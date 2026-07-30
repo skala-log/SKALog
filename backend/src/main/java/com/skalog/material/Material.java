@@ -40,6 +40,15 @@ public class Material {
 
     protected Material() {}
 
+    /** 4단계 슬랙 수집기 전까지는 수동 입력이라 승인 큐 없이 바로 APPROVED로 붙는다. */
+    public Material(Long scheduleId, String title, MaterialKind kind, String url) {
+        this.scheduleId = scheduleId;
+        this.title = title;
+        this.kind = kind;
+        this.url = url;
+        this.status = MaterialStatus.APPROVED;
+    }
+
     public Long getId() { return id; }
     public Long getScheduleId() { return scheduleId; }
     public String getTitle() { return title; }
