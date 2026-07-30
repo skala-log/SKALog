@@ -46,6 +46,14 @@ public class Submission {
 
     protected Submission() {}
 
+    public Submission(Long userId, Long scheduleId, SubmissionType type, String title, String body) {
+        this.userId = userId;
+        this.scheduleId = scheduleId;
+        this.type = type;
+        this.title = title;
+        this.body = body;
+    }
+
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
     public Long getScheduleId() { return scheduleId; }
@@ -54,4 +62,5 @@ public class Submission {
     public String getBody() { return body; }
     public Visibility getVisibility() { return visibility; }
     public boolean isDeleted() { return deletedAt != null; }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
 }

@@ -1,6 +1,7 @@
 import { NavLink, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Timeline from './pages/Timeline'
+import ScheduleDetail from './pages/ScheduleDetail'
 import MyRecords from './pages/MyRecords'
 
 const tabs = [
@@ -36,6 +37,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/timeline" element={<Timeline />} />
+          <Route path="/timeline/:id" element={<ScheduleDetail />} />
           <Route path="/records" element={<MyRecords />} />
         </Routes>
       </main>
