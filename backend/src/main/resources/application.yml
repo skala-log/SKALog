@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: skalog
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/skalog}
+    username: ${DB_USERNAME:skalog}
+    password: ${DB_PASSWORD:skalog}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+slack:
+  client-id: ${SLACK_CLIENT_ID:}
+  client-secret: ${SLACK_CLIENT_SECRET:}
+  bot-token: ${SLACK_BOT_TOKEN:}
+  team-id: ${SLACK_TEAM_ID:}
+
+logging:
+  level:
+    org.hibernate.SQL: debug

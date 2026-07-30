@@ -1,0 +1,23 @@
+# 환경변수 (커밋 금지)
+.env
+.env.local
+*.pem
+
+# Java / Gradle
+backend/build/
+backend/.gradle/
+backend/bin/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Node
+frontend/node_modules/
+frontend/dist/
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
