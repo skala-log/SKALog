@@ -1,70 +1,132 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { get } from '../lib/api'
-
-type Schedule = {
-  id: number
-  date: string
-  weekNo: number
-  subject: string
-  instructor: string | null
-}
-
-type Material = {
-  id: number
-  title: string
-  kind: 'FILE' | 'LINK'
-  url: string | null
-}
+import { Ellipsis, FilePlus2, Pencil, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { AttachmentCount, TodayBadge, TypeBadge, WeekBadge } from '../components/Badge'
+import { Card, SectionHeader } from '../components/Card'
+import { InlineComposer } from '../components/InlineComposer'
+import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
+import { AppHeader, BackLink } from '../components/Shell'
+import { Sheet, SheetAction } from '../components/Sheet'
+import { dateTimeLabel, isToday, weekdayFullLabel } from '../lib/format'
+import { materialsFor, submissionsFor } from '../lib/selectors'
+import { useStore } from '../lib/store'
+import { useToast } from '../lib/toast'
+import type { Submission } from '../lib/types'
 
 export default function ScheduleDetail() {
   const { id } = useParams()
-  const [schedule, setSchedule] = useState<Schedule | null>(null)
-  const [materials, setMaterials] = useState<Material[]>([])
-  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const { schedules, materials, submissions, removeSubmission, restoreSubmission } = useStore()
+  const toast = useToast()
+  const [menuFor, setMenuFor] = useState<Submission | null>(null)
+  const [justSavedId, setJustSavedId] = useState<number | null>(null)
 
-  useEffect(() => {
-    setSchedule(null)
-    setError(null)
-    get<Schedule>(`/schedules/${id}`).then(setSchedule).catch((e) => setError(String(e)))
-    get<Material[]>(`/materials?scheduleId=${id}`).then(setMaterials).catch(() => setMaterials([]))
-  }, [id])
+  const schedule = schedules.find((s) => s.id === Number(id))
+  if (!schedule) return <Navigate to="/timeline" replace />
+
+  const scheduleMaterials = materialsFor(materials, schedule.id)
+  const records = submissionsFor(submissions, schedule.id)
+
+  function handleDelete(submission: Submission) {
+    setMenuFor(null)
+    removeSubmission(submission.id)
+    toast.show('삭제했습니다', { undo: () => restoreSubmission(submission) })
+  }
 
   return (
-    <section className="space-y-4">
-      <Link to="/timeline" className="text-sm text-neutral-500 hover:text-neutral-900">
-        ← 일정표
-      </Link>
-      {error && <p className="text-sm text-red-600">불러오지 못했습니다. {error}</p>}
-      {!error && !schedule && <p className="text-sm text-neutral-400">불러오는 중…</p>}
-      {schedule && (
-        <div className="rounded-xl border border-neutral-200 bg-white p-4">
-          <p className="text-sm text-neutral-500">
-            W{String(schedule.weekNo).padStart(2, '0')} · {schedule.date}
-          </p>
-          <h1 className="mt-1 text-lg font-medium">{schedule.subject}</h1>
-          {schedule.instructor && <p className="mt-2 text-sm text-neutral-500">강사 {schedule.instructor}</p>}
+    <>
+      <AppHeader title="일정표" back onBack={() => navigate('/timeline')} />
 
-          <div className="mt-4 border-t border-neutral-100 pt-4">
-            <p className="mb-2 text-sm text-neutral-500">강의자료</p>
-            {materials.length === 0 && <p className="text-sm text-neutral-400">등록된 자료가 없습니다.</p>}
-            <ul className="space-y-1">
-              {materials.map((m) => (
-                <li key={m.id}>
-                  <a
-                    href={m.url ?? undefined}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-sm text-blue-600 hover:underline"
-                  >
-                    {m.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
+      <div className="mx-auto w-full max-w-5xl space-y-5 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
+        <BackLink to="/timeline">일정표</BackLink>
+
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <WeekBadge weekNo={schedule.weekNo} tone="primary" />
+            {/* 데스크톱(D2)은 `7월 30일 목요일 · 권기창` 처럼 강사까지 한 줄에 붙인다 */}
+            <span className="text-meta text-ink-muted">
+              {weekdayFullLabel(schedule.date)}
+              {schedule.instructor && <span className="hidden lg:inline"> · {schedule.instructor}</span>}
+            </span>
+            {isToday(schedule.date) && <span className="ml-auto"><TodayBadge /></span>}
           </div>
+          <h1 className="mt-1.5 text-title font-semibold text-ink lg:text-display">{schedule.subject}</h1>
+          {schedule.instructor && <p className="mt-1 text-meta text-ink-muted lg:hidden">{schedule.instructor}</p>}
         </div>
-      )}
-    </section>
+
+        {/* D2 는 강의자료 / 내 기록 2단, 모바일(M3)은 위아래로 쌓인다 */}
+        <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
+          {/* 강의자료 — 섹션 헤더 + 헤어라인, 카드 테두리 없음 (.pen M3) */}
+          <section>
+            <SectionHeader title="강의자료" count={scheduleMaterials.length} />
+            <div className="mt-2.5 space-y-1.5">
+              {/* S5 · 자료 없음 */}
+              {scheduleMaterials.length === 0 ? (
+                <MaterialEmpty />
+              ) : (
+                scheduleMaterials.map((m) => (
+                  <MaterialRow key={m.id} material={m} variant="card" by={schedule.instructor} />
+                ))
+              )}
+            </div>
+          </section>
+
+          <section>
+            <SectionHeader title="내 기록" count={records.length} />
+            <div className="mt-2.5 space-y-2.5">
+              {/* S3 · 컴포저 펼침 */}
+              <InlineComposer schedule={schedule} onSaved={setJustSavedId} />
+
+              {records.map((r) => (
+                <div
+                  key={r.id}
+                  className={
+                    'flex items-start gap-2.5 rounded-card border bg-surface px-3 py-2.5 transition-colors ' +
+                    // S4 · 저장 직후: 방금 저장한 기록을 잠깐 강조
+                    (justSavedId === r.id ? 'border-primary bg-primary-soft' : 'border-line')
+                  }
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <TypeBadge type={r.type} />
+                      <span className="min-w-0 truncate text-label font-medium text-ink">{r.title}</span>
+                    </div>
+                    {r.body && <p className="mt-1.5 whitespace-pre-wrap text-meta text-ink-muted">{r.body}</p>}
+                    <div className="mt-1.5 flex items-center gap-2 text-meta text-ink-muted">
+                      <span>{dateTimeLabel(r.createdAt)}</span>
+                      <AttachmentCount count={r.attachments.length} />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setMenuFor(r)}
+                    aria-label="기록 메뉴"
+                    className="-mr-1 flex size-9 shrink-0 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
+                  >
+                    <Ellipsis size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <Card variant="placeholder" className="min-h-20">
+          공지 · 출결 섹션 자리
+        </Card>
+      </div>
+
+      <Sheet open={menuFor !== null} onClose={() => setMenuFor(null)} title={menuFor?.title}>
+        <SheetAction icon={Pencil} onClick={() => toast.show('준비 중입니다')}>
+          수정
+        </SheetAction>
+        <SheetAction icon={FilePlus2} onClick={() => toast.show('준비 중입니다')}>
+          파일 추가
+        </SheetAction>
+        <SheetAction icon={Trash2} danger onClick={() => menuFor && handleDelete(menuFor)}>
+          삭제
+        </SheetAction>
+      </Sheet>
+    </>
   )
 }

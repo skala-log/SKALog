@@ -1,46 +1,60 @@
-import { NavLink, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
+import { Sidebar, TabBar } from './components/Shell'
+import { StoreProvider } from './lib/store'
+import { ToastProvider } from './lib/toast'
+import AdminMaterials from './pages/AdminMaterials'
+import AdminSchedules from './pages/AdminSchedules'
+import ClassSelect from './pages/ClassSelect'
 import Home from './pages/Home'
-import Timeline from './pages/Timeline'
-import ScheduleDetail from './pages/ScheduleDetail'
+import Login from './pages/Login'
 import MyRecords from './pages/MyRecords'
+import ScheduleDetail from './pages/ScheduleDetail'
+import Timeline from './pages/Timeline'
 
-const tabs = [
-  { to: '/', label: '오늘' },
-  { to: '/timeline', label: '일정표' },
-  { to: '/records', label: '내 기록' },
-]
+/** 로그인/온보딩은 사이드바·탭바 없이 단독 화면으로 뜬다. */
+const STANDALONE = ['/login', '/onboarding/class']
 
 export default function App() {
   return (
-    <div className="min-h-dvh bg-neutral-50 text-neutral-900">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-3xl items-center gap-6 px-4 py-3">
-          <span className="font-medium">SKALog</span>
-          <nav className="flex gap-4 text-sm">
-            {tabs.map((t) => (
-              <NavLink
-                key={t.to}
-                to={t.to}
-                end={t.to === '/'}
-                className={({ isActive }) =>
-                  isActive ? 'text-neutral-900' : 'text-neutral-500 hover:text-neutral-900'
-                }
-              >
-                {t.label}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
-      </header>
+    <StoreProvider>
+      <ToastProvider>
+        <Shell />
+      </ToastProvider>
+    </StoreProvider>
+  )
+}
 
-      <main className="mx-auto max-w-3xl px-4 py-6">
+function Shell() {
+  const { pathname } = useLocation()
+  const standalone = STANDALONE.includes(pathname)
+
+  if (standalone) {
+    return (
+      <div className="min-h-dvh bg-app text-ink">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/timeline" element={<Timeline />} />
-          <Route path="/timeline/:id" element={<ScheduleDetail />} />
-          <Route path="/records" element={<MyRecords />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/onboarding/class" element={<ClassSelect />} />
         </Routes>
-      </main>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex min-h-dvh bg-app text-ink">
+      <Sidebar />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/timeline" element={<Timeline />} />
+            <Route path="/timeline/:id" element={<ScheduleDetail />} />
+            <Route path="/records" element={<MyRecords />} />
+            <Route path="/admin/materials" element={<AdminMaterials />} />
+            <Route path="/admin/schedules" element={<AdminSchedules />} />
+          </Routes>
+        </main>
+        <TabBar />
+      </div>
     </div>
   )
 }
