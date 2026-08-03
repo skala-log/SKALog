@@ -1,4 +1,4 @@
-import { TriangleAlert } from 'lucide-react'
+import { CloudOff } from 'lucide-react'
 
 /** S1 · 홈 / 로딩 — 카드 형태를 유지한 스켈레톤 */
 export function SkeletonLine({ className = '' }: { className?: string }) {
@@ -19,25 +19,19 @@ export function SkeletonCard({ lines = 3 }: { lines?: number }) {
 }
 
 /**
- * S8 · 홈 / 카드 단위 에러 — 화면 전체가 아니라 실패한 카드만 이 상태가 된다.
- * 나머지 카드는 정상 렌더되고, 여기서만 다시 시도할 수 있다.
+ * S8 · 카드 단위 에러 — .pen `K6cN1D` (ErrorState).
+ * 카드를 통째로 대체하는 게 아니라 **카드 본문만** 이 상태가 된다.
+ * 카드 제목/배지는 그대로 남고, 나머지 카드도 정상 렌더된다.
  */
-export function ErrorCard({ message, onRetry }: { message: string; onRetry: () => void }) {
+export function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
-    <div className="rounded-card border border-line bg-surface p-4">
-      <div className="flex items-start gap-2.5">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning-bg text-warning">
-          <TriangleAlert size={16} />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-label font-medium text-ink">{message}</p>
-          <p className="mt-0.5 text-meta text-ink-muted">잠시 후 다시 시도해 주세요. 다른 카드는 정상입니다.</p>
-        </div>
-      </div>
+    <div className="flex flex-col items-center gap-3 py-5">
+      <CloudOff size={24} className="text-ink-muted" />
+      <p className="text-body text-ink">불러오지 못했습니다</p>
       <button
         type="button"
         onClick={onRetry}
-        className="mt-3 h-9 w-full rounded-control border border-line text-label font-medium text-ink-muted hover:bg-subtle"
+        className="flex h-touch items-center rounded-control border border-line bg-surface px-5 text-label font-medium text-primary hover:bg-subtle"
       >
         다시 시도
       </button>

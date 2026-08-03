@@ -163,6 +163,18 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
     )
   })
 
+  // 주차 아코디언 — 23주가 한 번에 펼쳐져 있으면 훑기가 어렵다. 이번 주만 열어둔다.
+  const [openWeeks, setOpenWeeks] = useState<Set<number>>(() => new Set([currentWeekNo]))
+
+  function toggleWeek(weekNo: number) {
+    setOpenWeeks((prev) => {
+      const next = new Set(prev)
+      if (next.has(weekNo)) next.delete(weekNo)
+      else next.add(weekNo)
+      return next
+    })
+  }
+
   const weeks = useMemo(() => {
     const byWeek = new Map<number, Schedule[]>()
     for (const s of schedules) {
@@ -190,7 +202,11 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
 
   return (
     <div className="space-y-6 pt-2">
-      {weeks.map(({ weekNo, items }) => (
+      {weeks.map(({ weekNo, items }) => {
+        const weekOpen = openWeeks.has(weekNo)
+        // 지난 주차는 흐리게 — 오늘 이후 일정이 하나도 없으면 지난 주차로 본다
+        const isPastWeek = items.every((i) => i.date < TODAY_ISO)
+        return (
           <div
             key={weekNo}
             ref={(el) => {
@@ -199,30 +215,53 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
             /* 상단 고정 컨트롤 바(헤더 56 + 보기 전환/칩) 아래로 내려오도록 */
             className="scroll-mt-38 lg:scroll-mt-28"
           >
-            {/* .pen M2 주차 헤더 — `W03 7/28 – 8/1` 좌측, `이번 주` 배지는 우측 끝 */}
-            <div className="mb-2 flex items-center gap-2">
-              <p className="text-label font-semibold text-ink">
-                {weekTag(weekNo)} <span className="font-normal text-ink-muted">{weekRangeLabel(items.map((i) => i.date))}</span>
+            {/* 주차 헤더 = 아코디언 트리거. `W03 7/28 – 8/1` 좌측, `이번 주` 배지는 우측 끝 */}
+            <button
+              type="button"
+              onClick={() => toggleWeek(weekNo)}
+              aria-expanded={weekOpen}
+              className="mb-2 flex w-full items-center gap-2 rounded-control px-1 py-1 text-left transition-colors hover:bg-subtle"
+            >
+              <ChevronDown
+                size={18}
+                className={
+                  'shrink-0 text-ink-muted transition-transform ' + (weekOpen ? 'rotate-0' : '-rotate-90')
+                }
+              />
+              <p className={'text-heading font-semibold ' + (isPastWeek ? 'text-ink-muted' : 'text-ink')}>
+                {weekTag(weekNo)}{' '}
+                <span className="text-label font-normal text-ink-muted">
+                  {weekRangeLabel(items.map((i) => i.date))}
+                </span>
               </p>
-              {weekNo === currentWeekNo && (
-                <span className="ml-auto rounded-full bg-primary-tint px-2 py-0.5 text-badge font-semibold text-primary">
+              <span className="flex-1" />
+              {weekNo === currentWeekNo ? (
+                <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-today-vivid px-2.5 py-1 text-badge font-semibold text-on-primary">
+                  <span className="size-1.5 rounded-full bg-on-primary" />
                   이번 주
                 </span>
+              ) : (
+                !weekOpen && <span className="shrink-0 text-meta text-ink-faint tabular-nums">{items.length}일</span>
               )}
-            </div>
+            </button>
 
-            <div className="overflow-hidden rounded-card border border-line bg-surface">
-              {items.map((s, idx) => {
+            {/* .pen M2 `CgVER` : 카드 안쪽에 행을 쌓되 행 사이 구분선은 없다 (간격으로만 나눈다) */}
+            {weekOpen && (
+            <div className="overflow-hidden rounded-card border border-line bg-surface p-2">
+              {items.map((s) => {
                 const scheduleMaterials = materialsFor(materials, s.id)
                 const hasRecord = submissionsFor(submissions, s.id).length > 0
                 const today = isToday(s.date)
                 const isOpen = expanded.has(s.id)
+                // 지난 수업은 흐리게 — 오늘/앞으로 남은 일정에 먼저 눈이 가게 한다
+                const past = s.date < TODAY_ISO
                 return (
-                  <div key={s.id} className={idx > 0 ? 'border-t border-line' : ''}>
+                  <div key={s.id}>
                     <div
                       className={
-                        'flex min-h-listitem items-center gap-3 px-3 py-2 ' +
-                        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[9px]' : '')
+                        'flex min-h-listitem items-center gap-3 rounded-control px-3 py-2 ' +
+                        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[9px] ' : '') +
+                        (past ? 'opacity-55' : '')
                       }
                     >
                       <Link to={`/timeline/${s.id}`} className="flex min-w-0 flex-1 items-center gap-3 hover:opacity-80">
@@ -236,7 +275,9 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
                         >
                           {formatMD(s.date)}
                         </span>
-                        <span className="min-w-0 flex-1 truncate text-body text-ink">{s.subject}</span>
+                        <span className={'min-w-0 flex-1 truncate text-body ' + (past ? 'text-ink-muted' : 'text-ink')}>
+                          {s.subject}
+                        </span>
                       </Link>
                       {scheduleMaterials.length > 0 && (
                         <button
@@ -267,8 +308,10 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
                 )
               })}
             </div>
+            )}
           </div>
-        ))}
+        )
+      })}
     </div>
   )
 }
@@ -321,6 +364,8 @@ function MonthView({ year, month }: { year: number; month: number }) {
               const today = isToday(iso)
               const hasRecord = recordDates.has(iso)
               const isSelected = iso === selected
+              // 주간 뷰와 같은 규칙 — 지난 날짜는 흐리게
+              const past = iso < TODAY_ISO
               return (
                 <button
                   key={iso}
@@ -330,7 +375,7 @@ function MonthView({ year, month }: { year: number; month: number }) {
                   aria-label={`${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일${schedule ? ` · ${schedule.subject}` : ''}`}
                   className={
                     'flex min-h-14 flex-col items-center gap-1 p-1.5 transition-colors lg:min-h-28 lg:items-stretch lg:text-left ' +
-                    (inMonth ? '' : 'opacity-40 ') +
+                    (inMonth ? (past ? 'opacity-55 ' : '') : 'opacity-40 ') +
                     // 모바일(M7)은 오늘 날짜에 동그라미만, 데스크톱(D4)은 셀 전체를 물들인다
                     (today ? 'lg:bg-today-soft ' : isSelected ? 'bg-primary-soft lg:bg-transparent ' : 'hover:bg-subtle ')
                   }

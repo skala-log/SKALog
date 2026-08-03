@@ -8,15 +8,15 @@ export default function Login() {
   return (
     <div className="flex min-h-dvh flex-col justify-center px-6 pb-16">
       <div className="mx-auto w-full max-w-sm text-center">
-        <p className="text-display font-semibold text-primary">SKALog</p>
+        <p className="text-[34px] font-semibold leading-tight text-primary">SKALog</p>
         <p className="mt-2 text-body text-ink-muted">설정 없이 바로 쓰는 학습 기록장</p>
 
         <button
           type="button"
           onClick={() => navigate('/onboarding/class')}
-          className="mt-8 flex h-12 w-full items-center justify-center gap-2 rounded-control bg-primary text-body font-semibold text-on-primary transition-colors hover:bg-primary-hover"
+          className="mt-8 flex h-14 w-full items-center justify-center gap-2 rounded-control bg-primary text-heading font-semibold text-on-primary transition-colors hover:bg-primary-hover"
         >
-          <Hash size={18} />
+          <Hash size={20} />
           슬랙으로 시작하기
         </button>
 

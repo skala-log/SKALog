@@ -48,10 +48,12 @@ export function MaterialRow({
   )
 }
 
+/** S5 · 자료 없음 — .pen `T4ZBCB` : 흰 카드 + 1px 테두리, 제목/부제 2줄 */
 export function MaterialEmpty() {
   return (
-    <p className="rounded-control bg-subtle px-3 py-3 text-meta text-ink-muted">
-      자료가 아직 올라오지 않았습니다 · 보통 수업 후 3시간 내 반영됩니다
-    </p>
+    <div className="rounded-card border border-line bg-surface p-4">
+      <p className="text-body font-medium text-ink">자료가 아직 올라오지 않았습니다</p>
+      <p className="mt-1 text-meta text-ink-muted">보통 수업 후 3시간 내 반영됩니다</p>
+    </div>
   )
 }

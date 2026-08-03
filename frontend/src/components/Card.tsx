@@ -6,11 +6,13 @@ type CardProps = {
   action?: ReactNode
   children: ReactNode
   variant?: 'default' | 'placeholder'
+  /** 히어로 존 안에 놓일 때 카드 껍데기(테두리·배경·패딩)를 벗긴다 */
+  bare?: boolean
   className?: string
 }
 
 /** Card — .pen `phV74` : bg-surface, 1px border, radius 12 */
-export function Card({ title, action, children, variant = 'default', className = '' }: CardProps) {
+export function Card({ title, action, children, variant = 'default', bare = false, className = '' }: CardProps) {
   if (variant === 'placeholder') {
     return (
       <div
@@ -25,8 +27,9 @@ export function Card({ title, action, children, variant = 'default', className =
     )
   }
 
+  // bare : 히어로 존 안에 들어갈 때는 카드 테두리/배경/패딩을 벗는다 (카드 안의 카드 방지)
   return (
-    <div className={'rounded-card border border-line bg-surface p-4 ' + className}>
+    <div className={(bare ? '' : 'rounded-card border border-line bg-surface p-4 ') + className}>
       {(title || action) && (
         <div className="mb-3 flex items-center gap-2">
           {title && <h2 className="text-heading font-semibold text-ink">{title}</h2>}

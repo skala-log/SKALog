@@ -1,5 +1,6 @@
 import { Link as LinkIcon, Paperclip, Plus, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { Badge } from './Badge'
 import { formatFileSize, weekTag } from '../lib/format'
 import { useStore } from '../lib/store'
 import { useToast } from '../lib/toast'
@@ -29,9 +30,11 @@ function readDraft(scheduleId: number): Draft | null {
 type InlineComposerProps = {
   schedule: Schedule
   onSaved?: (submissionId: number) => void
+  /** 접힘 상태 문구 override — S2 처럼 "최근 강의(7/30)에 기록 남기기" 로 바꿔야 할 때 */
+  collapsedLabel?: string
 }
 
-export function InlineComposer({ schedule, onSaved }: InlineComposerProps) {
+export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComposerProps) {
   const { addSubmission, removeSubmission } = useStore()
   const toast = useToast()
 
@@ -163,31 +166,35 @@ export function InlineComposer({ schedule, onSaved }: InlineComposerProps) {
           className="flex h-11 w-full items-center gap-2 rounded-control border border-line-accent bg-surface px-3 text-label text-ink-muted transition-colors hover:border-primary hover:text-primary"
         >
           <Plus size={16} className="text-primary" />
-          {hasDraft ? '이어서 쓰기' : '이 강의에 기록 남기기'}
+          {hasDraft ? '이어서 쓰기' : (collapsedLabel ?? '이 강의에 기록 남기기')}
         </button>
       </div>
     )
   }
 
   return (
-    <div ref={formTopRef} className="rounded-control border border-line-accent bg-subtle p-3">
-      <p className="truncate text-meta text-ink-muted">
-        {weekTag(schedule.weekNo)} · {schedule.subject} 에 저장됩니다
-      </p>
+    /* .pen `MRZgz` : 흰 배경 + primary 1px 테두리, radius 12, padding 16, gap 12 */
+    <div ref={formTopRef} className="space-y-3 rounded-card border border-primary bg-surface p-4">
+      {/* 확인 라벨 — 주차는 배지, 나머지는 읽기 전용 문구 (선택 필드가 아니다) */}
+      <div className="flex items-center gap-2">
+        <Badge tone="primary" className="tabular-nums">
+          {weekTag(schedule.weekNo)}
+        </Badge>
+        <p className="min-w-0 flex-1 truncate text-meta text-ink-muted">{schedule.subject}에 저장됩니다</p>
+      </div>
 
-      <div className="mt-2 flex gap-1.5">
+      <div className="flex gap-2">
         {(['NOTE', 'ASSIGNMENT'] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setType(t)}
+            aria-pressed={type === t}
             className={
-              'h-9 rounded-full px-3 text-label font-medium transition-colors ' +
+              'h-touch rounded-full px-4 text-label transition-colors ' +
               (type === t
-                ? t === 'NOTE'
-                  ? 'bg-note-bg text-note'
-                  : 'bg-assignment-bg text-assignment'
-                : 'bg-surface text-ink-muted border border-line')
+                ? 'border border-primary bg-primary-soft font-semibold text-primary'
+                : 'bg-subtle font-medium text-ink-muted hover:text-ink')
             }
           >
             {t === 'NOTE' ? '노트' : '과제'}
@@ -206,7 +213,7 @@ export function InlineComposer({ schedule, onSaved }: InlineComposerProps) {
           }
         }}
         placeholder="제목"
-        className="mt-2 w-full rounded-control border border-line bg-surface px-3 py-2 text-body text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none"
+        className="h-touch w-full rounded-control bg-subtle px-3 text-body text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
       <textarea
@@ -220,36 +227,37 @@ export function InlineComposer({ schedule, onSaved }: InlineComposerProps) {
         }}
         placeholder="내용 (선택)"
         rows={3}
-        className="mt-2 w-full resize-none rounded-control border border-line bg-surface px-3 py-2 text-body text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none"
+        className="h-21 w-full resize-none rounded-control bg-subtle p-3 text-body text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
       {attachments.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-1.5">
+        /* .pen `RAIEC` : 44px 높이 primary-soft 칩 */
+        <ul className="flex flex-wrap gap-2">
           {attachments.map((a) => (
             <li
               key={a.id}
-              className="flex items-center gap-1 rounded-full border border-line bg-surface px-2 py-1 text-meta text-ink-muted"
+              className="flex h-touch items-center gap-2 rounded-control bg-primary-soft px-3 text-meta text-primary"
             >
-              {a.kind === 'LINK' ? <LinkIcon size={12} /> : <Paperclip size={12} />}
+              {a.kind === 'LINK' ? <LinkIcon size={14} /> : <Paperclip size={14} />}
               <span className="max-w-40 truncate">{a.name}</span>
               {a.kind !== 'LINK' && <span>{a.size}</span>}
               <button
                 type="button"
                 onClick={() => removeAttachment(a.id)}
                 aria-label={`${a.name} 제거`}
-                className="text-ink-faint hover:text-danger"
+                className="text-primary hover:text-danger"
               >
-                <X size={12} />
+                <X size={16} />
               </button>
             </li>
           ))}
         </ul>
       )}
 
-      {fileError && <p className="mt-1.5 text-meta text-danger">{fileError}</p>}
+      {fileError && <p className="text-meta text-danger">{fileError}</p>}
 
       {linkFieldOpen && (
-        <div className="mt-2 flex gap-1.5">
+        <div className="flex gap-1.5">
           <input
             value={linkValue}
             onChange={(e) => setLinkValue(e.target.value)}
@@ -273,39 +281,60 @@ export function InlineComposer({ schedule, onSaved }: InlineComposerProps) {
         </div>
       )}
 
-      <div className="mt-2 flex items-center justify-between">
-        <div className="flex gap-3">
-          <label className="flex cursor-pointer items-center gap-1.5 text-label text-ink-muted hover:text-ink">
-            <Paperclip size={16} />
-            파일
-            <input type="file" multiple className="hidden" onChange={handleFiles} />
-          </label>
-          <button
-            type="button"
-            onClick={() => setLinkFieldOpen((v) => !v)}
-            className="flex items-center gap-1.5 text-label text-ink-muted hover:text-ink"
-          >
-            <LinkIcon size={16} />
-            링크
-          </button>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={closeForm}
-            className="h-9 rounded-control px-3 text-label text-ink-muted hover:bg-surface"
-          >
-            취소
-          </button>
-          <button
-            type="button"
-            onClick={save}
-            disabled={!title.trim() || saving}
-            className="h-9 rounded-control bg-primary px-4 text-label font-medium text-on-primary transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint"
-          >
-            {saving ? '저장 중…' : '저장'}
-          </button>
-        </div>
+      {/* .pen `IyjmL` Toolbar — 전부 44px, 선택 기능(파일·링크)은 테두리 없는 텍스트 버튼 */}
+      <div className="flex items-center gap-2">
+        <label className="flex h-touch cursor-pointer items-center gap-1 rounded-control px-2 text-label font-medium text-ink-muted hover:text-ink">
+          <Paperclip size={16} />
+          파일
+          <input type="file" multiple className="hidden" onChange={handleFiles} />
+        </label>
+        <button
+          type="button"
+          onClick={() => setLinkFieldOpen((v) => !v)}
+          className="flex h-touch items-center gap-1 rounded-control px-2 text-label font-medium text-ink-muted hover:text-ink"
+        >
+          <LinkIcon size={16} />
+          링크
+        </button>
+        <span className="flex-1" />
+        <button
+          type="button"
+          onClick={closeForm}
+          className="h-touch rounded-control px-3 text-label font-medium text-ink-muted hover:bg-subtle"
+        >
+          취소
+        </button>
+        <button
+          type="button"
+          onClick={save}
+          disabled={!title.trim() || saving}
+          className="h-touch rounded-control bg-primary px-5 text-label font-semibold text-on-primary transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint"
+        >
+          {saving ? '저장 중…' : '저장'}
+        </button>
+      </div>
+
+      {/*
+        S3 · 모바일 전용 sticky 저장 바 (.pen `WRukt`).
+        §6.3 — 키보드를 내렸다 저장하는 동작이 들어가면 30초가 깨진다.
+        하단 탭바를 덮도록 z-50 으로 올린다.
+      */}
+      <div className="fixed inset-x-0 bottom-0 z-50 flex h-header items-center gap-2 border-t border-line bg-surface px-4 lg:hidden">
+        <label className="flex h-touch cursor-pointer items-center gap-1 rounded-control px-2 text-label font-medium text-ink-muted">
+          <Paperclip size={16} />
+          파일
+          <input type="file" multiple className="hidden" onChange={handleFiles} />
+        </label>
+        <span className="flex-1" />
+        <span className="text-meta text-ink-faint">⌘↵</span>
+        <button
+          type="button"
+          onClick={save}
+          disabled={!title.trim() || saving}
+          className="h-touch rounded-control bg-primary px-5 text-label font-semibold text-on-primary disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-faint"
+        >
+          {saving ? '저장 중…' : '저장'}
+        </button>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { CalendarCog, CalendarDays, ChevronLeft, CircleUser, House, Inbox, NotebookText } from 'lucide-react'
+import { CalendarCog, CalendarDays, ChevronLeft, CircleUser, House, Inbox, NotebookText, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { CLASS_NAME, CURRENT_USER, USER_NAME } from '../lib/mock'
@@ -42,7 +42,7 @@ export function AppHeader({
 }
 
 const TABS = [
-  { to: '/', label: '오늘', Icon: House, end: true },
+  { to: '/', label: '홈', Icon: House, end: true },
   { to: '/timeline', label: '일정표', Icon: CalendarDays, end: false },
   { to: '/records', label: '내 기록', Icon: NotebookText, end: false },
 ]
@@ -77,9 +77,10 @@ const NAV_GROUPS = [
   {
     label: '학습',
     items: [
-      { to: '/', label: '오늘', Icon: House, end: true },
+      { to: '/', label: '홈', Icon: House, end: true },
       { to: '/timeline', label: '일정표', Icon: CalendarDays, end: false },
       { to: '/records', label: '내 기록', Icon: NotebookText, end: false },
+      { to: '/showcase', label: '쇼케이스', Icon: Sparkles, end: false },
     ],
   },
   {
@@ -92,10 +93,15 @@ const NAV_GROUPS = [
   },
 ]
 
-/** Sidebar — .pen `ckNFx` : width 240, 학습/관리 두 그룹 + 하단 아바타 칩 */
+/**
+ * Sidebar — .pen `ckNFx` : width 240, 학습/관리 두 그룹 + 하단 아바타 칩.
+ *
+ * sticky + h-dvh 로 본문이 아무리 길어져도 뷰포트에 붙어 있게 한다.
+ * self-start 가 없으면 flex 의 stretch 때문에 높이가 본문만큼 늘어나 sticky 가 걸리지 않는다.
+ */
 export function Sidebar() {
   return (
-    <aside className="hidden w-sidebar shrink-0 flex-col gap-6 border-r border-line bg-surface px-4 py-5 lg:flex">
+    <aside className="hidden w-sidebar shrink-0 flex-col gap-6 self-start overflow-y-auto border-r border-line bg-surface px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-dvh">
       <NavLink to="/" className="px-2 text-title font-semibold text-primary">
         SKALog
       </NavLink>

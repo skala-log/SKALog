@@ -98,7 +98,9 @@ export default function MyRecords() {
           <ProgressBar pct={progressPct} className="mt-2.5" />
         </div>
 
-        {/* 필터 칩 — .pen M4/D3 : 선택은 solid violet, 나머지는 테두리만 있는 흰 칩 */}
+        {/* 필터 칩 — .pen M4/D3 : 선택은 solid violet, 나머지는 테두리만 있는 흰 칩
+            기록이 0건이면 .pen S6 처럼 칩 줄 자체를 렌더하지 않는다 (거를 대상이 없다) */}
+        {total > 0 && (
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             {(
@@ -133,6 +135,7 @@ export default function MyRecords() {
             <ArrowUpDown size={15} />
           </button>
         </div>
+        )}
 
         {filtered.length === 0 ? (
           <EmptyState
@@ -140,8 +143,8 @@ export default function MyRecords() {
             alternative={
               total === 0
                 ? todaySchedule
-                  ? `오늘 강의는 ${todaySchedule.subject}입니다.`
-                  : '한 줄만 남겨도 포트폴리오가 됩니다.'
+                  ? `오늘 강의는 ${todaySchedule.subject}입니다.\n한 줄만 남겨도 포트폴리오가 됩니다`
+                  : '한 줄만 남겨도 포트폴리오가 됩니다'
                 : '필터를 바꾸면 다른 기록을 볼 수 있습니다.'
             }
             action={

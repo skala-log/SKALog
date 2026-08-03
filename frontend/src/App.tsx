@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import MyRecords from './pages/MyRecords'
 import ScheduleDetail from './pages/ScheduleDetail'
+import Showcase from './pages/Showcase'
 import Timeline from './pages/Timeline'
 
 /** 로그인/온보딩은 사이드바·탭바 없이 단독 화면으로 뜬다. */
@@ -49,6 +50,7 @@ function Shell() {
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/timeline/:id" element={<ScheduleDetail />} />
             <Route path="/records" element={<MyRecords />} />
+            <Route path="/showcase" element={<Showcase />} />
             <Route path="/admin/materials" element={<AdminMaterials />} />
             <Route path="/admin/schedules" element={<AdminSchedules />} />
           </Routes>
