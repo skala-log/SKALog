@@ -1,5 +1,6 @@
 package com.skalog.submission;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 // ponytail: userId는 로그인(6단계) 전까지 쿼리 파라미터로 받는 임시 스텁. 로그인 붙으면 세션에서 꺼내도록 교체.
+@Tag(name = "내 기록")
 @RestController
 @RequestMapping("/api/submissions")
 public class SubmissionController {
