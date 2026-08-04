@@ -54,6 +54,15 @@ public class Submission {
         this.body = body;
     }
 
+    public void update(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
+
+    public void softDelete() {
+        this.deletedAt = OffsetDateTime.now();
+    }
+
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
     public Long getScheduleId() { return scheduleId; }
