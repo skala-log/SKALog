@@ -9,7 +9,7 @@ backend/.gradle/
 backend/bin/
 *.class
 *.jar
-!gradle/wrapper/gradle-wrapper.jar
+!backend/gradle/wrapper/gradle-wrapper.jar
 
 # Node
 frontend/node_modules/
