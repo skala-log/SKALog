@@ -220,7 +220,8 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
               type="button"
               onClick={() => toggleWeek(weekNo)}
               aria-expanded={weekOpen}
-              className="mb-2 flex w-full items-center gap-2 rounded-control px-1 py-1 text-left transition-colors hover:bg-subtle"
+              /* 주차 헤더 전체가 아코디언 트리거다 — 탭 타깃 44px 이상 확보 */
+              className="mb-2 flex min-h-touch w-full items-center gap-2 rounded-control px-2 py-2 text-left transition-colors hover:bg-subtle"
             >
               <ChevronDown
                 size={18}

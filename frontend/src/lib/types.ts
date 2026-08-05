@@ -1,5 +1,8 @@
 export type Weekday = '일' | '월' | '화' | '수' | '목' | '금' | '토'
 
+/** 수업 방식 — .pen `ClassMode` */
+export type ClassMode = 'ONSITE' | 'REMOTE'
+
 export type Schedule = {
   id: number
   date: string // YYYY-MM-DD
@@ -52,20 +55,24 @@ export type User = {
   role: 'STUDENT' | 'ADMIN'
 }
 
-/** 슬랙 #공지 채널에서 수집한 공지 — 홈 3층 */
+/** 공지 노출 범위 — .pen `NoticeScope` (우리반 / 4층 / 판교 …) */
+export type NoticeScope = 'CLASS' | 'FLOOR' | 'CAMPUS'
+
+/** 슬랙 #공지 채널에서 수집한 공지 */
 export type Notice = {
   id: number
   title: string
-  channel: string
+  scope: NoticeScope
+  scopeLabel: string
   postedAt: string // ISO
   url: string // 슬랙 원본
 }
 
-/** 주간 식단 — 홈 3층. 평일만 있다 */
+/** 주간 식단 — 평일만. 끼니별 메뉴를 항목 배열로 갖는다 (.pen `Detail/8-3`) */
 export type MealPlan = {
   date: string // YYYY-MM-DD
-  lunch: string
-  dinner: string
+  lunch: string[]
+  dinner: string[]
 }
 
 /** 홈 2층 바로가기 타일. external=false 면 앱 내부 라우트 */

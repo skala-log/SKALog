@@ -4,9 +4,9 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { Badge, TodayBadge, WeekBadge } from '../components/Badge'
 import { Card, SectionHeader } from '../components/Card'
 import { EmptyState } from '../components/EmptyState'
-import { LinkRail, MealStrip, NoticeList } from '../components/HomeBlocks'
+import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll } from '../components/HomeBlocks'
 import { InlineComposer } from '../components/InlineComposer'
-import { ScheduleRow, RecordRow } from '../components/ListItem'
+import { RecordRow } from '../components/ListItem'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader } from '../components/Shell'
 import { ErrorState, SkeletonCard, SkeletonLine } from '../components/States'
@@ -19,13 +19,12 @@ import {
   getTodaySchedule,
   materialsFor,
   scheduleById,
-  schedulesInWeek,
-  submissionsFor,
 } from '../lib/selectors'
 import { useStore } from '../lib/store'
+import type { ClassMode } from '../lib/types'
 
 export default function Home() {
-  const { schedules, materials, submissions } = useStore()
+  const { schedules, submissions } = useStore()
   const location = useLocation()
   const [params] = useSearchParams()
 
@@ -33,9 +32,6 @@ export default function Home() {
   const state = params.get('state')
   const [loading, setLoading] = useState(state === 'loading')
   const [cardError, setCardError] = useState(state === 'error')
-  // 식단 스트립: 열을 누르면 그날 중·석식이 펼쳐진다 (일정표 자료 아코디언과 같은 패턴)
-  const [openMeal, setOpenMeal] = useState<string | null>(null)
-  const toggleMeal = (date: string) => setOpenMeal((cur) => (cur === date ? null : date))
 
   useEffect(() => {
     setLoading(state === 'loading')
@@ -54,8 +50,6 @@ export default function Home() {
   const previousSchedule = getPreviousSchedule(schedules)
   const composerSchedule = todaySchedule ?? previousSchedule ?? nextSchedule
   const currentWeekNo = getCurrentWeekNo(schedules)
-  const weekSchedules = schedulesInWeek(schedules, currentWeekNo)
-  const todaySchedules = todaySchedule ? schedules.filter((s) => s.date === todaySchedule.date) : []
   const recentRecords = [...submissions].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3)
   const anchorDate = todaySchedule?.date ?? nextSchedule?.date ?? previousSchedule?.date ?? ''
   // 주차 옆 ⓘ 툴팁 — 주차 대신 '며칠째'로도 볼 수 있게 한다(주말 제외 실제 교육일 기준)
@@ -68,30 +62,19 @@ export default function Home() {
 
       <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         {/*
-          [1층] 히어로 — 카드가 아니다. 테두리 없이 옅은 워시만 깔아 "존" 으로 읽히게 한다.
-          인사 · 날짜 · 진행도 · 오늘 강의(자료+컴포저)까지가 한 덩어리다.
+          [1층] Strip — .pen D1 `Strip` : 인사 + 날짜/주차/진행바 한 덩어리.
+          카드가 아니고 배경도 없다. 오늘 강의는 아래 카드로 분리돼 있다.
         */}
-        <section className="rounded-card bg-subtle p-4 lg:p-5">
+        <section className="flex flex-col gap-2">
           {loading ? (
-            <SkeletonLine className="h-6 w-48" />
+            <SkeletonLine className="h-7 w-64" />
           ) : (
-            <h1 className="text-title font-semibold text-ink lg:text-display">안녕하세요, {USER_NAME}님</h1>
-          )}
-          {!loading && (
-            <p className="mt-1 hidden text-label text-ink-muted lg:block">
-              {todaySchedule
-                ? `오늘 일정 ${todaySchedules.length}건과 새 자료 ${materialsFor(materials, todaySchedule.id).length}건이 기다리고 있어요.`
-                : '오늘은 강의가 없습니다. 지난 강의를 정리하기 좋은 날이에요.'}
-            </p>
-          )}
-
-          {loading ? (
-            <SkeletonLine className="mt-3 h-6 w-64" />
-          ) : (
-            <div className="mt-3 flex items-center gap-2">
-              <p className="text-heading font-semibold text-ink">{weekdayFullLabel(anchorDate)}</p>
+            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+              <h1 className="text-title font-semibold text-ink lg:text-display">안녕하세요, {USER_NAME}님</h1>
+              <span className="hidden flex-1 lg:block" />
+              <p className="text-label font-medium text-ink">{weekdayFullLabel(anchorDate)}</p>
               <WeekBadge weekNo={currentWeekNo} tone="primary" />
-              <p className="ml-auto shrink-0 text-meta text-ink-muted tabular-nums">
+              <p className="shrink-0 text-meta text-ink-muted tabular-nums">
                 {currentWeekNo} / {TOTAL_WEEKS}주차
               </p>
               <span
@@ -104,7 +87,7 @@ export default function Home() {
           )}
 
           {/* 로딩 중에는 진행바도 스켈레톤이다 (.pen S1 — 그라데이션이 미리 보이면 안 된다) */}
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-line-accent">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-line-accent">
             {!loading && (
               <div
                 className="h-full rounded-full transition-[width]"
@@ -115,81 +98,76 @@ export default function Home() {
               />
             )}
           </div>
+        </section>
 
-          <div className="mt-4">
+        {/*
+          .pen D1 `Grid/2col` — 좌: 오늘 강의 · 공지 · 내 최근 기록 / 우 280: 바로가기 · 일정 · 주간 식단.
+          모바일은 한 컬럼으로 쌓이되 .pen M1 순서(오늘 강의 → 바로가기 → 공지 → 식단 → 일정 → 최근 기록)를 따른다.
+          min-w-0 이 없으면 내부 목록이 컬럼을 넓혀 가로 스크롤이 생긴다.
+        */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
             {loading ? (
-              <SkeletonLine className="h-40 w-full" />
+              <SkeletonCard lines={6} />
             ) : todaySchedule ? (
-              <TodayCard scheduleId={todaySchedule.id} bare />
+              <TodayCard scheduleId={todaySchedule.id} />
             ) : (
               <NoClassCard
                 nextScheduleId={nextSchedule?.id ?? null}
                 composerScheduleId={composerSchedule?.id ?? null}
-                bare
               />
             )}
-          </div>
-        </section>
 
-        {/* [2층] 바로가기 레일 — 카드 나열이 아니라 가로 스크롤 타일 */}
-        <LinkRail links={QUICK_LINKS} />
-
-        {/* [3층] 소식 — 공지 목록 + 주간 식단 스트립. 데스크톱은 2열 */}
-        <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
-          <div className="min-w-0">
-            <NoticeList notices={MOCK_NOTICES} />
-          </div>
-          <div className="min-w-0">
-            <MealStrip meals={MOCK_MEALS} openDate={openMeal} onToggle={toggleMeal} />
-          </div>
-        </div>
-
-        {/*
-          [4층] 학습 맥락 — 이번 주 일정 + 내 최근 기록.
-          데스크톱은 2열 그리드.
-        */}
-        {/* min-w-0 : 그리드 아이템 기본값(min-width:auto)이면 -mx-3 목록이 컬럼을 넓혀 가로 스크롤이 생긴다 */}
-        <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-          {/* S8 · 카드 단위 에러는 .pen 기준 '이번 주' 카드에서 일어난다 */}
-          {loading ? (
-            <div className="min-w-0">
-              <SkeletonCard lines={4} />
+            {/* 모바일에선 바로가기가 오늘 강의 바로 밑에 온다 (.pen M1) */}
+            <div className="lg:hidden">
+              <LinkRail links={QUICK_LINKS} />
             </div>
-          ) : (
-            <Card
-              title="이번 주"
-              action={<WeekBadge weekNo={currentWeekNo} tone="primary" />}
-              className="min-w-0"
-            >
-              {cardError ? (
-                <ErrorState onRetry={() => setCardError(false)} />
-              ) : (
-                <ul className="-mx-3">
-                  {weekSchedules.map((s) => (
-                    <li key={s.id}>
-                      <ScheduleRow
-                        schedule={s}
-                        materialCount={materialsFor(materials, s.id).length}
-                        hasRecord={submissionsFor(submissions, s.id).length > 0}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Card>
-          )}
 
-          <div className="min-w-0">
+            {loading ? <SkeletonCard lines={4} /> : <NoticeList notices={MOCK_NOTICES} />}
+
+            {/* 모바일 순서: 공지 다음 식단 → 일정 */}
+            <div className="flex flex-col gap-4 lg:hidden">
+              <MealSection meals={MOCK_MEALS} />
+              {cardError ? (
+                <Card title="일정">
+                  <ErrorState onRetry={() => setCardError(false)} />
+                </Card>
+              ) : (
+                <ScheduleScroll schedules={schedules} />
+              )}
+            </div>
+
             {loading ? (
               <SkeletonCard lines={4} />
             ) : (
               <RecentRecords recentIds={recentRecords.map((r) => r.id)} composerAvailable={!!composerSchedule} />
             )}
           </div>
+
+          <aside className="hidden w-70 shrink-0 flex-col gap-4 lg:flex">
+            <LinkRail links={QUICK_LINKS} />
+            {/* S8 · 카드 단위 에러는 .pen 기준 일정 블록에서 일어난다 */}
+            {cardError ? (
+              <Card title="일정">
+                <ErrorState onRetry={() => setCardError(false)} />
+              </Card>
+            ) : (
+              <ScheduleScroll schedules={schedules} />
+            )}
+            <MealSection meals={MOCK_MEALS} />
+          </aside>
         </div>
       </div>
     </>
   )
+}
+
+/**
+ * 수업 방식 — 백엔드에 컬럼이 아직 없다. 과목명으로 임시 판별하고,
+ * API 가 붙으면 `schedule.classMode` 로 갈아끼운다.
+ */
+function classModeOf(schedule: { subject: string }): ClassMode {
+  return /특강|온라인|원격/.test(schedule.subject) ? 'REMOTE' : 'ONSITE'
 }
 
 function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: boolean }) {
@@ -198,7 +176,16 @@ function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: bo
   const scheduleMaterials = materialsFor(materials, scheduleId)
 
   return (
-    <Card title="오늘 강의" action={<TodayBadge />} bare={bare}>
+    <Card
+      title="오늘 강의"
+      action={
+        <>
+          <ClassModeBadge mode={classModeOf(schedule)} />
+          <TodayBadge />
+        </>
+      }
+      bare={bare}
+    >
       <Link to={`/timeline/${schedule.id}`} className="group block">
         <p className="text-title font-semibold text-ink group-hover:text-primary">{schedule.subject}</p>
         {schedule.instructor && <p className="mt-0.5 text-meta text-ink-muted">{schedule.instructor}</p>}

@@ -42,6 +42,12 @@
   --color-warning: #b45309;
   --color-warning-bg: #fffbeb;
 
+  /* 수업 방식 — .pen `onsite`/`remote` */
+  --color-onsite: #c81e4e;
+  --color-onsite-bg: #fff1f5;
+  --color-remote: #2d8cff;
+  --color-remote-bg: #eaf3ff;
+
   /* Typography scale — px values straight from the .pen token set */
   --text-display: 24px;
   --text-display--line-height: 1.3;
