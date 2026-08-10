@@ -139,6 +139,8 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
   function save() {
     if (!title.trim() || saving) return
     setSaving(true)
+    // ponytail: attachments는 백엔드에 업로드 API가 없어 이 세션 화면에만 보이고 저장/새로고침 시 사라진다.
+    // 파일 업로드를 v1에 넣기로 하면 submission에 file_key 저장 + 업로드 엔드포인트 추가.
     const submission = addSubmission({
       scheduleId: schedule.id,
       type,

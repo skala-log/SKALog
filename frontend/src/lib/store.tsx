@@ -1,5 +1,7 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
-import { MOCK_MATERIALS, MOCK_PENDING_MATERIALS, MOCK_SCHEDULES, MOCK_SUBMISSIONS, TODAY_ISO } from './mock'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { del, get, post } from './api'
+import { weekdayOf } from './format'
+import { MOCK_PENDING_MATERIALS, TODAY_ISO } from './mock'
 import type { Attachment, Material, Schedule, Submission, SubmissionType } from './types'
 
 type NewSubmissionInput = {
@@ -30,9 +32,61 @@ type StoreValue = {
 
 const StoreContext = createContext<StoreValue | null>(null)
 
-let nextSubmissionId = MOCK_SUBMISSIONS.reduce((max, s) => Math.max(max, s.id), 0) + 1
+// ponytail: 로그인(6단계) 전까지 반/사용자를 고정. 로그인 붙으면 세션에서 꺼내도록 교체.
+const CLASS_ID = 1
+const USER_ID = 1
 
-/** 새 기록의 작성 시각. 날짜는 프로토타입 기준일(TODAY_ISO)로 고정하고 시각만 실제 로컬 시간을 쓴다. */
+type ApiSchedule = { id: number; date: string; weekNo: number; subject: string; instructor: string | null }
+type ApiMaterial = {
+  id: number
+  scheduleId: number
+  title: string
+  kind: Material['kind']
+  url: string | null
+  status: Material['status']
+  sourceRef: string | null
+}
+type ApiSubmission = {
+  id: number
+  scheduleId: number
+  type: SubmissionType
+  title: string
+  body: string | null
+  createdAt: string
+}
+
+function toSchedule(s: ApiSchedule): Schedule {
+  return {
+    id: s.id,
+    date: s.date,
+    weekday: weekdayOf(s.date) as Schedule['weekday'],
+    weekNo: s.weekNo,
+    subject: s.subject,
+    instructor: s.instructor,
+  }
+}
+
+// ponytail: ext/fileSize/postedAt은 백엔드가 아직 안 내려줌(수동 입력 자료라 파일 메타·수집 시각이 없음). 승인함(4단계)에서 채워지면 여기도 채운다.
+function toMaterial(m: ApiMaterial): Material {
+  return {
+    id: m.id,
+    scheduleId: m.scheduleId,
+    title: m.title,
+    kind: m.kind,
+    ext: null,
+    url: m.url,
+    fileSize: null,
+    status: m.status,
+    sourceRef: m.sourceRef,
+    postedAt: '',
+  }
+}
+
+function toSubmission(s: ApiSubmission): Submission {
+  return { id: s.id, scheduleId: s.scheduleId, type: s.type, title: s.title, body: s.body ?? '', createdAt: s.createdAt, attachments: [] }
+}
+
+/** 새 기록의 작성 시각(낙관적 표시용). 서버 응답이 오면 서버 createdAt으로 교체된다. */
 function nowLocalISO(): string {
   const d = new Date()
   const p = (n: number) => String(n).padStart(2, '0')
@@ -40,14 +94,34 @@ function nowLocalISO(): string {
 }
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [schedules, setSchedules] = useState<Schedule[]>(MOCK_SCHEDULES)
-  const [submissions, setSubmissions] = useState<Submission[]>(MOCK_SUBMISSIONS)
-  const [materials, setMaterials] = useState<Material[]>(MOCK_MATERIALS)
+  const [schedules, setSchedules] = useState<Schedule[]>([])
+  const [submissions, setSubmissions] = useState<Submission[]>([])
+  const [materials, setMaterials] = useState<Material[]>([])
   const [pendingMaterials, setPendingMaterials] = useState<Material[]>(MOCK_PENDING_MATERIALS)
 
+  useEffect(() => {
+    get<ApiSchedule[]>(`/schedules?classId=${CLASS_ID}`).then(async (raw) => {
+      const list = raw.map(toSchedule)
+      setSchedules(list)
+      // ponytail: 자료 조회가 scheduleId 단위라 일정 수만큼 N+1 호출. 부담되면 GET /materials?classId= 벌크 엔드포인트 추가.
+      const perSchedule = await Promise.all(
+        list.map((s) => get<ApiMaterial[]>(`/materials?scheduleId=${s.id}`).catch(() => [] as ApiMaterial[])),
+      )
+      setMaterials(perSchedule.flat().map(toMaterial))
+    })
+    get<ApiSubmission[]>(`/submissions?userId=${USER_ID}`).then((raw) => setSubmissions(raw.map(toSubmission)))
+  }, [])
+
+  // ponytail: 화면에 보이는 id는 생성 시점에 고정하고, 실제 서버 id는 realIdRef에서 별도로 추적한다.
+  // (toast의 "실행 취소"가 submission.id를 클로저로 들고 있는데, 저장 응답이 오면서 id를 바꿔치기하면
+  //  그 사이 취소를 눌러도 더는 못 찾는 버그가 생긴다.)
+  const realIdRef = useRef(new Map<number, number>())
+  const resolveRealId = (id: number) => realIdRef.current.get(id) ?? id
+
   const addSubmission = useCallback((input: NewSubmissionInput) => {
-    const submission: Submission = {
-      id: nextSubmissionId++,
+    const localId = -Date.now()
+    const optimistic: Submission = {
+      id: localId,
       scheduleId: input.scheduleId,
       type: input.type,
       title: input.title,
@@ -55,16 +129,47 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       createdAt: nowLocalISO(),
       attachments: input.attachments ?? [],
     }
-    setSubmissions((prev) => [submission, ...prev])
-    return submission
+    setSubmissions((prev) => [optimistic, ...prev])
+
+    post<ApiSubmission>(`/submissions?userId=${USER_ID}`, {
+      scheduleId: input.scheduleId,
+      type: input.type,
+      title: input.title,
+      body: input.body,
+    })
+      .then((saved) => {
+        // ponytail: 저장 직후 응답의 createdAt은 DB 기본값이 반영되기 전이라 null로 온다. 낙관적 타임스탬프를 그대로 둔다.
+        realIdRef.current.set(localId, saved.id)
+      })
+      .catch((e) => {
+        console.error('submission 저장 실패', e)
+        setSubmissions((prev) => prev.filter((s) => s.id !== localId))
+      })
+
+    return optimistic
   }, [])
 
   const removeSubmission = useCallback((id: number) => {
     setSubmissions((prev) => prev.filter((s) => s.id !== id))
+    const realId = resolveRealId(id)
+    if (realId < 0) return // 아직 서버 저장이 끝나지 않은 항목 — 저장 완료 후에도 정리는 안 되지만 드문 경합이라 무시
+    del(`/submissions/${realId}?userId=${USER_ID}`).catch((e) => console.error('submission 삭제 실패', e))
   }, [])
 
+  // ponytail: 백엔드에 복원 API가 없어(soft delete만 있음) 재생성으로 대체한다. id는 그대로 유지하고
+  // 새로 생긴 서버 id만 realIdRef에 기록 — 진짜 복원이 필요하면 PATCH /submissions/{id}/restore 추가.
   const restoreSubmission = useCallback((submission: Submission) => {
     setSubmissions((prev) => [submission, ...prev])
+    post<ApiSubmission>(`/submissions?userId=${USER_ID}`, {
+      scheduleId: submission.scheduleId,
+      type: submission.type,
+      title: submission.title,
+      body: submission.body,
+    })
+      .then((saved) => {
+        realIdRef.current.set(submission.id, saved.id)
+      })
+      .catch((e) => console.error('submission 복원 실패', e))
   }, [])
 
   const approveMaterials = useCallback((ids: number[]) => {

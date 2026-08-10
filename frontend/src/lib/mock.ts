@@ -10,7 +10,13 @@ import type {
   User,
 } from './types'
 
-export const TODAY_ISO = '2026-08-03'
+function todayLocalISO(): string {
+  const d = new Date()
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+
+export const TODAY_ISO = todayLocalISO()
 export const TOTAL_WEEKS = 23
 
 export const CURRENT_USER: User = {
