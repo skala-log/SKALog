@@ -10,4 +10,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     List<Material> findByStatusOrderByCreatedAtDesc(MaterialStatus status);
 
     boolean existsBySourceRef(String sourceRef);
+
+    boolean existsByScheduleId(Long scheduleId);
 }

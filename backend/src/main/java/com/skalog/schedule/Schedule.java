@@ -32,6 +32,11 @@ public class Schedule {
 
     protected Schedule() {}
 
+    public void update(String subject, String instructor) {
+        this.subject = subject;
+        this.instructor = instructor;
+    }
+
     public Long getId() { return id; }
     public Long getClassId() { return classId; }
     public LocalDate getDate() { return date; }

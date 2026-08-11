@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { del, get, post } from './api'
+import { del, get, patch, post } from './api'
 import { weekdayOf } from './format'
-import { MOCK_PENDING_MATERIALS, TODAY_ISO } from './mock'
+import { TODAY_ISO } from './mock'
 import type { Attachment, Material, Schedule, Submission, SubmissionType } from './types'
 
 type NewSubmissionInput = {
@@ -39,7 +39,7 @@ const USER_ID = 1
 type ApiSchedule = { id: number; date: string; weekNo: number; subject: string; instructor: string | null }
 type ApiMaterial = {
   id: number
-  scheduleId: number
+  scheduleId: number | null
   title: string
   kind: Material['kind']
   url: string | null
@@ -97,7 +97,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [schedules, setSchedules] = useState<Schedule[]>([])
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
-  const [pendingMaterials, setPendingMaterials] = useState<Material[]>(MOCK_PENDING_MATERIALS)
+  const [pendingMaterials, setPendingMaterials] = useState<Material[]>([])
 
   useEffect(() => {
     get<ApiSchedule[]>(`/schedules?classId=${CLASS_ID}`).then(async (raw) => {
@@ -110,6 +110,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setMaterials(perSchedule.flat().map(toMaterial))
     })
     get<ApiSubmission[]>(`/submissions?userId=${USER_ID}`).then((raw) => setSubmissions(raw.map(toSubmission)))
+    get<ApiMaterial[]>('/materials/pending').then((raw) => setPendingMaterials(raw.map(toMaterial)))
   }, [])
 
   // ponytail: 화면에 보이는 id는 생성 시점에 고정하고, 실제 서버 id는 realIdRef에서 별도로 추적한다.
@@ -179,27 +180,36 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setMaterials((cur) => [...approved, ...cur])
       return prev.filter((m) => !set.has(m.id))
     })
+    post('/materials/approve', { ids }).catch((e) => console.error('자료 승인 실패', e))
   }, [])
 
   const rejectMaterials = useCallback((ids: number[]) => {
     const set = new Set(ids)
     setPendingMaterials((prev) => prev.filter((m) => !set.has(m.id)))
+    post('/materials/reject', { ids }).catch((e) => console.error('자료 반려 실패', e))
   }, [])
 
   const relinkMaterial = useCallback((id: number, scheduleId: number | null) => {
     setPendingMaterials((prev) =>
       prev.map((m) => (m.id === id ? { ...m, scheduleId, matchConfidence: 'EXACT' as const } : m)),
     )
+    patch(`/materials/${id}/relink`, { scheduleId }).catch((e) => console.error('자료 매칭 실패', e))
   }, [])
 
-  const updateSchedule = useCallback((id: number, patch: Partial<ScheduleDraft>) => {
-    setSchedules((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)))
+  const updateSchedule = useCallback((id: number, draft: Partial<ScheduleDraft>) => {
+    setSchedules((prev) => prev.map((s) => (s.id === id ? { ...s, ...draft } : s)))
+    patch(`/schedules/${id}`, { subject: draft.subject, instructor: draft.instructor }).catch((e) =>
+      console.error('일정 수정 실패', e),
+    )
   }, [])
 
   const removeSchedule = useCallback((id: number) => {
     setSchedules((prev) => prev.filter((s) => s.id !== id))
+    del(`/schedules/${id}`).catch((e) => console.error('일정 삭제 실패', e))
   }, [])
 
+  // ponytail: 일정 생성 API가 없어 실행취소는 화면에만 되돌린다. 삭제가 이미 서버에 반영된 뒤라면
+  // 새로고침하면 다시 사라짐 — 진짜 복원이 필요하면 POST /schedules 추가.
   const restoreSchedule = useCallback((schedule: Schedule) => {
     setSchedules((prev) => [...prev, schedule].sort((a, b) => a.date.localeCompare(b.date)))
   }, [])

@@ -11,7 +11,7 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "schedule_id", nullable = false)
+    @Column(name = "schedule_id")
     private Long scheduleId;
 
     @Column(nullable = false, length = 300)
@@ -47,6 +47,18 @@ public class Material {
         this.kind = kind;
         this.url = url;
         this.status = MaterialStatus.APPROVED;
+    }
+
+    public void approve() {
+        this.status = MaterialStatus.APPROVED;
+    }
+
+    public void reject() {
+        this.status = MaterialStatus.REJECTED;
+    }
+
+    public void relink(Long scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     public Long getId() { return id; }

@@ -11,4 +11,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     List<Submission> findByScheduleIdAndUserIdAndDeletedAtIsNull(Long scheduleId, Long userId);
 
     Optional<Submission> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
+
+    boolean existsByScheduleId(Long scheduleId);
 }
