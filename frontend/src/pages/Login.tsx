@@ -13,7 +13,7 @@ export default function Login() {
 
         <button
           type="button"
-          onClick={() => navigate('/onboarding/class')}
+          onClick={() => navigate('/')}
           className="mt-8 flex h-14 w-full items-center justify-center gap-2 rounded-control bg-primary text-heading font-semibold text-on-primary transition-colors hover:bg-primary-hover"
         >
           <Hash size={20} />

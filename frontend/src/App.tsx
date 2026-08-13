@@ -4,7 +4,6 @@ import { StoreProvider } from './lib/store'
 import { ToastProvider } from './lib/toast'
 import AdminMaterials from './pages/AdminMaterials'
 import AdminSchedules from './pages/AdminSchedules'
-import ClassSelect from './pages/ClassSelect'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import MyRecords from './pages/MyRecords'
@@ -12,8 +11,9 @@ import ScheduleDetail from './pages/ScheduleDetail'
 import Showcase from './pages/Showcase'
 import Timeline from './pages/Timeline'
 
-/** 로그인/온보딩은 사이드바·탭바 없이 단독 화면으로 뜬다. */
-const STANDALONE = ['/login', '/onboarding/class']
+/** 로그인은 사이드바·탭바 없이 단독 화면으로 뜬다.
+ * 반 선택 온보딩은 없앴다 — 슬랙 표시 이름("판교_1반_탁연우")에서 반을 자동으로 읽어온다. */
+const STANDALONE = ['/login']
 
 export default function App() {
   return (
@@ -34,7 +34,6 @@ function Shell() {
       <div className="min-h-dvh bg-app text-ink">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/onboarding/class" element={<ClassSelect />} />
         </Routes>
       </div>
     )
