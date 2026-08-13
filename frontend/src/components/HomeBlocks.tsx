@@ -5,7 +5,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { dayLabel, formatMD, isToday, weekdayOf } from '../lib/format'
 import { TODAY_ISO } from '../lib/mock'
-import type { ClassMode, MealPlan, Notice, QuickLink, Schedule } from '../lib/types'
+import { materialsFor, schedulesInWeek, submissionsFor } from '../lib/selectors'
+import type { ClassMode, MealPlan, Material, Notice, QuickLink, Schedule, Submission } from '../lib/types'
+import { WeekBadge } from './Badge'
+import { Card } from './Card'
+import { ScheduleRow } from './ListItem'
 
 /** mock 의 lucide 아이콘 이름 문자열을 컴포넌트로 해석한다. 못 찾으면 링크 아이콘. */
 function iconOf(name: string): LucideIcon {
@@ -42,7 +46,7 @@ export function ClassModeBadge({ mode }: { mode: ClassMode }) {
   return (
     <span
       className={
-        'inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-badge font-semibold ' +
+        'inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-badge leading-[1.33] font-semibold ' +
         (onsite ? 'bg-onsite-bg text-onsite' : 'bg-remote-bg text-remote')
       }
     >
@@ -61,17 +65,20 @@ export function NoticeScopeBadge({ notice }: { notice: Notice }) {
         ? 'bg-note-bg text-note'
         : 'bg-subtle text-ink-muted'
   return (
-    <span className={'w-13 shrink-0 rounded-full px-1.5 py-0.5 text-center text-badge font-semibold ' + tone}>
+    <span className={'w-13 shrink-0 rounded-full px-1.5 py-0.5 text-center text-badge leading-[1.33] font-semibold ' + tone}>
       {notice.scopeLabel}
     </span>
   )
 }
 
-/** 바로가기 레일 — .pen `LinkTile`. 모바일은 가로 스크롤, 데스크톱은 2열 그리드. */
-export function LinkRail({ links }: { links: QuickLink[] }) {
+/**
+ * 바로가기 레일 — .pen `LinkTile`. 모바일은 가로 스크롤, 데스크톱은 2열 그리드.
+ * 제목은 .pen D1 `Sec/바로가기` 에만 있고 M1 `LinkRail` 에는 없다.
+ */
+export function LinkRail({ links, showHeader = false }: { links: QuickLink[]; showHeader?: boolean }) {
   return (
     <section className="flex flex-col gap-2">
-      <BlockHead title="바로가기" />
+      {showHeader && <BlockHead title="바로가기" />}
       <div className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:overflow-visible lg:px-0">
         <ul className="flex w-max gap-2 lg:grid lg:w-full lg:grid-cols-2">
           {links.map((l) => {
@@ -98,7 +105,7 @@ export function LinkRail({ links }: { links: QuickLink[] }) {
               </>
             )
             const cls =
-              'group flex h-15 w-28 shrink-0 flex-col justify-between rounded-card border border-line bg-surface p-3 transition-colors hover:border-primary-tint hover:bg-primary-soft lg:w-full'
+              'group flex h-22 w-28 shrink-0 flex-col justify-between rounded-card border border-line bg-surface p-3 transition-colors hover:border-primary-tint hover:bg-primary-soft lg:w-full'
             return (
               <li key={l.id}>
                 {l.external ? (
@@ -123,20 +130,7 @@ export function LinkRail({ links }: { links: QuickLink[] }) {
 export function NoticeList({ notices, max = 3 }: { notices: Notice[]; max?: number }) {
   return (
     <section className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4">
-      <BlockHead
-        title="공지"
-        hairline={false}
-        action={
-          <a
-            href="https://theskala.slack.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="shrink-0 text-meta font-medium text-primary hover:underline"
-          >
-            더보기 ›
-          </a>
-        }
-      />
+      <BlockHead title="공지" hairline={false} />
       <ul className="flex flex-col gap-1">
         {notices.slice(0, max).map((n) => (
           <li key={n.id}>
@@ -144,11 +138,11 @@ export function NoticeList({ notices, max = 3 }: { notices: Notice[]; max?: numb
               href={n.url}
               target="_blank"
               rel="noreferrer noopener"
-              className="group flex items-center gap-2.5 rounded-control px-1 py-1.5 transition-colors hover:bg-subtle"
+              className="group flex items-center gap-2 rounded-control p-2 transition-colors hover:bg-subtle"
             >
               <NoticeScopeBadge notice={n} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-label font-medium text-ink transition-colors group-hover:text-primary">
+                <span className="block truncate text-body leading-[1.4] font-medium text-ink transition-colors group-hover:text-primary">
                   {n.title}
                 </span>
                 <span className="block text-badge text-ink-muted">{dayLabel(n.postedAt)}</span>
@@ -162,6 +156,36 @@ export function NoticeList({ notices, max = 3 }: { notices: Notice[]; max?: numb
         ))}
       </ul>
     </section>
+  )
+}
+
+/** 이번 주 일정 카드 — .pen M1 `Card/이번주`. 데스크톱의 스크롤형 `Sec/일정` 과 달리 이번 주만 고정으로 보여준다. */
+export function ThisWeekCard({
+  schedules,
+  materials,
+  submissions,
+  weekNo,
+}: {
+  schedules: Schedule[]
+  materials: Material[]
+  submissions: Submission[]
+  weekNo: number
+}) {
+  const rows = schedulesInWeek(schedules, weekNo)
+  return (
+    <Card title="이번 주" action={<WeekBadge weekNo={weekNo} tone="primary" />}>
+      <ul className="-mx-2 flex flex-col gap-0.5">
+        {rows.map((s) => (
+          <li key={s.id}>
+            <ScheduleRow
+              schedule={s}
+              materialCount={materialsFor(materials, s.id).length}
+              hasRecord={submissionsFor(submissions, s.id).length > 0}
+            />
+          </li>
+        ))}
+      </ul>
+    </Card>
   )
 }
 

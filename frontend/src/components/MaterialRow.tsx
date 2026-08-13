@@ -30,19 +30,19 @@ export function MaterialRow({
       target="_blank"
       rel="noreferrer"
       className={
-        'flex items-center gap-3 rounded-control px-3 py-2.5 transition-colors ' +
+        'flex items-center transition-colors ' +
         (variant === 'card'
-          ? 'border border-line bg-surface hover:border-primary-tint'
-          : 'bg-subtle hover:bg-primary-soft')
+          ? 'gap-3 rounded-control border border-line bg-surface px-3 py-2.5 hover:border-primary-tint'
+          : 'h-11 gap-2 rounded-control bg-subtle px-2 hover:bg-primary-soft')
       }
     >
-      <span className="shrink-0 text-primary">{isFile ? <FileText size={18} /> : <LinkIcon size={18} />}</span>
+      <span className="shrink-0 text-primary">{isFile ? <FileText size={16} /> : <LinkIcon size={16} />}</span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-label font-medium text-ink">{material.title}</span>
-        <span className="mt-0.5 block truncate text-meta text-ink-muted">{meta}</span>
+        <span className="block truncate text-label leading-[1.35] font-medium text-ink">{material.title}</span>
+        <span className="mt-0.5 block truncate text-badge text-ink-muted">{meta}</span>
       </span>
-      <span className="shrink-0 text-ink-muted" aria-label={isFile ? '다운로드' : '새 탭에서 열기'}>
-        {isFile ? <Download size={16} /> : <ArrowUpRight size={16} className="text-primary" />}
+      <span className="shrink-0 text-primary" aria-label={isFile ? '다운로드' : '새 탭에서 열기'}>
+        {isFile ? <Download size={18} /> : <ArrowUpRight size={18} />}
       </span>
     </a>
   )

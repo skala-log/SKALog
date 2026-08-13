@@ -76,33 +76,32 @@ export default function MyRecords() {
           <StatCard icon={StickyNote} label="노트" value={noteCount} tone="note" />
           <StatCard icon={Paperclip} label="첨부" value={attachmentCount} tone="neutral" />
         </div>
-        {/* .pen D3 : `3 / 23주차 진행 중` 라벨 + 같은 줄에 진행바 한 줄 */}
-        <div className="hidden items-center gap-4 rounded-card border border-line bg-surface px-4 py-3 lg:flex">
-          <p className="shrink-0 text-label text-ink tabular-nums">
+        {/* .pen D4 `ProgressWrap` : `3 / 23주차 진행 중` 라벨 + 같은 줄에 진행바 한 줄 */}
+        <div className="hidden items-center gap-3 rounded-card border border-line bg-surface px-4 py-2.5 lg:flex">
+          <p className="shrink-0 text-meta leading-[1.4] font-medium text-ink tabular-nums">
             {currentWeekNo} / {TOTAL_WEEKS}주차 진행 중
           </p>
           <ProgressBar pct={progressPct} className="flex-1" />
         </div>
 
-        {/* M4 · 모바일 요약 스트립 */}
-        <div className="rounded-card border border-line bg-surface p-4 lg:hidden">
-          <div className="flex items-baseline gap-2">
+        {/* M5 · 모바일 요약 스트립 */}
+        <div className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4 lg:hidden">
+          <div className="flex items-center gap-2">
             <p className="text-title font-semibold text-ink tabular-nums">총 {total}건</p>
-            <p className="ml-auto text-meta text-ink-muted tabular-nums">
+            <span className="flex-1" />
+            <p className="text-meta leading-[1.4] text-ink-muted tabular-nums">
               {currentWeekNo} / {TOTAL_WEEKS}주차 진행 중
             </p>
           </div>
-          <p className="mt-1 text-meta text-ink-muted tabular-nums">
+          <p className="text-meta leading-[1.4] text-ink-muted tabular-nums">
             과제 {assignmentCount} · 노트 {noteCount} · 첨부 {attachmentCount}
           </p>
-          <ProgressBar pct={progressPct} className="mt-2.5" />
+          <ProgressBar pct={progressPct} />
         </div>
 
-        {/* 필터 칩 — .pen M4/D3 : 선택은 solid violet, 나머지는 테두리만 있는 흰 칩
-            기록이 0건이면 .pen S6 처럼 칩 줄 자체를 렌더하지 않는다 (거를 대상이 없다) */}
-        {total > 0 && (
+        {/* 필터 칩 — .pen M5/D4 : 빈 상태(S8)에도 칩 줄은 그대로 남는다 */}
         <div className="flex items-center gap-2">
-          <div className="flex gap-1.5">
+          <div className="flex gap-2">
             {(
               [
                 ['ALL', '전체'],
@@ -116,7 +115,7 @@ export default function MyRecords() {
                 onClick={() => setTypeFilter(value)}
                 aria-pressed={typeFilter === value}
                 className={
-                  'flex h-9 items-center rounded-full px-3.5 text-label font-medium transition-colors ' +
+                  'flex h-8 items-center rounded-full px-3 text-meta leading-[1.4] font-semibold transition-colors ' +
                   (typeFilter === value
                     ? 'bg-primary text-on-primary'
                     : 'border border-line bg-surface text-ink-muted hover:border-primary-tint hover:text-primary')
@@ -129,13 +128,12 @@ export default function MyRecords() {
           <button
             type="button"
             onClick={() => setSort((s) => (s === 'RECENT' ? 'WEEK' : 'RECENT'))}
-            className="ml-auto flex h-9 shrink-0 items-center gap-1.5 rounded-control px-2 text-label text-ink-muted hover:bg-subtle"
+            className="ml-auto flex h-8 shrink-0 items-center gap-1 rounded-control px-2 text-meta leading-[1.4] font-medium text-ink-muted hover:bg-subtle"
           >
             {sort === 'RECENT' ? '최신순' : '주차순'}
-            <ArrowUpDown size={15} />
+            <ArrowUpDown size={14} />
           </button>
         </div>
-        )}
 
         {filtered.length === 0 ? (
           <EmptyState
@@ -187,7 +185,7 @@ export default function MyRecords() {
                         <li key={r.id}>
                           <Link
                             to={`/timeline/${r.scheduleId}`}
-                            className="group flex items-center gap-2.5 rounded-card border border-line bg-surface px-3 py-2.5 transition-colors hover:border-primary-tint"
+                            className="group flex items-center gap-3 rounded-card border border-line bg-surface px-4 py-3 transition-colors hover:border-primary-tint"
                           >
                             {/* .pen M4 : 배지와 제목이 같은 줄, 메타는 배지 왼쪽 끝에 맞춰 아래 줄 */}
                             <span className="min-w-0 flex-1">
@@ -198,7 +196,7 @@ export default function MyRecords() {
                                 </span>
                               </span>
                               {/* .pen M4 는 상대 날짜가 아니라 `7/30` 같은 절대 날짜를 쓴다 */}
-                              <span className="mt-0.5 block truncate text-meta text-ink-muted">
+                              <span className="mt-0.5 block truncate text-meta leading-[1.4] text-ink-muted">
                                 {schedule?.subject} · {formatMD(r.createdAt)}
                               </span>
                             </span>
@@ -258,12 +256,12 @@ function StatCard({
     neutral: 'bg-subtle text-ink-muted',
   }
   return (
-    <div className="rounded-card border border-line bg-surface p-4">
-      <span className={`flex size-9 items-center justify-center rounded-control ${tones[tone]}`}>
+    <div className="rounded-card bg-surface p-5 shadow-[0_1px_2px_rgba(15,23,42,0.06),0_6px_16px_-4px_rgba(15,23,42,0.08)]">
+      <span className={`flex size-8.5 items-center justify-center rounded-[10px] ${tones[tone]}`}>
         <Icon size={18} />
       </span>
-      <p className="mt-3 text-display font-semibold text-ink tabular-nums">{value}</p>
-      <p className="mt-0.5 text-meta text-ink-muted">{label}</p>
+      <p className="mt-4 text-display leading-[1.2] font-semibold text-ink tabular-nums">{value}</p>
+      <p className="mt-0.5 text-meta leading-[1.4] text-ink-muted">{label}</p>
     </div>
   )
 }

@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom'
 
 const CLASSES = ['판교 1반', '판교 2반', '판교 3반', '역삼 1반', '역삼 2반']
 
-/** M6 · 반 선택 (최초 1회) */
+/** M8 · 반 선택 (최초 1회) */
 export default function ClassSelect() {
   const navigate = useNavigate()
   const [value, setValue] = useState(CLASSES[0])
 
   return (
-    <div className="flex min-h-dvh flex-col justify-center px-6 pb-16">
+    <div className="flex min-h-dvh flex-col justify-center px-6">
       <div className="mx-auto w-full max-w-sm">
-        <h1 className="text-center text-display font-semibold text-ink">어느 반이신가요?</h1>
+        <h1 className="text-center text-display font-semibold leading-[1.35] text-ink">어느 반이신가요?</h1>
 
         <div className="relative mt-6">
           <select
@@ -41,7 +41,7 @@ export default function ClassSelect() {
           시작하기
         </button>
 
-        <p className="mt-6 text-center text-meta text-ink-muted">나중에 설정에서 바꿀 수 있습니다</p>
+        <p className="mt-6 text-center text-meta leading-[1.5] text-ink-muted">나중에 설정에서 바꿀 수 있습니다</p>
       </div>
     </div>
   )

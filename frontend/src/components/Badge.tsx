@@ -25,7 +25,7 @@ export function Badge({
   }
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-badge font-semibold ${tones[tone]} ${className}`}
+      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-badge leading-[1.33] font-semibold ${tones[tone]} ${className}`}
     >
       {children}
     </span>
@@ -56,12 +56,12 @@ export function TypeBadge({ type }: { type: SubmissionType }) {
   return <Badge tone={isNote ? 'note' : 'assignment'}>{isNote ? '노트' : '과제'}</Badge>
 }
 
-/** 첨부 개수 — .pen 은 lucide paperclip + 숫자 조합 */
+/** 첨부 개수 — .pen `t2ns28` BadgeIcon : bg-subtle pill, padding [2,8], gap 4, 12px semibold */
 export function AttachmentCount({ count }: { count: number }) {
   if (count <= 0) return null
   return (
-    <span className="inline-flex shrink-0 items-center gap-1 text-meta text-ink-muted tabular-nums">
-      <Paperclip size={13} />
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-subtle px-2 py-0.5 text-badge leading-[1.33] font-semibold text-ink-muted tabular-nums">
+      <Paperclip size={12} />
       {count}
     </span>
   )

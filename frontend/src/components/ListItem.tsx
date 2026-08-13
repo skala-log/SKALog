@@ -5,7 +5,7 @@ import { formatMD, isToday } from '../lib/format'
 import type { Schedule, Submission } from '../lib/types'
 
 /**
- * 일정 한 줄 — .pen `CxxDW` ListItem : height 56, 요일 / 날짜 / 과목 / 첨부수 / 기록점.
+ * 일정 한 줄 — .pen `CRePe` WeekRow : height 44, 요일 / 날짜 / 과목 / 첨부수 / 기록점.
  * 오늘 행은 왼쪽 3px 핑크 바 + today-soft 배경.
  */
 export function ScheduleRow({
@@ -24,20 +24,18 @@ export function ScheduleRow({
     <Link
       to={`/timeline/${schedule.id}`}
       className={
-        'flex min-h-listitem items-center gap-3 rounded-control px-3 py-2 transition-colors hover:bg-subtle ' +
-        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[9px] ' : '') +
+        'flex h-11 items-center gap-2 rounded-control px-2 transition-colors hover:bg-subtle ' +
+        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[5px] ' : '') +
         className
       }
     >
-      <span className={'w-4 shrink-0 text-meta ' + (today ? 'font-semibold text-today' : 'text-ink-muted')}>
+      <span className={'w-[14px] shrink-0 text-meta font-semibold ' + (today ? 'text-today' : 'text-ink-muted')}>
         {schedule.weekday}
       </span>
-      <span
-        className={'w-10 shrink-0 text-meta tabular-nums ' + (today ? 'font-semibold text-today' : 'text-ink-muted')}
-      >
+      <span className={'w-[34px] shrink-0 text-meta tabular-nums ' + (today ? 'text-today' : 'text-ink-muted')}>
         {formatMD(schedule.date)}
       </span>
-      <span className="min-w-0 flex-1 truncate text-body text-ink">{schedule.subject}</span>
+      <span className="min-w-0 flex-1 truncate text-label leading-[1.4] font-medium text-ink">{schedule.subject}</span>
       <AttachmentCount count={materialCount} />
       {hasRecord && <RecordDot />}
     </Link>

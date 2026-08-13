@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { MOCK_SHOWCASE } from '../lib/mock'
 
-/** M8 / D5 · 쇼케이스 — 다른 반 교육생이 만든 서비스 아카이브 */
+/** M6 / D5 · 쇼케이스 — 다른 반 교육생이 만든 서비스 아카이브 */
 export default function Showcase() {
   const items = [...MOCK_SHOWCASE].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
@@ -13,8 +13,9 @@ export default function Showcase() {
       <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         <div>
           <PageTitle>쇼케이스</PageTitle>
+          {/* .pen M6 은 개수 표기가 없고, D5 헤더에만 "· N개" 가 붙는다 */}
           <p className="mt-1 text-meta text-ink-muted lg:text-label">
-            다른 반 교육생들이 만든 서비스를 모아뒀습니다 · {items.length}개
+            다른 반 교육생들이 만든 서비스를 모아뒀습니다<span className="hidden lg:inline"> · {items.length}개</span>
           </p>
         </div>
 

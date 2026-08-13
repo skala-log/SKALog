@@ -1,4 +1,4 @@
-import { CalendarCog, CalendarDays, ChevronLeft, CircleUser, House, Inbox, NotebookText, Sparkles } from 'lucide-react'
+import { CalendarCog, CalendarDays, ChevronLeft, House, Inbox, LogOut, NotebookText, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { CLASS_NAME, CURRENT_USER, USER_NAME } from '../lib/mock'
@@ -28,15 +28,19 @@ export function AppHeader({
           type="button"
           aria-label="뒤로"
           onClick={() => (onBack ? onBack() : navigate(-1))}
-          className="-ml-1.5 flex size-9 shrink-0 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
+          className="-ml-1.5 flex size-9 shrink-0 items-center justify-center rounded-control text-ink hover:bg-subtle"
         >
           <ChevronLeft size={22} />
         </button>
       )}
-      <h1 className={'min-w-0 flex-1 truncate text-title font-semibold ' + (brand ? 'text-primary' : 'text-ink')}>
+      <h1
+        className={
+          'min-w-0 flex-1 truncate text-title font-semibold leading-[1.4] ' + (brand ? 'text-primary' : 'text-ink')
+        }
+      >
         {title}
       </h1>
-      {right && <div className="shrink-0 text-meta text-ink-muted">{right}</div>}
+      {right && <div className="shrink-0 text-meta leading-[1.4] text-ink-muted">{right}</div>}
     </header>
   )
 }
@@ -94,28 +98,46 @@ const NAV_GROUPS = [
 ]
 
 /**
- * Sidebar — .pen `ckNFx` : width 240, 학습/관리 두 그룹 + 하단 아바타 칩.
+ * Sidebar — .pen `gvY9H` : width 240, 유저 카드 상단, 학습/관리 두 그룹, 하단 로그아웃.
  *
  * sticky + h-dvh 로 본문이 아무리 길어져도 뷰포트에 붙어 있게 한다.
  * self-start 가 없으면 flex 의 stretch 때문에 높이가 본문만큼 늘어나 sticky 가 걸리지 않는다.
  */
 export function Sidebar() {
+  const navigate = useNavigate()
+  const roleLabel = CURRENT_USER.role === 'ADMIN' ? '관리자' : '훈련생'
+
   return (
-    <aside className="hidden w-sidebar shrink-0 flex-col gap-6 self-start overflow-y-auto border-r border-line bg-surface px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-dvh">
-      <NavLink to="/" className="px-2 text-title font-semibold text-primary">
-        SKALog
+    <aside className="hidden w-sidebar shrink-0 flex-col gap-5 self-start overflow-y-auto border-r border-line bg-surface px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-dvh">
+      <NavLink to="/" className="flex flex-col gap-0.5">
+        <span className="text-title font-semibold leading-[1.4] text-primary">SKALog</span>
+        <span className="text-badge leading-[1.4] text-ink-faint">학습 기록 플랫폼</span>
       </NavLink>
+
+      <div className="flex items-center gap-2 border-y border-line py-3">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-label font-semibold leading-none text-primary">
+          {USER_NAME.slice(0, 1)}
+        </div>
+        <div className="flex min-w-0 flex-col gap-px">
+          <p className="truncate text-meta font-semibold leading-[1.3] text-ink">{USER_NAME}</p>
+          <p className="truncate text-badge leading-[1.3] text-ink-muted">
+            {roleLabel} · {CLASS_NAME}
+          </p>
+        </div>
+      </div>
 
       {NAV_GROUPS.filter((g) => !g.admin || CURRENT_USER.role === 'ADMIN').map((group) => (
         <div key={group.label} className="flex flex-col gap-1">
-          <p className="px-2 pb-1 text-badge font-semibold tracking-wide text-ink-muted">{group.label}</p>
+          <p className="px-3 py-1 text-badge font-semibold leading-[1.4] tracking-[1px] text-ink-muted">
+            {group.label}
+          </p>
           {group.items.map(({ to, label, Icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
               className={({ isActive }) =>
-                'flex h-11 items-center gap-2.5 rounded-control px-3 text-label transition-colors ' +
+                'flex h-10 items-center gap-3 rounded-control px-3 text-label leading-[1.4] transition-colors ' +
                 (isActive
                   ? 'bg-primary-soft font-semibold text-primary'
                   : 'font-medium text-ink-muted hover:bg-subtle hover:text-ink')
@@ -128,12 +150,16 @@ export function Sidebar() {
         </div>
       ))}
 
-      <div className="mt-auto flex items-center gap-2 rounded-control bg-subtle px-3 py-2.5 text-meta text-ink-muted">
-        <CircleUser size={18} />
-        <span className="truncate">
-          {USER_NAME} · {CLASS_NAME}
-        </span>
-      </div>
+      <div className="flex-1" />
+
+      <button
+        type="button"
+        onClick={() => navigate('/login')}
+        className="flex items-center justify-center gap-2 rounded-control border border-line p-2 text-meta font-medium leading-[1.4] text-danger hover:bg-danger-bg"
+      >
+        <LogOut size={16} />
+        로그아웃
+      </button>
     </aside>
   )
 }

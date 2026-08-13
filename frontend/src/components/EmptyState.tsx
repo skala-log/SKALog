@@ -23,9 +23,11 @@ export function EmptyState({ icon: Icon = NotebookPen, message, alternative, act
       <Icon size={28} className="mb-3 text-ink-faint" />
       <p className="text-body font-medium text-ink">{message}</p>
       {alternative && (
-        <div className="mx-auto mt-1.5 max-w-xs whitespace-pre-line text-meta text-ink-muted">{alternative}</div>
+        <div className="mx-auto mt-3 max-w-xs whitespace-pre-line text-meta leading-[1.5] text-ink-muted">
+          {alternative}
+        </div>
       )}
-      {action && <div className="mt-4">{action}</div>}
+      {action && <div className="mt-3">{action}</div>}
     </div>
   )
 }

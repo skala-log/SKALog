@@ -1,14 +1,14 @@
 import { Hash } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-/** M5 · 로그인 */
+/** M7 · 로그인 */
 export default function Login() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex min-h-dvh flex-col justify-center px-6 pb-16">
+    <div className="flex min-h-dvh flex-col justify-center px-6">
       <div className="mx-auto w-full max-w-sm text-center">
-        <p className="text-[34px] font-semibold leading-tight text-primary">SKALog</p>
+        <p className="text-[34px] font-semibold leading-[1.2] text-primary">SKALog</p>
         <p className="mt-2 text-body text-ink-muted">설정 없이 바로 쓰는 학습 기록장</p>
 
         <button
@@ -20,7 +20,7 @@ export default function Login() {
           슬랙으로 시작하기
         </button>
 
-        <p className="mt-4 text-meta text-ink-muted">SKALA 슬랙 워크스페이스 구성원만 이용할 수 있습니다</p>
+        <p className="mt-4 text-meta leading-[1.5] text-ink-muted">SKALA 슬랙 워크스페이스 구성원만 이용할 수 있습니다</p>
       </div>
     </div>
   )
