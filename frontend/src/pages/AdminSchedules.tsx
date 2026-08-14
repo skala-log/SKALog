@@ -1,29 +1,50 @@
 import { ChevronDown, Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { TodayBadge } from '../components/Badge'
 import { AppHeader } from '../components/Shell'
 import { ConfirmDialog, Sheet, SheetAction } from '../components/Sheet'
+import { del, get, patch } from '../lib/api'
 import { isToday, weekTag } from '../lib/format'
-import { CLASS_NAME } from '../lib/mock'
 import { materialsFor, submissionsFor, weekNumbers } from '../lib/selectors'
-import { useStore } from '../lib/store'
+import { toSchedule, useStore, type ApiSchedule } from '../lib/store'
 import { useToast } from '../lib/toast'
-import type { Schedule } from '../lib/types'
+import type { Instructor, Schedule } from '../lib/types'
 
-const CLASSES = ['판교 1반', '판교 2반', '판교 3반']
+type ClassOption = { id: number; name: string }
 
 /** A2 · 관리자 / 일정 관리 (A2-a 행 인라인 편집, A2-b 삭제 경고 포함) */
 export default function AdminSchedules() {
-  const { schedules, materials, submissions, updateSchedule, removeSchedule, restoreSchedule } = useStore()
+  // ponytail: 자료/기록 건수는 로그인 사용자 반(useStore)만 미리 불러와 있어서, 다른 반을 볼 땐
+  // 삭제 경고에 0건으로 뜬다. 반별 자료·기록까지 다 끌어오려면 별도 API가 필요해서 보류.
+  const { materials, submissions } = useStore()
   const toast = useToast()
 
-  const [className, setClassName] = useState(CLASS_NAME)
+  const [classes, setClasses] = useState<ClassOption[]>([])
+  const [classId, setClassId] = useState<number | null>(null)
+  const [schedules, setSchedules] = useState<Schedule[]>([])
+
   // .pen A2 는 `주차 전체` 로 열린다
   const [weekFilter, setWeekFilter] = useState<number | 'ALL'>('ALL')
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [draft, setDraft] = useState<{ subject: string; instructor: string }>({ subject: '', instructor: '' })
+  const [draft, setDraft] = useState<{ subject: string; fullTime: string; practice: string }>({
+    subject: '',
+    fullTime: '',
+    practice: '',
+  })
   const [menuFor, setMenuFor] = useState<Schedule | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Schedule | null>(null)
+
+  useEffect(() => {
+    get<ClassOption[]>('/classes').then((list) => {
+      setClasses(list)
+      setClassId((cur) => cur ?? (list.find((c) => c.name === '1반') ?? list[0])?.id ?? null)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (classId == null) return
+    get<ApiSchedule[]>(`/schedules?classId=${classId}`).then((raw) => setSchedules(raw.map(toSchedule)))
+  }, [classId])
 
   const rows = useMemo(
     () =>
@@ -36,11 +57,21 @@ export default function AdminSchedules() {
   function startEdit(s: Schedule) {
     setMenuFor(null)
     setEditingId(s.id)
-    setDraft({ subject: s.subject, instructor: s.instructor ?? '' })
+    setDraft({
+      subject: s.subject,
+      fullTime: s.instructors.find((i) => i.role === 'FULL_TIME')?.name ?? '',
+      practice: s.instructors.find((i) => i.role === 'PRACTICE')?.name ?? '',
+    })
   }
 
   function commitEdit(id: number) {
-    updateSchedule(id, { subject: draft.subject.trim(), instructor: draft.instructor.trim() || null })
+    const instructors: Instructor[] = [
+      ...(draft.fullTime.trim() ? [{ name: draft.fullTime.trim(), role: 'FULL_TIME' as const }] : []),
+      ...(draft.practice.trim() ? [{ name: draft.practice.trim(), role: 'PRACTICE' as const }] : []),
+    ]
+    const subject = draft.subject.trim()
+    setSchedules((prev) => prev.map((s) => (s.id === id ? { ...s, subject, instructors } : s)))
+    patch(`/schedules/${id}`, { subject, instructors }).catch((e) => console.error('일정 수정 실패', e))
     setEditingId(null)
     toast.show('일정을 수정했습니다')
   }
@@ -48,9 +79,15 @@ export default function AdminSchedules() {
   function confirmDelete() {
     if (!deleteTarget) return
     const target = deleteTarget
-    removeSchedule(target.id)
+    setSchedules((prev) => prev.filter((s) => s.id !== target.id))
     setDeleteTarget(null)
-    toast.show('일정을 삭제했습니다', { undo: () => restoreSchedule(target) })
+    del(`/schedules/${target.id}`)
+      .then(() => toast.show('일정을 삭제했습니다', { undo: () => setSchedules((prev) => [...prev, target].sort((a, b) => a.date.localeCompare(b.date))) }))
+      .catch((e) => {
+        console.error('일정 삭제 실패', e)
+        setSchedules((prev) => [...prev, target].sort((a, b) => a.date.localeCompare(b.date)))
+        toast.show('삭제하지 못했습니다 — 연결된 자료나 기록이 있는지 확인해주세요')
+      })
   }
 
   return (
@@ -62,10 +99,10 @@ export default function AdminSchedules() {
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="hidden text-display font-semibold text-ink lg:block">일정 관리</h1>
           <FilterSelect
-            value={className}
-            onChange={setClassName}
+            value={classId == null ? '' : String(classId)}
+            onChange={(v) => setClassId(Number(v))}
             label="반 선택"
-            options={CLASSES.map((c) => [c, c])}
+            options={classes.map((c) => [String(c.id), c.name])}
           />
           <FilterSelect
             value={String(weekFilter)}
@@ -84,13 +121,14 @@ export default function AdminSchedules() {
         </div>
 
         <div className="overflow-x-auto rounded-card border border-line bg-surface">
-          <table className="w-full min-w-160 border-collapse text-left">
+          <table className="w-full min-w-180 border-collapse text-left">
             <thead>
               <tr className="border-b border-line bg-subtle text-meta text-ink-muted">
                 <th className="px-5 py-2.5 font-semibold">주차</th>
                 <th className="px-5 py-2.5 font-semibold">날짜</th>
                 <th className="px-5 py-2.5 font-semibold">과목</th>
-                <th className="px-5 py-2.5 font-semibold">강사</th>
+                <th className="px-5 py-2.5 font-semibold">전임교수</th>
+                <th className="px-5 py-2.5 font-semibold">실습교수</th>
                 <th className="w-16 px-5 py-2.5" />
               </tr>
             </thead>
@@ -98,6 +136,8 @@ export default function AdminSchedules() {
               {rows.map((s) => {
                 const today = isToday(s.date)
                 const editing = editingId === s.id
+                const fullTime = s.instructors.find((i) => i.role === 'FULL_TIME')?.name
+                const practice = s.instructors.find((i) => i.role === 'PRACTICE')?.name
                 return (
                   <tr
                     key={s.id}
@@ -145,17 +185,33 @@ export default function AdminSchedules() {
                     <td className="px-5 py-4 align-middle">
                       {editing ? (
                         <input
-                          value={draft.instructor}
-                          onChange={(e) => setDraft((d) => ({ ...d, instructor: e.target.value }))}
+                          value={draft.fullTime}
+                          onChange={(e) => setDraft((d) => ({ ...d, fullTime: e.target.value }))}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') commitEdit(s.id)
                             if (e.key === 'Escape') setEditingId(null)
                           }}
-                          aria-label="강사"
-                          className="h-10 w-32 rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
+                          aria-label="전임교수"
+                          className="h-10 w-28 rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
                         />
                       ) : (
-                        <span className="text-label leading-[1.4] text-ink-muted">{s.instructor ?? '—'}</span>
+                        <span className="text-label leading-[1.4] text-ink-muted">{fullTime ?? '—'}</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4 align-middle">
+                      {editing ? (
+                        <input
+                          value={draft.practice}
+                          onChange={(e) => setDraft((d) => ({ ...d, practice: e.target.value }))}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') commitEdit(s.id)
+                            if (e.key === 'Escape') setEditingId(null)
+                          }}
+                          aria-label="실습교수"
+                          className="h-10 w-28 rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
+                        />
+                      ) : (
+                        <span className="text-label leading-[1.4] text-ink-muted">{practice ?? '—'}</span>
                       )}
                     </td>
                     <td className="px-5 py-4 align-middle">

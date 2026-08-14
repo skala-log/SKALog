@@ -1,13 +1,13 @@
 import { Ellipsis, FilePlus2, Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { AttachmentCount, TodayBadge, TypeBadge, WeekBadge } from '../components/Badge'
+import { AttachmentCount, InstructorList, TodayBadge, TypeBadge, WeekBadge } from '../components/Badge'
 import { Card, SectionHeader } from '../components/Card'
 import { InlineComposer } from '../components/InlineComposer'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader, BackLink } from '../components/Shell'
 import { Sheet, SheetAction } from '../components/Sheet'
-import { dateTimeLabel, isToday, weekdayFullLabel } from '../lib/format'
+import { dateTimeLabel, instructorNames, isToday, weekdayFullLabel } from '../lib/format'
 import { materialsFor, submissionsFor } from '../lib/selectors'
 import { useStore } from '../lib/store'
 import { useToast } from '../lib/toast'
@@ -47,14 +47,12 @@ export default function ScheduleDetail() {
             {isToday(schedule.date) && <span className="ml-auto"><TodayBadge /></span>}
           </div>
           <h1 className="mt-2 text-display font-semibold text-ink">{schedule.subject}</h1>
-          {/* 데스크톱(D3)은 강사 앞에 "전임" 역할 배지가 붙는다(.pen `Professors`) */}
-          {schedule.instructor && (
-            <div className="mt-2 flex items-center gap-2">
-              <span className="hidden shrink-0 items-center rounded-full bg-primary-soft px-2 py-[3px] text-badge leading-[1.33] font-semibold text-primary lg:flex">
-                전임
-              </span>
-              <p className="text-label leading-[1.4] text-ink-muted lg:font-medium lg:text-ink">{schedule.instructor}</p>
-            </div>
+          {/* 데스크톱(D3)만 역할 배지가 붙는다(.pen `Professors`) — 모바일(M4)은 이름만 */}
+          <div className="mt-2 hidden lg:block">
+            <InstructorList instructors={schedule.instructors} nameClassName="text-label leading-[1.4] font-medium text-ink" />
+          </div>
+          {schedule.instructors.length > 0 && (
+            <p className="mt-2 text-label leading-[1.4] text-ink-muted lg:hidden">{instructorNames(schedule.instructors)}</p>
           )}
         </div>
 
@@ -69,7 +67,7 @@ export default function ScheduleDetail() {
                 <MaterialEmpty />
               ) : (
                 scheduleMaterials.map((m) => (
-                  <MaterialRow key={m.id} material={m} variant="card" by={schedule.instructor} />
+                  <MaterialRow key={m.id} material={m} variant="card" by={instructorNames(schedule.instructors)} />
                 ))
               )}
             </div>

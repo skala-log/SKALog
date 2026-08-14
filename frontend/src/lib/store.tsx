@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { del, get, patch, post } from './api'
 import { weekdayOf } from './format'
 import { TODAY_ISO } from './mock'
-import type { Attachment, Material, Schedule, Submission, SubmissionType } from './types'
+import type { Attachment, Instructor, Material, Schedule, Submission, SubmissionType } from './types'
 
 type NewSubmissionInput = {
   scheduleId: number
@@ -12,7 +12,7 @@ type NewSubmissionInput = {
   attachments?: Attachment[]
 }
 
-export type ScheduleDraft = Pick<Schedule, 'date' | 'weekNo' | 'subject' | 'instructor'>
+export type ScheduleDraft = Pick<Schedule, 'date' | 'weekNo' | 'subject' | 'instructors'>
 
 type StoreValue = {
   schedules: Schedule[]
@@ -36,7 +36,7 @@ const StoreContext = createContext<StoreValue | null>(null)
 const CLASS_ID = 1
 const USER_ID = 1
 
-type ApiSchedule = { id: number; date: string; weekNo: number; subject: string; instructor: string | null }
+export type ApiSchedule = { id: number; date: string; weekNo: number; subject: string; instructors?: Instructor[]; isLive?: boolean }
 type ApiMaterial = {
   id: number
   scheduleId: number | null
@@ -55,14 +55,15 @@ type ApiSubmission = {
   createdAt: string
 }
 
-function toSchedule(s: ApiSchedule): Schedule {
+export function toSchedule(s: ApiSchedule): Schedule {
   return {
     id: s.id,
     date: s.date,
     weekday: weekdayOf(s.date) as Schedule['weekday'],
     weekNo: s.weekNo,
     subject: s.subject,
-    instructor: s.instructor,
+    instructors: s.instructors ?? [],
+    isLive: s.isLive ?? false,
   }
 }
 
@@ -198,7 +199,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const updateSchedule = useCallback((id: number, draft: Partial<ScheduleDraft>) => {
     setSchedules((prev) => prev.map((s) => (s.id === id ? { ...s, ...draft } : s)))
-    patch(`/schedules/${id}`, { subject: draft.subject, instructor: draft.instructor }).catch((e) =>
+    patch(`/schedules/${id}`, { subject: draft.subject, instructors: draft.instructors }).catch((e) =>
       console.error('일정 수정 실패', e),
     )
   }, [])

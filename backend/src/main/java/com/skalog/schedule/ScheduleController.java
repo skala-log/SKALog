@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 @Tag(name = "일정")
 @RestController
@@ -42,15 +43,21 @@ public class ScheduleController {
 
     @GetMapping("/{id}")
     public Schedule detail(@PathVariable Long id) {
-        return scheduleRepository.findById(id)
+        return scheduleRepository.findWithInstructorsById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PatchMapping("/{id}")
+    @Transactional
     public Schedule update(@PathVariable Long id, @Valid @RequestBody ScheduleUpdateRequest req) {
-        Schedule schedule = scheduleRepository.findById(id)
+        Schedule schedule = scheduleRepository.findWithInstructorsById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        schedule.update(req.subject(), req.instructor());
+        List<ScheduleInstructor> instructors = req.instructors() == null
+                ? List.of()
+                : req.instructors().stream()
+                        .map(i -> new ScheduleInstructor(schedule, i.name(), i.role()))
+                        .toList();
+        schedule.update(req.subject(), instructors);
         return scheduleRepository.save(schedule);
     }
 

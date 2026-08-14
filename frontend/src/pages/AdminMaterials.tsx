@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
 import { AppHeader, PageTitle } from '../components/Shell'
-import { dateTimeLabel, formatMD, weekTag } from '../lib/format'
+import { dateTimeLabel, formatMD, instructorNames, weekTag } from '../lib/format'
 import { TODAY_ISO } from '../lib/mock'
 import { useStore } from '../lib/store'
 import { useToast } from '../lib/toast'
@@ -175,7 +175,7 @@ export default function AdminMaterials() {
 
                       <div className="flex flex-wrap items-center gap-2 text-meta leading-[1.4] text-ink-muted">
                         <span>
-                          {schedule?.instructor ? `${schedule.instructor} · ` : ''}
+                          {schedule && schedule.instructors.length > 0 ? `${instructorNames(schedule.instructors)} · ` : ''}
                           {dateTimeLabel(m.postedAt)}
                         </span>
                         <a

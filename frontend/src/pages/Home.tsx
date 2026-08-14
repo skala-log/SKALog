@@ -1,7 +1,7 @@
 import { ChevronRight, Info, Paperclip } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import { Badge, TodayBadge, WeekBadge } from '../components/Badge'
+import { Badge, InstructorList, WeekBadge } from '../components/Badge'
 import { Card, SectionHeader } from '../components/Card'
 import { EmptyState } from '../components/EmptyState'
 import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll, ThisWeekCard } from '../components/HomeBlocks'
@@ -10,7 +10,7 @@ import { RecordRow } from '../components/ListItem'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader } from '../components/Shell'
 import { ErrorState, SkeletonCard, SkeletonLine } from '../components/States'
-import { dayLabel, formatMD, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
+import { dayLabel, formatMD, instructorNames, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
 import { CLASS_NAME, MOCK_MEALS, MOCK_NOTICES, QUICK_LINKS, TOTAL_WEEKS, USER_NAME } from '../lib/mock'
 import {
   getCurrentWeekNo,
@@ -22,7 +22,7 @@ import {
   scheduleById,
 } from '../lib/selectors'
 import { useStore } from '../lib/store'
-import type { ClassMode } from '../lib/types'
+import type { ClassMode, Schedule } from '../lib/types'
 
 export default function Home() {
   const { schedules, submissions, materials } = useStore()
@@ -192,12 +192,11 @@ export default function Home() {
   )
 }
 
-/**
- * 수업 방식 — 백엔드에 컬럼이 아직 없다. 과목명으로 임시 판별하고,
- * API 가 붙으면 `schedule.classMode` 로 갈아끼운다.
- */
-function classModeOf(schedule: { subject: string }): ClassMode {
-  return /특강|온라인|원격/.test(schedule.subject) ? 'REMOTE' : 'ONSITE'
+/** 수업 방식 — 실습교수가 전임교수와 같은 사람이면(직강 반) 현강, 다르면(중계 시청) 원격. */
+function classModeOf(schedule: Schedule): ClassMode {
+  const fullTime = schedule.instructors.find((i) => i.role === 'FULL_TIME')?.name
+  const practice = schedule.instructors.find((i) => i.role === 'PRACTICE')?.name
+  return fullTime && fullTime !== practice ? 'REMOTE' : 'ONSITE'
 }
 
 function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: boolean }) {
@@ -208,17 +207,12 @@ function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: bo
   return (
     <Card
       title="오늘 강의"
-      action={
-        <>
-          <ClassModeBadge mode={classModeOf(schedule)} />
-          <TodayBadge />
-        </>
-      }
+      action={<ClassModeBadge mode={classModeOf(schedule)} />}
       bare={bare}
     >
       <Link to={`/timeline/${schedule.id}`} className="group block">
         <p className="text-title font-semibold text-ink group-hover:text-primary">{schedule.subject}</p>
-        {schedule.instructor && <p className="mt-0.5 text-meta text-ink-muted">{schedule.instructor}</p>}
+        <div className="mt-2"><InstructorList instructors={schedule.instructors} /></div>
       </Link>
 
       <SectionHeader icon={Paperclip} muted title="강의자료" count={scheduleMaterials.length} className="mt-4" />
@@ -268,7 +262,7 @@ function NoClassCard({
         <Link to={`/timeline/${next.id}`} className="group block">
           <p className="text-title font-semibold text-ink group-hover:text-primary">{next.subject}</p>
           <p className="mt-0.5 text-meta text-ink-muted">
-            {[next.instructor, weekTag(next.weekNo)].filter(Boolean).join(' · ')}
+            {[instructorNames(next.instructors), weekTag(next.weekNo)].filter(Boolean).join(' · ')}
           </p>
         </Link>
       ) : (

@@ -3,13 +3,23 @@ export type Weekday = '일' | '월' | '화' | '수' | '목' | '금' | '토'
 /** 수업 방식 — .pen `ClassMode` */
 export type ClassMode = 'ONSITE' | 'REMOTE'
 
+/** 강사 역할 — .pen `RoleTag/전임` · `RoleTag/실습` */
+export type InstructorRole = 'FULL_TIME' | 'PRACTICE'
+
+export type Instructor = {
+  name: string
+  role: InstructorRole
+}
+
 export type Schedule = {
   id: number
   date: string // YYYY-MM-DD
   weekday: Weekday
   weekNo: number
   subject: string
-  instructor: string | null
+  instructors: Instructor[]
+  /** 직강 여부 — 이 반이 현장에서 직접 강의를 듣는지, 다른 반 강의를 중계로 보는지 */
+  isLive: boolean
 }
 
 export type MaterialKind = 'FILE' | 'LINK'
