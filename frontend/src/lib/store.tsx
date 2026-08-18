@@ -25,6 +25,7 @@ type StoreValue = {
   approveMaterials: (ids: number[]) => void
   rejectMaterials: (ids: number[]) => void
   relinkMaterial: (id: number, scheduleId: number | null) => void
+  refreshPendingMaterials: () => Promise<void>
   updateSchedule: (id: number, patch: Partial<ScheduleDraft>) => void
   removeSchedule: (id: number) => void
   restoreSchedule: (schedule: Schedule) => void
@@ -99,6 +100,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [materials, setMaterials] = useState<Material[]>([])
   const [pendingMaterials, setPendingMaterials] = useState<Material[]>([])
 
+  const refreshPendingMaterials = useCallback(async () => {
+    const raw = await get<ApiMaterial[]>('/materials/pending')
+    setPendingMaterials(raw.map(toMaterial))
+  }, [])
+
   useEffect(() => {
     get<ApiSchedule[]>(`/schedules?classId=${CLASS_ID}`).then(async (raw) => {
       const list = raw.map(toSchedule)
@@ -110,8 +116,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setMaterials(perSchedule.flat().map(toMaterial))
     })
     get<ApiSubmission[]>(`/submissions?userId=${USER_ID}`).then((raw) => setSubmissions(raw.map(toSubmission)))
-    get<ApiMaterial[]>('/materials/pending').then((raw) => setPendingMaterials(raw.map(toMaterial)))
-  }, [])
+    refreshPendingMaterials()
+  }, [refreshPendingMaterials])
 
   // ponytail: 화면에 보이는 id는 생성 시점에 고정하고, 실제 서버 id는 realIdRef에서 별도로 추적한다.
   // (toast의 "실행 취소"가 submission.id를 클로저로 들고 있는데, 저장 응답이 오면서 id를 바꿔치기하면
@@ -226,6 +232,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       approveMaterials,
       rejectMaterials,
       relinkMaterial,
+      refreshPendingMaterials,
       updateSchedule,
       removeSchedule,
       restoreSchedule,
@@ -241,6 +248,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       approveMaterials,
       rejectMaterials,
       relinkMaterial,
+      refreshPendingMaterials,
       updateSchedule,
       removeSchedule,
       restoreSchedule,

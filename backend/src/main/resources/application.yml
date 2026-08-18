@@ -17,6 +17,7 @@ slack:
   client-secret: ${SLACK_CLIENT_SECRET:}
   bot-token: ${SLACK_BOT_TOKEN:}
   team-id: ${SLACK_TEAM_ID:}
+  material-channel-ids: ${SLACK_MATERIAL_CHANNEL_IDS:}
 
 logging:
   level:

@@ -1,8 +1,9 @@
-import { ArrowUpRight, Check, FileText, Link as LinkIcon, Plus, TriangleAlert, X } from 'lucide-react'
+import { ArrowUpRight, Check, FileText, Link as LinkIcon, Plus, RefreshCw, TriangleAlert, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
 import { AppHeader, PageTitle } from '../components/Shell'
+import { post } from '../lib/api'
 import { dateTimeLabel, formatMD, weekTag } from '../lib/format'
 import { TODAY_ISO } from '../lib/mock'
 import { useStore } from '../lib/store'
@@ -13,11 +14,27 @@ type Tab = 'PENDING' | 'APPROVED' | 'REJECTED'
 
 /** A1 · 관리자 / 자료 승인함 */
 export default function AdminMaterials() {
-  const { schedules, materials, pendingMaterials, approveMaterials, rejectMaterials, relinkMaterial } = useStore()
+  const { schedules, materials, pendingMaterials, approveMaterials, rejectMaterials, relinkMaterial, refreshPendingMaterials } =
+    useStore()
   const toast = useToast()
   const [tab, setTab] = useState<Tab>('PENDING')
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [rejected, setRejected] = useState<Material[]>([])
+  const [collecting, setCollecting] = useState(false)
+
+  async function collectNow() {
+    setCollecting(true)
+    try {
+      await post('/admin/materials/collect', {})
+      await refreshPendingMaterials()
+      toast.show('슬랙에서 새 자료를 확인했습니다')
+    } catch (e) {
+      console.error('슬랙 수집 실패', e)
+      toast.show('수집에 실패했습니다')
+    } finally {
+      setCollecting(false)
+    }
+  }
 
   const list = tab === 'PENDING' ? pendingMaterials : tab === 'APPROVED' ? materials : rejected
   const collectedToday = pendingMaterials.filter((m) => m.postedAt.slice(0, 10) === TODAY_ISO).length
@@ -257,14 +274,25 @@ export default function AdminMaterials() {
         )}
 
         {/* .pen A1 : 수동 등록은 목록 아래 왼쪽에 놓인 보조 버튼 */}
-        <button
-          type="button"
-          onClick={() => toast.show('준비 중입니다')}
-          className="flex h-touch items-center gap-1.5 rounded-control border border-line bg-surface px-4 text-label font-medium text-primary hover:bg-primary-soft"
-        >
-          <Plus size={16} />
-          수동 등록
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => toast.show('준비 중입니다')}
+            className="flex h-touch items-center gap-1.5 rounded-control border border-line bg-surface px-4 text-label font-medium text-primary hover:bg-primary-soft"
+          >
+            <Plus size={16} />
+            수동 등록
+          </button>
+          <button
+            type="button"
+            onClick={collectNow}
+            disabled={collecting}
+            className="flex h-touch items-center gap-1.5 rounded-control border border-line bg-surface px-4 text-label font-medium text-primary hover:bg-primary-soft disabled:opacity-50"
+          >
+            <RefreshCw size={16} className={collecting ? 'animate-spin' : ''} />
+            {collecting ? '수집 중…' : '지금 수집'}
+          </button>
+        </div>
       </div>
     </>
   )
