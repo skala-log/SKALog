@@ -16,6 +16,7 @@ export type ScheduleDraft = Pick<Schedule, 'date' | 'weekNo' | 'subject' | 'inst
 
 type StoreValue = {
   schedules: Schedule[]
+  schedulesLoaded: boolean
   materials: Material[]
   pendingMaterials: Material[]
   submissions: Submission[]
@@ -97,6 +98,7 @@ function nowLocalISO(): string {
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [schedules, setSchedules] = useState<Schedule[]>([])
+  const [schedulesLoaded, setSchedulesLoaded] = useState(false)
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
   const [pendingMaterials, setPendingMaterials] = useState<Material[]>([])
@@ -115,6 +117,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         list.map((s) => get<ApiMaterial[]>(`/materials?scheduleId=${s.id}`).catch(() => [] as ApiMaterial[])),
       )
       setMaterials(perSchedule.flat().map(toMaterial))
+      setSchedulesLoaded(true)
     })
     get<ApiSubmission[]>(`/submissions?userId=${USER_ID}`).then((raw) => setSubmissions(raw.map(toSubmission)))
     refreshPendingMaterials()
@@ -224,6 +227,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<StoreValue>(
     () => ({
       schedules,
+      schedulesLoaded,
       materials,
       pendingMaterials,
       submissions,
@@ -240,6 +244,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }),
     [
       schedules,
+      schedulesLoaded,
       materials,
       pendingMaterials,
       submissions,

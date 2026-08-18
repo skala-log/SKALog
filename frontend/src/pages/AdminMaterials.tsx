@@ -193,7 +193,8 @@ export default function AdminMaterials() {
                       <div className="flex flex-wrap items-center gap-2 text-meta leading-[1.4] text-ink-muted">
                         <span>
                           {schedule && schedule.instructors.length > 0 ? `${instructorNames(schedule.instructors)} · ` : ''}
-                          {dateTimeLabel(m.postedAt)}
+                          {/* ponytail: 슬랙 수집 자료는 postedAt이 아직 없다(백엔드 미구현) — 그 경우 시각 생략 */}
+                          {m.postedAt ? dateTimeLabel(m.postedAt) : '수집 시각 미상'}
                         </span>
                         <a
                           href="#"

@@ -7,6 +7,7 @@ import { InlineComposer } from '../components/InlineComposer'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader, BackLink } from '../components/Shell'
 import { Sheet, SheetAction } from '../components/Sheet'
+import { SkeletonCard } from '../components/States'
 import { dateTimeLabel, instructorNames, isToday, weekdayFullLabel } from '../lib/format'
 import { materialsFor, submissionsFor } from '../lib/selectors'
 import { useStore } from '../lib/store'
@@ -16,13 +17,23 @@ import type { Submission } from '../lib/types'
 export default function ScheduleDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { schedules, materials, submissions, removeSubmission, restoreSubmission } = useStore()
+  const { schedules, schedulesLoaded, materials, submissions, removeSubmission, restoreSubmission } = useStore()
   const toast = useToast()
   const [menuFor, setMenuFor] = useState<Submission | null>(null)
   const [justSavedId, setJustSavedId] = useState<number | null>(null)
 
   const schedule = schedules.find((s) => s.id === Number(id))
-  if (!schedule) return <Navigate to="/timeline" replace />
+  if (!schedule) {
+    // 일정 목록이 아직 서버에서 안 왔을 수 있다 — 로딩 전에 "없음"으로 단정해 튕기지 않는다.
+    if (!schedulesLoaded) {
+      return (
+        <div className="mx-auto w-full max-w-5xl space-y-3 px-4 pt-4 lg:px-8 lg:pt-8">
+          <SkeletonCard />
+        </div>
+      )
+    }
+    return <Navigate to="/timeline" replace />
+  }
 
   const scheduleMaterials = materialsFor(materials, schedule.id)
   const records = submissionsFor(submissions, schedule.id)
