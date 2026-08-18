@@ -11585,12 +11585,7 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": [
-            56,
-            "$space-8",
-            "$space-8",
-            "$space-8"
-          ],
+          "padding": "$space-8",
           "alignItems": "center",
           "children": [
             {
@@ -11635,7 +11630,7 @@
                 },
                 {
                   "type": "frame",
-                  "id": "mLBNF",
+                  "id": "ca2M1",
                   "name": "Hero",
                   "width": "fill_container",
                   "layout": "vertical",
@@ -11643,14 +11638,14 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "QVStH",
+                      "id": "oBCVI",
                       "name": "Meta",
                       "width": "fill_container",
                       "gap": "$space-2",
                       "alignItems": "center",
                       "children": [
                         {
-                          "id": "iuHkf",
+                          "id": "pwd4A",
                           "type": "ref",
                           "ref": "zWNLL",
                           "name": "Week",
@@ -11664,10 +11659,10 @@
                         },
                         {
                           "type": "text",
-                          "id": "XIWO7",
+                          "id": "ureMJ",
                           "name": "Date",
                           "fill": "$text-muted",
-                          "content": "7월 30일 목요일 · 권기창",
+                          "content": "7월 30일 목요일",
                           "lineHeight": 1.4,
                           "fontFamily": "$font",
                           "fontSize": "$text-meta",
@@ -11675,13 +11670,13 @@
                         },
                         {
                           "type": "frame",
-                          "id": "T1JrE",
+                          "id": "RAzbI",
                           "name": "Spacer",
                           "width": "fill_container",
                           "height": 1
                         },
                         {
-                          "id": "HGubt",
+                          "id": "F2Ll2",
                           "type": "ref",
                           "ref": "zWNLL",
                           "name": "Today",
@@ -11697,7 +11692,7 @@
                     },
                     {
                       "type": "text",
-                      "id": "Jp3HQ",
+                      "id": "tQrRM",
                       "name": "Subject",
                       "fill": "$text",
                       "textGrowth": "fixed-width",
@@ -11707,6 +11702,51 @@
                       "fontFamily": "$font",
                       "fontSize": "$text-display",
                       "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bkw3B",
+                      "name": "Professors",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "T0r9Gs",
+                          "name": "RoleTag/전임",
+                          "fill": "$primary-soft",
+                          "cornerRadius": "$radius-pill",
+                          "padding": [
+                            3,
+                            8
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "lzHTV",
+                              "name": "Label",
+                              "fill": "$primary",
+                              "content": "전임",
+                              "lineHeight": 1.33,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-semibold"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "V5sKJf",
+                          "name": "Name",
+                          "fill": "$text",
+                          "content": "권기창",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-label",
+                          "fontWeight": "$weight-medium"
+                        }
+                      ]
                     }
                   ]
                 },
@@ -12174,12 +12214,7 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": [
-            56,
-            "$space-8",
-            "$space-8",
-            "$space-8"
-          ],
+          "padding": "$space-8",
           "alignItems": "center",
           "children": [
             {
@@ -16449,7 +16484,12 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": "$space-8",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
           "alignItems": "center",
           "children": [
             {
@@ -17514,7 +17554,12 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": "$space-8",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
           "alignItems": "center",
           "children": [
             {
@@ -18327,7 +18372,7 @@
       "name": "D1 · 데스크톱 홈",
       "clip": true,
       "width": 1440,
-      "height": 900,
+      "height": 1054,
       "fill": "$bg-app",
       "children": [
         {
@@ -18357,7 +18402,12 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": "$space-8",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
           "children": [
             {
               "type": "frame",
@@ -18532,7 +18582,7 @@
                           "padding": "$space-4",
                           "descendants": {
                             "WjBNO": {
-                              "content": "오늘 강의",
+                              "content": "📑 오늘 강의",
                               "fill": "$text-muted",
                               "fontWeight": "600",
                               "fontStyle": "normal"
@@ -18545,7 +18595,7 @@
                             },
                             "Za40Y": {
                               "type": "frame",
-                              "id": "ln7GM",
+                              "id": "PV0ls",
                               "name": "Body",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -18553,7 +18603,7 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "HvGKi",
+                                  "id": "eXfQW",
                                   "name": "Subject",
                                   "width": "fill_container",
                                   "layout": "vertical",
@@ -18561,7 +18611,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "EWMm7",
+                                      "id": "hBDhq",
                                       "name": "Name",
                                       "fill": "$text",
                                       "textGrowth": "fixed-width",
@@ -18573,21 +18623,102 @@
                                       "fontWeight": "$weight-semibold"
                                     },
                                     {
-                                      "type": "text",
-                                      "id": "mr8E1",
-                                      "name": "Instructor",
-                                      "fill": "$text-muted",
-                                      "content": "박창렴",
-                                      "lineHeight": 1.4,
-                                      "fontFamily": "$font",
-                                      "fontSize": "$text-meta",
-                                      "fontWeight": "normal"
+                                      "type": "frame",
+                                      "id": "H0clFS",
+                                      "name": "Professors",
+                                      "gap": 6,
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "frame",
+                                          "id": "dhawb",
+                                          "name": "RoleTag/전임",
+                                          "fill": "$primary-soft",
+                                          "cornerRadius": "$radius-pill",
+                                          "padding": [
+                                            2,
+                                            7
+                                          ],
+                                          "alignItems": "center",
+                                          "children": [
+                                            {
+                                              "type": "text",
+                                              "id": "vbPd3",
+                                              "name": "Label",
+                                              "fill": "$primary",
+                                              "content": "전임",
+                                              "lineHeight": 1.33,
+                                              "fontFamily": "$font",
+                                              "fontSize": "$text-badge",
+                                              "fontWeight": "$weight-semibold"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "rrCDc",
+                                          "name": "Name",
+                                          "fill": "$text",
+                                          "content": "박창렴",
+                                          "lineHeight": 1.4,
+                                          "fontFamily": "$font",
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "$weight-medium"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "t4lWz",
+                                          "name": "Dot",
+                                          "fill": "$text-faint",
+                                          "content": "·",
+                                          "lineHeight": 1.4,
+                                          "fontFamily": "$font",
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "frame",
+                                          "id": "mTch6",
+                                          "name": "RoleTag/실습",
+                                          "fill": "$note-bg",
+                                          "cornerRadius": "$radius-pill",
+                                          "padding": [
+                                            2,
+                                            7
+                                          ],
+                                          "alignItems": "center",
+                                          "children": [
+                                            {
+                                              "type": "text",
+                                              "id": "qJAH4",
+                                              "name": "Label",
+                                              "fill": "$note",
+                                              "content": "실습",
+                                              "lineHeight": 1.33,
+                                              "fontFamily": "$font",
+                                              "fontSize": "$text-badge",
+                                              "fontWeight": "$weight-semibold"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "UiRFv",
+                                          "name": "Name",
+                                          "fill": "$text",
+                                          "content": "이서준",
+                                          "lineHeight": 1.4,
+                                          "fontFamily": "$font",
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "$weight-medium"
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
                                 {
                                   "type": "rectangle",
-                                  "id": "X5D8EO",
+                                  "id": "IiFMl",
                                   "name": "Divider",
                                   "fill": "$border",
                                   "width": "fill_container",
@@ -18595,7 +18726,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "hRUU3",
+                                  "id": "aHIgP",
                                   "name": "MaterialsHead",
                                   "width": "fill_container",
                                   "gap": "$space-1",
@@ -18603,7 +18734,7 @@
                                   "children": [
                                     {
                                       "type": "icon",
-                                      "id": "d6qHD",
+                                      "id": "HRxZY",
                                       "name": "Icon",
                                       "width": 14,
                                       "height": 14,
@@ -18613,7 +18744,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "JCsCp",
+                                      "id": "b6Qcs",
                                       "name": "Label",
                                       "fill": "$text-muted",
                                       "content": "강의자료 2",
@@ -18626,7 +18757,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "Gv1sV",
+                                  "id": "Z99Wc",
                                   "name": "Materials",
                                   "width": "fill_container",
                                   "layout": "vertical",
@@ -18634,7 +18765,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "pkxIa",
+                                      "id": "BrXsx",
                                       "name": "Mat/Spring DI 개요.pdf",
                                       "width": "fill_container",
                                       "height": 56,
@@ -18649,7 +18780,7 @@
                                       "children": [
                                         {
                                           "type": "icon",
-                                          "id": "diM5s",
+                                          "id": "RKbl5",
                                           "name": "Kind",
                                           "width": 16,
                                           "height": 16,
@@ -18659,7 +18790,7 @@
                                         },
                                         {
                                           "type": "frame",
-                                          "id": "kBFKG",
+                                          "id": "mJer2",
                                           "name": "Text",
                                           "width": "fill_container",
                                           "layout": "vertical",
@@ -18667,7 +18798,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "jjz2Y",
+                                              "id": "klveQ",
                                               "name": "Name",
                                               "fill": "$text",
                                               "textGrowth": "fixed-width",
@@ -18680,7 +18811,7 @@
                                             },
                                             {
                                               "type": "text",
-                                              "id": "ffQDA",
+                                              "id": "fG9ch",
                                               "name": "Meta",
                                               "fill": "$text-muted",
                                               "textGrowth": "fixed-width",
@@ -18695,7 +18826,7 @@
                                         },
                                         {
                                           "type": "icon",
-                                          "id": "a87Qzv",
+                                          "id": "gB5Uc",
                                           "name": "Action",
                                           "width": 18,
                                           "height": 18,
@@ -18707,7 +18838,7 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "y8omww",
+                                      "id": "SifIp",
                                       "name": "Mat/실습 코드 저장소",
                                       "width": "fill_container",
                                       "height": 56,
@@ -18722,7 +18853,7 @@
                                       "children": [
                                         {
                                           "type": "icon",
-                                          "id": "DVP82",
+                                          "id": "Hdjll",
                                           "name": "Kind",
                                           "width": 16,
                                           "height": 16,
@@ -18732,7 +18863,7 @@
                                         },
                                         {
                                           "type": "frame",
-                                          "id": "eIv5q",
+                                          "id": "rsM6c",
                                           "name": "Text",
                                           "width": "fill_container",
                                           "layout": "vertical",
@@ -18740,7 +18871,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "PXOHd",
+                                              "id": "EQy1B",
                                               "name": "Name",
                                               "fill": "$text",
                                               "textGrowth": "fixed-width",
@@ -18753,7 +18884,7 @@
                                             },
                                             {
                                               "type": "text",
-                                              "id": "ntN2B",
+                                              "id": "pAYuY",
                                               "name": "Meta",
                                               "fill": "$text-muted",
                                               "textGrowth": "fixed-width",
@@ -18768,7 +18899,7 @@
                                         },
                                         {
                                           "type": "icon",
-                                          "id": "BcWtB",
+                                          "id": "RM6aD",
                                           "name": "Action",
                                           "width": 18,
                                           "height": 18,
@@ -18781,7 +18912,7 @@
                                   ]
                                 },
                                 {
-                                  "id": "dKjBu",
+                                  "id": "hGMIs",
                                   "type": "ref",
                                   "ref": "m3Wlc",
                                   "name": "Composer",
@@ -19375,7 +19506,8 @@
                                           "width": "fill_container",
                                           "content": "Java, SpringBoot, Rest API 구현",
                                           "fontFamily": "$font",
-                                          "fontSize": "$text-meta"
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
                                         }
                                       ]
                                     },
@@ -19495,7 +19627,8 @@
                                           "width": "fill_container",
                                           "content": "데이터 분석을 위한 Python 이해",
                                           "fontFamily": "$font",
-                                          "fontSize": "$text-meta"
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
                                         }
                                       ]
                                     },
@@ -19543,7 +19676,8 @@
                                           "width": "fill_container",
                                           "content": "실전 Feature Engineering",
                                           "fontFamily": "$font",
-                                          "fontSize": "$text-meta"
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
                                         }
                                       ]
                                     },
@@ -19591,7 +19725,8 @@
                                           "width": "fill_container",
                                           "content": "머신러닝 및 딥러닝 이해",
                                           "fontFamily": "$font",
-                                          "fontSize": "$text-meta"
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
                                         }
                                       ]
                                     },
@@ -19639,7 +19774,8 @@
                                           "width": "fill_container",
                                           "content": "머신러닝 및 딥러닝 이해",
                                           "fontFamily": "$font",
-                                          "fontSize": "$text-meta"
+                                          "fontSize": "$text-meta",
+                                          "fontWeight": "normal"
                                         }
                                       ]
                                     },
