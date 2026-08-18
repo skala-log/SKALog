@@ -32,6 +32,13 @@ public class User {
 
     protected User() {}
 
+    public User(String slackUserId, String slackTeamId, String name, Long classId) {
+        this.slackUserId = slackUserId;
+        this.slackTeamId = slackTeamId;
+        this.name = name;
+        this.classId = classId;
+    }
+
     public Long getId() { return id; }
     public String getSlackUserId() { return slackUserId; }
     public String getSlackTeamId() { return slackTeamId; }

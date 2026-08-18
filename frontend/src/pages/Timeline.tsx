@@ -2,10 +2,10 @@ import { ChevronDown, ChevronLeft, ChevronRight, Paperclip } from 'lucide-react'
 import type { ReactNode, RefObject } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { RecordDot, TodayBadge, WeekBadge } from '../components/Badge'
+import { AttachmentCount, Badge, RecordDot } from '../components/Badge'
 import { MaterialRow } from '../components/MaterialRow'
 import { AppHeader, PageTitle } from '../components/Shell'
-import { formatMD, isToday, monthGrid, monthLabel, weekRangeLabel, weekTag, weekdayFullLabel, WEEKDAY_NAMES } from '../lib/format'
+import { formatMD, isToday, monthGrid, monthLabel, weekRangeLabel, weekTag, WEEKDAY_NAMES } from '../lib/format'
 import { CLASS_NAME, TODAY_ISO } from '../lib/mock'
 import { getCurrentWeekNo, materialsFor, submissionsFor, weekNumbers } from '../lib/selectors'
 import { useStore } from '../lib/store'
@@ -81,7 +81,7 @@ export default function Timeline() {
               </div>
             )}
 
-            <div className="ml-auto flex shrink-0 rounded-full bg-subtle p-0.5">
+            <div className="ml-auto flex shrink-0 gap-0.5 rounded-control bg-subtle p-[3px]">
               {(
                 [
                   ['week', '주간'],
@@ -94,8 +94,8 @@ export default function Timeline() {
                   onClick={() => setView(value)}
                   aria-pressed={view === value}
                   className={
-                    'h-8 rounded-full px-3.5 text-meta font-semibold transition-colors ' +
-                    (view === value ? 'bg-surface text-primary shadow-sm' : 'text-ink-muted')
+                    'rounded-control px-2.5 py-1.5 text-badge transition-colors ' +
+                    (view === value ? 'bg-surface font-semibold text-primary shadow-sm' : 'font-medium text-ink-muted')
                   }
                 >
                   {label}
@@ -229,18 +229,15 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
                   'shrink-0 text-ink-muted transition-transform ' + (weekOpen ? 'rotate-0' : '-rotate-90')
                 }
               />
-              <p className={'text-heading font-semibold ' + (isPastWeek ? 'text-ink-muted' : 'text-ink')}>
+              <p className={'text-label leading-[1.4] font-semibold ' + (isPastWeek ? 'text-ink-muted' : 'text-ink')}>
                 {weekTag(weekNo)}{' '}
-                <span className="text-label font-normal text-ink-muted">
+                <span className="text-meta leading-[1.4] font-normal text-ink-muted">
                   {weekRangeLabel(items.map((i) => i.date))}
                 </span>
               </p>
               <span className="flex-1" />
               {weekNo === currentWeekNo ? (
-                <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-today-vivid px-2.5 py-1 text-badge font-semibold text-on-primary">
-                  <span className="size-1.5 rounded-full bg-on-primary" />
-                  이번 주
-                </span>
+                <Badge tone="primary">이번 주</Badge>
               ) : (
                 !weekOpen && <span className="shrink-0 text-meta text-ink-faint tabular-nums">{items.length}일</span>
               )}
@@ -248,7 +245,7 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
 
             {/* .pen M2 `CgVER` : 카드 안쪽에 행을 쌓되 행 사이 구분선은 없다 (간격으로만 나눈다) */}
             {weekOpen && (
-            <div className="overflow-hidden rounded-card border border-line bg-surface p-2">
+            <div className="flex flex-col gap-0.5 rounded-card border border-line bg-surface p-2">
               {items.map((s) => {
                 const scheduleMaterials = materialsFor(materials, s.id)
                 const hasRecord = submissionsFor(submissions, s.id).length > 0
@@ -260,23 +257,21 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
                   <div key={s.id}>
                     <div
                       className={
-                        'flex min-h-listitem items-center gap-3 rounded-control px-3 py-2 ' +
-                        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[9px] ' : '') +
+                        'flex h-11 items-center gap-2 rounded-control px-2 ' +
+                        (today ? 'border-l-[3px] border-today-vivid bg-today-soft pl-[5px] ' : '') +
                         (past ? 'opacity-55' : '')
                       }
                     >
-                      <Link to={`/timeline/${s.id}`} className="flex min-w-0 flex-1 items-center gap-3 hover:opacity-80">
-                        <span className={'w-4 shrink-0 text-meta ' + (today ? 'font-semibold text-today' : 'text-ink-muted')}>
+                      <Link to={`/timeline/${s.id}`} className="flex min-w-0 flex-1 items-center gap-2 hover:opacity-80">
+                        <span className={'w-[14px] shrink-0 text-meta font-semibold ' + (today ? 'text-today' : 'text-ink-muted')}>
                           {s.weekday}
                         </span>
                         <span
-                          className={
-                            'w-10 shrink-0 text-meta tabular-nums ' + (today ? 'font-semibold text-today' : 'text-ink-muted')
-                          }
+                          className={'w-[34px] shrink-0 text-meta tabular-nums ' + (today ? 'text-today' : 'text-ink-muted')}
                         >
                           {formatMD(s.date)}
                         </span>
-                        <span className={'min-w-0 flex-1 truncate text-body ' + (past ? 'text-ink-muted' : 'text-ink')}>
+                        <span className="min-w-0 flex-1 truncate text-label leading-[1.4] font-medium text-ink">
                           {s.subject}
                         </span>
                       </Link>
@@ -298,10 +293,11 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
                       )}
                       {hasRecord && <RecordDot />}
                     </div>
+                    {/* .pen `Grp/W03` Accordion : subtle 배경 + subject 칼럼과 맞춘 좌측 들여쓰기(34px) */}
                     {isOpen && (
-                      <div className="space-y-1.5 border-t border-line bg-app px-3 py-2.5">
+                      <div className="flex flex-col gap-1.5 py-2 pr-2 pl-[34px]">
                         {scheduleMaterials.map((m) => (
-                          <MaterialRow key={m.id} material={m} />
+                          <MaterialRow key={m.id} material={m} variant="card" />
                         ))}
                       </div>
                     )}
@@ -319,10 +315,10 @@ function WeekView({ weekRefs }: { weekRefs: RefObject<Map<number, HTMLDivElement
 
 /* ── M7 / D4 · 월간 캘린더 ────────────────────────────────────────── */
 
+/** .pen M3/D2 의 월간 캘린더는 평일(월~금) 5칸이다 — 주말엔 수업이 없다. */
 function MonthView({ year, month }: { year: number; month: number }) {
   const { schedules, materials, submissions } = useStore()
   const navigate = useNavigate()
-  const [selected, setSelected] = useState<string>(TODAY_ISO)
 
   const byDate = useMemo(() => new Map(schedules.map((s) => [s.date, s])), [schedules])
   const recordDates = useMemo(
@@ -330,159 +326,54 @@ function MonthView({ year, month }: { year: number; month: number }) {
     [submissions, schedules],
   )
 
-  const grid = monthGrid(year, month)
-  const selectedSchedule = byDate.get(selected) ?? null
-
-  function openDay(iso: string) {
-    setSelected(iso)
-    // .pen D4 : "날짜를 클릭하면 해당 일정 상세로 이동합니다" — 모바일은 아래 상세 카드로 대신한다
-    const schedule = byDate.get(iso)
-    if (schedule && window.matchMedia('(min-width: 1024px)').matches) navigate(`/timeline/${schedule.id}`)
-  }
+  const grid = monthGrid(year, month).map((week) => week.slice(1, 6))
+  const weekdayLabels = WEEKDAY_NAMES.slice(1, 6)
 
   return (
     <div className="pt-2">
-      {/* .pen M7 은 그리드가 화면 폭을 꽉 채우는 흰 판, D4 는 테두리 있는 카드 */}
-      <div className="-mx-4 bg-surface lg:mx-0 lg:overflow-hidden lg:rounded-card lg:border lg:border-line">
-        <div className="grid grid-cols-7 border-b border-line lg:bg-subtle">
-          {WEEKDAY_NAMES.map((d) => (
-            <div
-              key={d}
-              className={
-                'py-2.5 text-center text-meta font-semibold ' + (d === '일' ? 'text-today' : 'text-ink-muted')
-              }
-            >
-              {d}
-            </div>
-          ))}
-        </div>
-
-        {grid.map((week, wi) => (
-          <div key={wi} className={'grid grid-cols-7 ' + (wi < grid.length - 1 ? 'lg:border-b lg:border-line' : '')}>
-            {week.map((iso) => {
-              const inMonth = Number(iso.slice(5, 7)) === month
-              const schedule = byDate.get(iso)
-              const today = isToday(iso)
-              const hasRecord = recordDates.has(iso)
-              const isSelected = iso === selected
-              // 주간 뷰와 같은 규칙 — 지난 날짜는 흐리게
-              const past = iso < TODAY_ISO
-              return (
-                <button
-                  key={iso}
-                  type="button"
-                  onClick={() => openDay(iso)}
-                  aria-pressed={isSelected}
-                  aria-label={`${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일${schedule ? ` · ${schedule.subject}` : ''}`}
-                  className={
-                    'flex min-h-14 flex-col items-center gap-1 p-1.5 transition-colors lg:min-h-28 lg:items-stretch lg:text-left ' +
-                    (inMonth ? (past ? 'opacity-55 ' : '') : 'opacity-40 ') +
-                    // 모바일(M7)은 오늘 날짜에 동그라미만, 데스크톱(D4)은 셀 전체를 물들인다
-                    (today ? 'lg:bg-today-soft ' : isSelected ? 'bg-primary-soft lg:bg-transparent ' : 'hover:bg-subtle ')
-                  }
-                >
-                  <span className="flex w-full items-center justify-center lg:justify-start">
-                    <span
-                      className={
-                        'flex size-6 items-center justify-center rounded-full text-meta tabular-nums ' +
-                        (today
-                          ? 'bg-today-vivid font-semibold text-on-primary'
-                          : schedule
-                            ? 'font-medium text-ink'
-                            : 'font-medium text-ink-muted')
-                      }
-                    >
-                      {Number(iso.slice(8, 10))}
-                    </span>
-                    <span className="hidden flex-1 lg:block" />
-                    {hasRecord && <span className="hidden lg:inline-flex"><RecordDot /></span>}
-                  </span>
-
-                  {/* 모바일(M7)은 점 하나가 강의 유무 + 기록 유무를 함께 나타낸다 */}
-                  {schedule && (
-                    <span
-                      className={
-                        'block size-1.5 rounded-full lg:hidden ' + (hasRecord ? 'bg-primary' : 'bg-primary-tint')
-                      }
-                    />
-                  )}
-
-                  {/* 데스크톱(D4)은 과목 카드 */}
-                  {schedule && (
-                    <span
-                      className={
-                        'hidden min-w-0 flex-col gap-0.5 rounded-control px-2 py-1 lg:flex ' +
-                        (today ? 'bg-surface' : 'bg-primary-soft')
-                      }
-                    >
-                      <span className="line-clamp-2 text-badge font-medium text-ink">{schedule.subject}</span>
-                      <span className="text-micro font-semibold text-primary">{weekTag(schedule.weekNo)}</span>
-                    </span>
-                  )}
-                </button>
-              )
-            })}
+      {/* .pen M3/D2 `WeekdayHead` + `Grid` : 요일 5칸, 셀은 .pen `aFUiO` DayCell(64px, 테두리 카드) */}
+      <div className="grid grid-cols-5 gap-1.5">
+        {weekdayLabels.map((d) => (
+          <div key={d} className="pb-1 text-center text-meta font-semibold text-ink-muted">
+            {d}
           </div>
         ))}
       </div>
 
-      {/* 선택한 날짜 상세 — .pen M7 전용(D4 는 셀 자체가 상세로 이어진다) */}
-      <div className="mt-4 lg:hidden">
-        <div className="mb-2 flex items-center gap-2">
-          <p className="text-label font-semibold text-ink">{weekdayFullLabel(selected)}</p>
-          {isToday(selected) && <TodayBadge />}
-          {selectedSchedule && (
-            <span className="ml-auto">
-              <WeekBadge weekNo={selectedSchedule.weekNo} tone="primary" />
-            </span>
-          )}
+      {grid.map((week, wi) => (
+        <div key={wi} className="mt-1.5 grid grid-cols-5 gap-1.5">
+          {week.map((iso) => {
+            const inMonth = Number(iso.slice(5, 7)) === month
+            const schedule = byDate.get(iso)
+            const today = isToday(iso)
+            const hasRecord = recordDates.has(iso)
+            const past = iso < TODAY_ISO
+            const materialCount = schedule ? materialsFor(materials, schedule.id).length : 0
+            return (
+              <button
+                key={iso}
+                type="button"
+                onClick={() => schedule && navigate(`/timeline/${schedule.id}`)}
+                aria-label={`${Number(iso.slice(5, 7))}월 ${Number(iso.slice(8, 10))}일${schedule ? ` · ${schedule.subject}` : ''}`}
+                className={
+                  'flex h-16 flex-col gap-0.5 rounded-control border p-2 text-left transition-colors ' +
+                  (inMonth ? (past ? 'opacity-55 ' : '') : 'opacity-40 ') +
+                  (today ? 'border-today-vivid bg-today-soft ' : 'border-line bg-surface hover:border-primary-tint ')
+                }
+              >
+                <span className={'text-badge font-semibold tabular-nums ' + (today ? 'text-today' : 'text-ink')}>
+                  {Number(iso.slice(8, 10))}
+                </span>
+                {schedule && <span className="line-clamp-1 text-badge text-ink-muted">{schedule.subject}</span>}
+                <span className="mt-auto flex items-center gap-1">
+                  {materialCount > 0 && <AttachmentCount count={materialCount} />}
+                  {hasRecord && <RecordDot />}
+                </span>
+              </button>
+            )
+          })}
         </div>
-
-        {selectedSchedule ? (
-          <Link
-            to={`/timeline/${selectedSchedule.id}`}
-            className="group flex items-center gap-3 rounded-card border border-line bg-surface px-3 py-3"
-          >
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-body font-medium text-ink group-hover:text-primary">
-                {selectedSchedule.subject}
-              </span>
-              {selectedSchedule.instructor && (
-                <span className="mt-0.5 block text-meta text-ink-muted">{selectedSchedule.instructor}</span>
-              )}
-            </span>
-            {materialsFor(materials, selectedSchedule.id).length > 0 && (
-              <span className="flex shrink-0 items-center gap-1 text-meta text-ink-muted tabular-nums">
-                <Paperclip size={13} />
-                {materialsFor(materials, selectedSchedule.id).length}
-              </span>
-            )}
-            <ChevronRight size={16} className="shrink-0 text-ink-faint" />
-          </Link>
-        ) : (
-          <p className="rounded-card border border-line bg-surface px-3 py-4 text-center text-meta text-ink-muted">
-            이 날은 강의가 없습니다
-          </p>
-        )}
-      </div>
-
-      {/* 범례 — .pen M7 은 점 2개, D4 는 오늘/강의/기록 3개 + 오른쪽 안내문 */}
-      <div className="mt-4 flex items-center gap-x-5 gap-y-2 text-meta text-ink-muted">
-        <span className="hidden items-center gap-2 lg:flex">
-          <span className="size-3.5 rounded-full bg-today-vivid" />
-          오늘
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-primary-tint lg:size-3.5 lg:rounded-sm lg:bg-primary-soft" />
-          <span className="lg:hidden">강의 있음</span>
-          <span className="hidden lg:inline">강의 있는 날</span>
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-primary" />
-          내 기록 있음
-        </span>
-        <span className="ml-auto hidden text-primary lg:block">날짜를 클릭하면 해당 일정 상세로 이동합니다</span>
-      </div>
+      ))}
     </div>
   )
 }

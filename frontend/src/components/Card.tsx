@@ -65,15 +65,16 @@ export function SectionHeader({
     <div className={'flex items-center gap-3 ' + className}>
       <h2
         className={
-          'flex shrink-0 items-center gap-1.5 ' +
-          (muted ? 'text-meta font-medium text-ink-muted' : 'text-label font-semibold text-ink')
+          'flex shrink-0 items-center ' +
+          (muted ? 'gap-1 text-meta font-semibold text-ink-muted' : 'gap-1.5 text-label font-semibold text-ink')
         }
       >
         {Icon && <Icon size={14} />}
         {title}
         {count !== undefined && <span className={muted ? 'tabular-nums' : 'text-ink-muted tabular-nums'}>{count}</span>}
       </h2>
-      <span className="h-px min-w-4 flex-1 bg-line" />
+      {/* .pen M1 `MaterialsHead` 는 헤어라인 없이 아이콘+라벨만 있다 — M3/M4 패턴에만 있는 선 */}
+      {!muted && <span className="h-px min-w-4 flex-1 bg-line" />}
       {action && <div className="shrink-0">{action}</div>}
     </div>
   )

@@ -1,4 +1,5 @@
 import { TODAY_ISO } from './mock'
+import type { Instructor } from './types'
 
 export const WEEKDAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'] as const
 
@@ -82,6 +83,11 @@ export function monthGrid(year: number, month: number): string[][] {
 
 export function monthOf(dateISO: string): number {
   return Number(dateISO.slice(5, 7))
+}
+
+/** "박창렴 · 이서준" — 역할 구분 없이 이름만 나열할 때 (자료 캡션 등) */
+export function instructorNames(instructors: Instructor[]): string {
+  return instructors.map((i) => i.name).join(' · ')
 }
 
 export function formatFileSize(bytes: number): string {

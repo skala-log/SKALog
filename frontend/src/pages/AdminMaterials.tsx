@@ -4,7 +4,7 @@ import { Badge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { post } from '../lib/api'
-import { dateTimeLabel, formatMD, weekTag } from '../lib/format'
+import { dateTimeLabel, formatMD, instructorNames, weekTag } from '../lib/format'
 import { TODAY_ISO } from '../lib/mock'
 import { useStore } from '../lib/store'
 import { useToast } from '../lib/toast'
@@ -88,7 +88,7 @@ export default function AdminMaterials() {
           자료 승인함
         </PageTitle>
 
-        <div className="flex items-center gap-1 border-b border-line">
+        <div className="flex items-center gap-4 border-b border-line">
           {TABS.map(([value, label, count]) => (
             <button
               key={value}
@@ -99,22 +99,22 @@ export default function AdminMaterials() {
               }}
               aria-pressed={tab === value}
               className={
-                '-mb-px flex h-10 items-center gap-1.5 border-b-2 px-3 text-label transition-colors ' +
+                '-mb-px flex h-11 items-center border-b-2 px-2 text-label leading-[1.4] transition-colors ' +
                 (tab === value
                   ? 'border-primary font-semibold text-primary'
                   : 'border-transparent font-medium text-ink-muted hover:text-ink')
               }
             >
-              {label}
-              {count !== null && count > 0 && <Badge tone={tab === value ? 'primary' : 'neutral'}>{count}</Badge>}
+              {count !== null && count > 0 ? `${label} ${count}` : label}
             </button>
           ))}
         </div>
 
-        {/* 일괄 선택 바 */}
+        {/* 일괄 선택 바 — .pen `wUdta` BulkBar */}
         {selected.size > 0 && (
-          <div className="flex items-center gap-2 rounded-control bg-primary-soft px-3 py-2.5">
-            <p className="text-label font-medium text-primary tabular-nums">{selected.size}건 선택</p>
+          <div className="flex h-14 items-center gap-3 rounded-control border border-primary bg-primary-soft px-4">
+            <Check size={18} className="shrink-0 text-primary" />
+            <p className="text-label leading-[1.4] font-semibold text-primary tabular-nums">{selected.size}건 선택</p>
             <button
               type="button"
               onClick={() => setSelected(new Set())}
@@ -126,15 +126,15 @@ export default function AdminMaterials() {
               <button
                 type="button"
                 onClick={bulkReject}
-                className="flex h-9 items-center gap-1.5 rounded-control border border-line bg-surface px-3 text-label font-medium text-danger hover:bg-danger-bg"
+                className="flex h-9 items-center gap-1.5 rounded-control border border-line bg-surface px-4 text-meta leading-[1.4] font-semibold text-danger hover:bg-danger-bg"
               >
                 <X size={15} />
-                일괄 반려
+                반려
               </button>
               <button
                 type="button"
                 onClick={bulkApprove}
-                className="flex h-9 items-center gap-1.5 rounded-control bg-primary px-3 text-label font-medium text-on-primary hover:bg-primary-hover"
+                className="flex h-9 items-center gap-1.5 rounded-control bg-primary px-4 text-meta leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
               >
                 <Check size={15} />
                 일괄 승인
@@ -166,38 +166,38 @@ export default function AdminMaterials() {
                 <li
                   key={m.id}
                   className={
-                    'rounded-card border bg-surface p-3 ' +
+                    'rounded-card border bg-surface p-4 ' +
                     (selected.has(m.id) ? 'border-primary' : 'border-line')
                   }
                 >
-                  <div className="flex items-start gap-2.5">
+                  <div className="flex items-start gap-4">
                     {isPending && (
                       <input
                         type="checkbox"
                         checked={selected.has(m.id)}
                         onChange={() => toggle(m.id)}
                         aria-label={`${m.title} 선택`}
-                        className="mt-1 size-4 shrink-0 accent-[var(--color-primary)]"
+                        className="mt-1 size-5 shrink-0 rounded-[6px] accent-[var(--color-primary)]"
                       />
                     )}
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
+                    <div className="flex min-w-0 flex-1 flex-col gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="shrink-0 text-primary">
                           {m.kind === 'FILE' ? <FileText size={16} /> : <LinkIcon size={16} />}
                         </span>
-                        <span className="min-w-0 truncate text-label font-semibold text-ink">{m.title}</span>
+                        <span className="min-w-0 truncate text-body leading-[1.4] font-semibold text-ink">{m.title}</span>
                         <Badge>{m.kind === 'FILE' ? (m.ext ?? 'FILE') : 'LINK'}{m.fileSize ? ` · ${m.fileSize}` : ''}</Badge>
                       </div>
 
-                      <div className="mt-1.5 flex flex-wrap items-center gap-2 text-meta text-ink-muted">
+                      <div className="flex flex-wrap items-center gap-2 text-meta leading-[1.4] text-ink-muted">
                         <span>
-                          {schedule?.instructor ? `${schedule.instructor} · ` : ''}
+                          {schedule && schedule.instructors.length > 0 ? `${instructorNames(schedule.instructors)} · ` : ''}
                           {dateTimeLabel(m.postedAt)}
                         </span>
                         <a
                           href="#"
-                          className="flex items-center gap-0.5 rounded-full bg-subtle px-2 py-0.5 hover:text-primary"
+                          className="flex h-7 items-center gap-1 rounded-control bg-subtle px-2 text-badge leading-[1.4] font-semibold text-primary hover:underline"
                         >
                           슬랙 원본
                           <ArrowUpRight size={12} />
@@ -205,17 +205,17 @@ export default function AdminMaterials() {
                       </div>
 
                       {/* 매칭 드롭다운 */}
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className="text-meta text-ink-muted">매칭</span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-meta leading-[1.4] text-ink-muted">매칭</span>
                         <select
                           value={m.scheduleId ?? ''}
                           onChange={(e) => relinkMaterial(m.id, e.target.value ? Number(e.target.value) : null)}
                           disabled={!isPending}
                           aria-label="일정 매칭"
                           className={
-                            'h-9 max-w-full rounded-control border bg-surface px-2 text-meta text-ink disabled:bg-subtle disabled:text-ink-muted ' +
+                            'h-9 max-w-full rounded-control border bg-surface px-3 text-meta leading-[1.4] font-medium text-ink disabled:bg-subtle disabled:text-ink-muted ' +
                             (isPending && (m.matchConfidence === 'GUESS' || !schedule)
-                              ? 'border-today-vivid'
+                              ? 'border-today'
                               : 'border-line')
                           }
                         >
@@ -227,13 +227,13 @@ export default function AdminMaterials() {
                           ))}
                         </select>
                         {isPending && m.matchConfidence === 'GUESS' && schedule && (
-                          <span className="flex items-center gap-1 rounded-full bg-today-soft px-2 py-0.5 text-badge font-medium text-today">
+                          <span className="flex h-7 items-center gap-1 rounded-full bg-today-soft px-2 text-badge leading-[1.4] font-semibold text-today">
                             <TriangleAlert size={12} />
                             추정
                           </span>
                         )}
                         {isPending && !schedule && (
-                          <span className="flex items-center gap-1 rounded-full bg-danger-bg px-2 py-0.5 text-badge font-medium text-danger">
+                          <span className="flex h-7 items-center gap-1 rounded-full bg-danger-bg px-2 text-badge leading-[1.4] font-semibold text-danger">
                             <TriangleAlert size={12} />
                             매칭 없음
                           </span>
@@ -249,7 +249,7 @@ export default function AdminMaterials() {
                             approveMaterials([m.id])
                             toast.show('승인했습니다')
                           }}
-                          className="flex h-9 items-center rounded-control bg-primary px-3.5 text-label font-medium text-on-primary hover:bg-primary-hover"
+                          className="flex h-9 items-center rounded-control bg-primary px-4 text-meta leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
                         >
                           승인
                         </button>
@@ -260,7 +260,7 @@ export default function AdminMaterials() {
                             rejectMaterials([m.id])
                             toast.show('반려했습니다')
                           }}
-                          className="flex h-9 items-center rounded-control border border-line px-3.5 text-label font-medium text-danger hover:bg-danger-bg"
+                          className="flex h-9 items-center rounded-control border border-line px-4 text-meta leading-[1.4] font-semibold text-danger hover:bg-danger-bg"
                         >
                           반려
                         </button>

@@ -1,16 +1,16 @@
 import { ChevronRight, Info, Paperclip } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import { Badge, TodayBadge, WeekBadge } from '../components/Badge'
+import { Badge, InstructorList, WeekBadge } from '../components/Badge'
 import { Card, SectionHeader } from '../components/Card'
 import { EmptyState } from '../components/EmptyState'
-import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll } from '../components/HomeBlocks'
+import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll, ThisWeekCard } from '../components/HomeBlocks'
 import { InlineComposer } from '../components/InlineComposer'
 import { RecordRow } from '../components/ListItem'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader } from '../components/Shell'
 import { ErrorState, SkeletonCard, SkeletonLine } from '../components/States'
-import { dayLabel, formatMD, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
+import { dayLabel, formatMD, instructorNames, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
 import { CLASS_NAME, MOCK_MEALS, MOCK_NOTICES, QUICK_LINKS, TOTAL_WEEKS, USER_NAME } from '../lib/mock'
 import {
   getCurrentWeekNo,
@@ -18,13 +18,14 @@ import {
   getPreviousSchedule,
   getTodaySchedule,
   materialsFor,
+  newMaterialCount,
   scheduleById,
 } from '../lib/selectors'
 import { useStore } from '../lib/store'
-import type { ClassMode } from '../lib/types'
+import type { ClassMode, Schedule } from '../lib/types'
 
 export default function Home() {
-  const { schedules, submissions } = useStore()
+  const { schedules, submissions, materials } = useStore()
   const location = useLocation()
   const [params] = useSearchParams()
 
@@ -60,30 +61,54 @@ export default function Home() {
     <>
       <AppHeader title="SKALog" brand right={`${CLASS_NAME} · ${USER_NAME}`} />
 
-      <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
+      <div className="mx-auto w-full max-w-5xl space-y-3 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         {/*
-          [1층] Strip — .pen D1 `Strip` : 인사 + 날짜/주차/진행바 한 덩어리.
-          카드가 아니고 배경도 없다. 오늘 강의는 아래 카드로 분리돼 있다.
+          [1층] Strip — 인사 + 날짜/주차/진행바 한 덩어리. 카드가 아니고 배경도 없다.
+          모바일(.pen M1 `Hero`)은 인사말이 단독 줄, 데스크톱(.pen D1 `Strip`)은 인사말+요약 한 줄에
+          날짜/주차/진행 정보가 같이 붙는다 — 정보 표기 자체도 다르다(모바일 "N/23주차" ↔ 데스크톱 "N일차").
         */}
         <section className="flex flex-col gap-2">
           {loading ? (
             <SkeletonLine className="h-7 w-64" />
           ) : (
-            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
-              <h1 className="text-title font-semibold text-ink lg:text-display">안녕하세요, {USER_NAME}님</h1>
-              <span className="hidden flex-1 lg:block" />
-              <p className="text-label font-medium text-ink">{weekdayFullLabel(anchorDate)}</p>
-              <WeekBadge weekNo={currentWeekNo} tone="primary" />
-              <p className="shrink-0 text-meta text-ink-muted tabular-nums">
-                {currentWeekNo} / {TOTAL_WEEKS}주차
-              </p>
-              <span
-                title={`교육 ${elapsedDays}일째 · 총 ${totalDays}일 과정 (주말 제외)`}
-                className="shrink-0 text-ink-faint"
-              >
-                <Info size={14} />
-              </span>
-            </div>
+            <>
+              <div className="flex flex-col gap-3 lg:hidden">
+                <h1 className="text-title font-semibold text-ink">안녕하세요, {USER_NAME}님</h1>
+                <div className="flex items-center gap-2">
+                  <p className="text-heading font-semibold text-ink">{weekdayFullLabel(anchorDate)}</p>
+                  <WeekBadge weekNo={currentWeekNo} tone="primary" />
+                  <span className="flex-1" />
+                  <p className="shrink-0 text-meta leading-[1.4] text-ink-muted tabular-nums">
+                    {currentWeekNo} / {TOTAL_WEEKS}주차
+                  </p>
+                  <span
+                    title={`교육 ${elapsedDays}일째 · 총 ${totalDays}일 과정 (주말 제외)`}
+                    className="shrink-0 text-ink-faint"
+                  >
+                    <Info size={14} />
+                  </span>
+                </div>
+              </div>
+
+              <div className="hidden items-center gap-3 lg:flex">
+                <div className="flex flex-col gap-1">
+                  <h1 className="text-display font-semibold text-ink">안녕하세요, {USER_NAME}님</h1>
+                  <p className="text-label leading-[1.4] text-ink-muted">
+                    오늘 일정 {todaySchedule ? 1 : 0}건과 새 자료 {newMaterialCount(materials)}건이 기다리고 있어요.
+                  </p>
+                </div>
+                <span className="flex-1" />
+                <p className="text-label font-medium text-ink">{weekdayFullLabel(anchorDate)}</p>
+                <WeekBadge weekNo={currentWeekNo} tone="primary" />
+                <p className="shrink-0 text-meta text-ink-muted tabular-nums">{elapsedDays}일차</p>
+                <span
+                  title={`총 ${totalDays}일 과정 · ${currentWeekNo} / ${TOTAL_WEEKS}주차 (주말 제외)`}
+                  className="shrink-0 text-ink-faint"
+                >
+                  <Info size={14} />
+                </span>
+              </div>
+            </>
           )}
 
           {/* 로딩 중에는 진행바도 스켈레톤이다 (.pen S1 — 그라데이션이 미리 보이면 안 된다) */}
@@ -105,8 +130,8 @@ export default function Home() {
           모바일은 한 컬럼으로 쌓이되 .pen M1 순서(오늘 강의 → 바로가기 → 공지 → 식단 → 일정 → 최근 기록)를 따른다.
           min-w-0 이 없으면 내부 목록이 컬럼을 넓혀 가로 스크롤이 생긴다.
         */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-5">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
             {loading ? (
               <SkeletonCard lines={6} />
             ) : todaySchedule ? (
@@ -125,15 +150,20 @@ export default function Home() {
 
             {loading ? <SkeletonCard lines={4} /> : <NoticeList notices={MOCK_NOTICES} />}
 
-            {/* 모바일 순서: 공지 다음 식단 → 일정 */}
-            <div className="flex flex-col gap-4 lg:hidden">
+            {/* 모바일: 공지 다음 식단 → 이번 주 일정 카드(.pen M1 `Card/이번주`, 스크롤형 아님) */}
+            <div className="flex flex-col gap-3 lg:hidden">
               <MealSection meals={MOCK_MEALS} />
               {cardError ? (
-                <Card title="일정">
+                <Card title="이번 주">
                   <ErrorState onRetry={() => setCardError(false)} />
                 </Card>
               ) : (
-                <ScheduleScroll schedules={schedules} />
+                <ThisWeekCard
+                  schedules={schedules}
+                  materials={materials}
+                  submissions={submissions}
+                  weekNo={currentWeekNo}
+                />
               )}
             </div>
 
@@ -144,8 +174,8 @@ export default function Home() {
             )}
           </div>
 
-          <aside className="hidden w-70 shrink-0 flex-col gap-4 lg:flex">
-            <LinkRail links={QUICK_LINKS} />
+          <aside className="hidden w-70 shrink-0 flex-col gap-3 lg:flex">
+            <LinkRail links={QUICK_LINKS} showHeader />
             {/* S8 · 카드 단위 에러는 .pen 기준 일정 블록에서 일어난다 */}
             {cardError ? (
               <Card title="일정">
@@ -162,12 +192,11 @@ export default function Home() {
   )
 }
 
-/**
- * 수업 방식 — 백엔드에 컬럼이 아직 없다. 과목명으로 임시 판별하고,
- * API 가 붙으면 `schedule.classMode` 로 갈아끼운다.
- */
-function classModeOf(schedule: { subject: string }): ClassMode {
-  return /특강|온라인|원격/.test(schedule.subject) ? 'REMOTE' : 'ONSITE'
+/** 수업 방식 — 실습교수가 전임교수와 같은 사람이면(직강 반) 현강, 다르면(중계 시청) 원격. */
+function classModeOf(schedule: Schedule): ClassMode {
+  const fullTime = schedule.instructors.find((i) => i.role === 'FULL_TIME')?.name
+  const practice = schedule.instructors.find((i) => i.role === 'PRACTICE')?.name
+  return fullTime && fullTime !== practice ? 'REMOTE' : 'ONSITE'
 }
 
 function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: boolean }) {
@@ -178,17 +207,12 @@ function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: bo
   return (
     <Card
       title="오늘 강의"
-      action={
-        <>
-          <ClassModeBadge mode={classModeOf(schedule)} />
-          <TodayBadge />
-        </>
-      }
+      action={<ClassModeBadge mode={classModeOf(schedule)} />}
       bare={bare}
     >
       <Link to={`/timeline/${schedule.id}`} className="group block">
         <p className="text-title font-semibold text-ink group-hover:text-primary">{schedule.subject}</p>
-        {schedule.instructor && <p className="mt-0.5 text-meta text-ink-muted">{schedule.instructor}</p>}
+        <div className="mt-2"><InstructorList instructors={schedule.instructors} /></div>
       </Link>
 
       <SectionHeader icon={Paperclip} muted title="강의자료" count={scheduleMaterials.length} className="mt-4" />
@@ -238,7 +262,7 @@ function NoClassCard({
         <Link to={`/timeline/${next.id}`} className="group block">
           <p className="text-title font-semibold text-ink group-hover:text-primary">{next.subject}</p>
           <p className="mt-0.5 text-meta text-ink-muted">
-            {[next.instructor, weekTag(next.weekNo)].filter(Boolean).join(' · ')}
+            {[instructorNames(next.instructors), weekTag(next.weekNo)].filter(Boolean).join(' · ')}
           </p>
         </Link>
       ) : (
@@ -287,7 +311,7 @@ function RecentRecords({ recentIds, composerAvailable }: { recentIds: number[]; 
             composerAvailable && (
               <a
                 href="#composer"
-                className="flex h-touch items-center rounded-control bg-primary px-4 text-label font-medium text-on-primary hover:bg-primary-hover"
+                className="flex h-touch items-center rounded-control bg-primary px-5 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
               >
                 오늘 강의에 기록 남기기
               </a>

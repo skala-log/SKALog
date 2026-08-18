@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react'
 
 type ToastState = {
@@ -33,12 +34,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {toast && (
         <div className="fixed inset-x-0 bottom-20 z-50 flex justify-center px-4 lg:bottom-6 lg:justify-end lg:pr-8">
-          <div className="flex items-center gap-3 rounded-control bg-ink px-4 py-2.5 text-label text-white shadow-lg">
-            <span>{toast.message}</span>
+          <div className="flex h-[52px] items-center gap-3 rounded-control bg-ink/95 px-4 text-label text-white shadow-lg">
+            <Check size={18} className="shrink-0 text-mint" />
+            <span className="leading-[1.4] font-medium">{toast.message}</span>
             {toast.undo && (
               <button
                 type="button"
-                className="font-medium text-primary-tint underline-offset-2 hover:underline"
+                className="shrink-0 font-semibold text-mint underline-offset-2 hover:underline"
                 onClick={() => {
                   toast.undo?.()
                   setToast(null)

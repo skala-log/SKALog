@@ -23,6 +23,11 @@ public class ClassGroup {
 
     protected ClassGroup() {}
 
+    public ClassGroup(String campus, String name) {
+        this.campus = campus;
+        this.name = name;
+    }
+
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getCampus() { return campus; }

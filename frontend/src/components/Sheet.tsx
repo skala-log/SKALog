@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { TriangleAlert } from 'lucide-react'
+import { TriangleAlert, X } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 
 type SheetProps = {
@@ -32,8 +32,20 @@ export function Sheet({ open, onClose, title, children }: SheetProps) {
         aria-modal="true"
         className="relative w-full rounded-t-sheet border border-line bg-surface p-4 shadow-lg lg:w-80 lg:rounded-card"
       >
-        <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-line lg:hidden" aria-hidden />
-        {title && <p className="mb-2 truncate text-label font-medium text-ink">{title}</p>}
+        <div className="mx-auto mb-2 h-1 w-9 rounded-full bg-line lg:hidden" aria-hidden />
+        {title && (
+          <div className="mb-2 flex items-center gap-2">
+            <p className="min-w-0 flex-1 truncate text-heading leading-[1.4] font-semibold text-ink">{title}</p>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="닫기"
+              className="flex size-touch shrink-0 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        )}
         {children}
       </div>
     </div>
@@ -90,29 +102,29 @@ export function ConfirmDialog({
       <div
         role="alertdialog"
         aria-modal="true"
-        className="relative w-full max-w-sm rounded-card border border-line bg-surface p-5 shadow-lg"
+        className="relative w-full max-w-[400px] rounded-sheet border border-line bg-surface p-6 shadow-[0_12px_32px_rgba(17,24,39,0.2)]"
       >
         <div className="flex items-start gap-3">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-danger-bg text-danger">
-            <TriangleAlert size={18} />
+            <TriangleAlert size={20} />
           </span>
-          <div className="min-w-0">
+          <div className="flex min-w-0 flex-col gap-2">
             <p className="text-heading font-semibold text-ink">{title}</p>
-            <div className="mt-1 text-meta text-ink-muted">{description}</div>
+            <div className="text-label leading-[1.6] text-ink-muted">{description}</div>
           </div>
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="h-touch rounded-control border border-line px-4 text-label font-medium text-ink-muted hover:bg-subtle"
+            className="flex h-touch items-center rounded-control border border-line px-5 text-label leading-[1.4] font-semibold text-ink-muted hover:bg-subtle"
           >
             취소
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="h-touch rounded-control bg-danger px-4 text-label font-medium text-on-primary hover:opacity-90"
+            className="flex h-touch items-center rounded-control bg-danger px-5 text-label leading-[1.4] font-semibold text-on-primary hover:opacity-90"
           >
             {confirmLabel}
           </button>

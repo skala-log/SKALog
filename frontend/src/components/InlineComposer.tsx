@@ -165,7 +165,7 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
         <button
           type="button"
           onClick={openForm}
-          className="flex h-11 w-full items-center gap-2 rounded-control border border-line-accent bg-surface px-3 text-label text-ink-muted transition-colors hover:border-primary hover:text-primary"
+          className="flex h-11 w-full items-center gap-2 rounded-card border border-line-accent bg-surface px-4 text-body leading-[1.4] text-ink-muted transition-colors hover:border-primary hover:text-primary"
         >
           <Plus size={16} className="text-primary" />
           {hasDraft ? '이어서 쓰기' : (collapsedLabel ?? '이 강의에 기록 남기기')}
@@ -176,13 +176,13 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
 
   return (
     /* .pen `MRZgz` : 흰 배경 + primary 1px 테두리, radius 12, padding 16, gap 12 */
-    <div ref={formTopRef} className="space-y-3 rounded-card border border-primary bg-surface p-4">
+    <div ref={formTopRef} className="space-y-3 rounded-card border-[1.5px] border-primary bg-surface p-4">
       {/* 확인 라벨 — 주차는 배지, 나머지는 읽기 전용 문구 (선택 필드가 아니다) */}
       <div className="flex items-center gap-2">
         <Badge tone="primary" className="tabular-nums">
           {weekTag(schedule.weekNo)}
         </Badge>
-        <p className="min-w-0 flex-1 truncate text-meta text-ink-muted">{schedule.subject}에 저장됩니다</p>
+        <p className="min-w-0 flex-1 truncate text-meta leading-[1.4] text-ink-muted">{schedule.subject}에 저장됩니다</p>
       </div>
 
       <div className="flex gap-2">
@@ -215,7 +215,7 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
           }
         }}
         placeholder="제목"
-        className="h-touch w-full rounded-control bg-subtle px-3 text-body text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary"
+        className="h-touch w-full rounded-control bg-subtle px-3 text-body leading-[1.4] text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
       <textarea
@@ -229,7 +229,7 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
         }}
         placeholder="내용 (선택)"
         rows={3}
-        className="h-21 w-full resize-none rounded-control bg-subtle p-3 text-body text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-primary"
+        className="h-21 w-full resize-none rounded-control bg-subtle p-3 text-body text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
       {attachments.length > 0 && (
@@ -238,7 +238,7 @@ export function InlineComposer({ schedule, onSaved, collapsedLabel }: InlineComp
           {attachments.map((a) => (
             <li
               key={a.id}
-              className="flex h-touch items-center gap-2 rounded-control bg-primary-soft px-3 text-meta text-primary"
+              className="flex h-touch items-center gap-2 rounded-control bg-primary-soft px-3 text-meta leading-[1.4] text-primary"
             >
               {a.kind === 'LINK' ? <LinkIcon size={14} /> : <Paperclip size={14} />}
               <span className="max-w-40 truncate">{a.name}</span>

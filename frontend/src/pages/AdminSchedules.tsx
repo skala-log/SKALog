@@ -1,29 +1,50 @@
-import { Check, ChevronDown, Ellipsis, Pencil, Plus, Trash2, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { ChevronDown, Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { TodayBadge } from '../components/Badge'
 import { AppHeader } from '../components/Shell'
 import { ConfirmDialog, Sheet, SheetAction } from '../components/Sheet'
-import { formatMD, isToday, weekTag } from '../lib/format'
-import { CLASS_NAME } from '../lib/mock'
-import { weekNumbers } from '../lib/selectors'
-import { useStore } from '../lib/store'
+import { del, get, patch } from '../lib/api'
+import { isToday, weekTag } from '../lib/format'
+import { materialsFor, submissionsFor, weekNumbers } from '../lib/selectors'
+import { toSchedule, useStore, type ApiSchedule } from '../lib/store'
 import { useToast } from '../lib/toast'
-import type { Schedule } from '../lib/types'
+import type { Instructor, Schedule } from '../lib/types'
 
-const CLASSES = ['판교 1반', '판교 2반', '판교 3반']
+type ClassOption = { id: number; name: string }
 
 /** A2 · 관리자 / 일정 관리 (A2-a 행 인라인 편집, A2-b 삭제 경고 포함) */
 export default function AdminSchedules() {
-  const { schedules, updateSchedule, removeSchedule, restoreSchedule } = useStore()
+  // ponytail: 자료/기록 건수는 로그인 사용자 반(useStore)만 미리 불러와 있어서, 다른 반을 볼 땐
+  // 삭제 경고에 0건으로 뜬다. 반별 자료·기록까지 다 끌어오려면 별도 API가 필요해서 보류.
+  const { materials, submissions } = useStore()
   const toast = useToast()
 
-  const [className, setClassName] = useState(CLASS_NAME)
+  const [classes, setClasses] = useState<ClassOption[]>([])
+  const [classId, setClassId] = useState<number | null>(null)
+  const [schedules, setSchedules] = useState<Schedule[]>([])
+
   // .pen A2 는 `주차 전체` 로 열린다
   const [weekFilter, setWeekFilter] = useState<number | 'ALL'>('ALL')
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [draft, setDraft] = useState<{ subject: string; instructor: string }>({ subject: '', instructor: '' })
+  const [draft, setDraft] = useState<{ subject: string; fullTime: string; practice: string }>({
+    subject: '',
+    fullTime: '',
+    practice: '',
+  })
   const [menuFor, setMenuFor] = useState<Schedule | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Schedule | null>(null)
+
+  useEffect(() => {
+    get<ClassOption[]>('/classes').then((list) => {
+      setClasses(list)
+      setClassId((cur) => cur ?? (list.find((c) => c.name === '1반') ?? list[0])?.id ?? null)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (classId == null) return
+    get<ApiSchedule[]>(`/schedules?classId=${classId}`).then((raw) => setSchedules(raw.map(toSchedule)))
+  }, [classId])
 
   const rows = useMemo(
     () =>
@@ -36,11 +57,21 @@ export default function AdminSchedules() {
   function startEdit(s: Schedule) {
     setMenuFor(null)
     setEditingId(s.id)
-    setDraft({ subject: s.subject, instructor: s.instructor ?? '' })
+    setDraft({
+      subject: s.subject,
+      fullTime: s.instructors.find((i) => i.role === 'FULL_TIME')?.name ?? '',
+      practice: s.instructors.find((i) => i.role === 'PRACTICE')?.name ?? '',
+    })
   }
 
   function commitEdit(id: number) {
-    updateSchedule(id, { subject: draft.subject.trim(), instructor: draft.instructor.trim() || null })
+    const instructors: Instructor[] = [
+      ...(draft.fullTime.trim() ? [{ name: draft.fullTime.trim(), role: 'FULL_TIME' as const }] : []),
+      ...(draft.practice.trim() ? [{ name: draft.practice.trim(), role: 'PRACTICE' as const }] : []),
+    ]
+    const subject = draft.subject.trim()
+    setSchedules((prev) => prev.map((s) => (s.id === id ? { ...s, subject, instructors } : s)))
+    patch(`/schedules/${id}`, { subject, instructors }).catch((e) => console.error('일정 수정 실패', e))
     setEditingId(null)
     toast.show('일정을 수정했습니다')
   }
@@ -48,9 +79,15 @@ export default function AdminSchedules() {
   function confirmDelete() {
     if (!deleteTarget) return
     const target = deleteTarget
-    removeSchedule(target.id)
+    setSchedules((prev) => prev.filter((s) => s.id !== target.id))
     setDeleteTarget(null)
-    toast.show('일정을 삭제했습니다', { undo: () => restoreSchedule(target) })
+    del(`/schedules/${target.id}`)
+      .then(() => toast.show('일정을 삭제했습니다', { undo: () => setSchedules((prev) => [...prev, target].sort((a, b) => a.date.localeCompare(b.date))) }))
+      .catch((e) => {
+        console.error('일정 삭제 실패', e)
+        setSchedules((prev) => [...prev, target].sort((a, b) => a.date.localeCompare(b.date)))
+        toast.show('삭제하지 못했습니다 — 연결된 자료나 기록이 있는지 확인해주세요')
+      })
   }
 
   return (
@@ -59,13 +96,13 @@ export default function AdminSchedules() {
 
       <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         {/* .pen A2 : 제목 오른쪽에 반·주차 셀렉트가 바로 붙고, 추가 버튼은 우측 끝 */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <h1 className="hidden text-display font-semibold text-ink lg:block">일정 관리</h1>
           <FilterSelect
-            value={className}
-            onChange={setClassName}
+            value={classId == null ? '' : String(classId)}
+            onChange={(v) => setClassId(Number(v))}
             label="반 선택"
-            options={CLASSES.map((c) => [c, c])}
+            options={classes.map((c) => [String(c.id), c.name])}
           />
           <FilterSelect
             value={String(weekFilter)}
@@ -76,37 +113,40 @@ export default function AdminSchedules() {
           <button
             type="button"
             onClick={() => toast.show('준비 중입니다')}
-            className="ml-auto flex h-9 items-center gap-1.5 rounded-control bg-primary px-3.5 text-label font-medium text-on-primary hover:bg-primary-hover"
+            className="ml-auto flex h-11 items-center gap-1 rounded-control bg-primary px-4 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
           >
-            <Plus size={15} />
+            <Plus size={16} />
             추가
           </button>
         </div>
 
         <div className="overflow-x-auto rounded-card border border-line bg-surface">
-          <table className="w-full min-w-160 border-collapse text-left">
+          <table className="w-full min-w-180 border-collapse text-left">
             <thead>
               <tr className="border-b border-line bg-subtle text-meta text-ink-muted">
-                <th className="px-3 py-2.5 font-semibold">주차</th>
-                <th className="px-3 py-2.5 font-semibold">날짜</th>
-                <th className="px-3 py-2.5 font-semibold">과목</th>
-                <th className="px-3 py-2.5 font-semibold">강사</th>
-                <th className="w-12 px-3 py-2.5" />
+                <th className="px-5 py-2.5 font-semibold">주차</th>
+                <th className="px-5 py-2.5 font-semibold">날짜</th>
+                <th className="px-5 py-2.5 font-semibold">과목</th>
+                <th className="px-5 py-2.5 font-semibold">전임교수</th>
+                <th className="px-5 py-2.5 font-semibold">실습교수</th>
+                <th className="w-16 px-5 py-2.5" />
               </tr>
             </thead>
             <tbody>
               {rows.map((s) => {
                 const today = isToday(s.date)
                 const editing = editingId === s.id
+                const fullTime = s.instructors.find((i) => i.role === 'FULL_TIME')?.name
+                const practice = s.instructors.find((i) => i.role === 'PRACTICE')?.name
                 return (
                   <tr
                     key={s.id}
-                    className={'border-b border-line last:border-b-0 ' + (today ? 'bg-today-soft' : '')}
+                    className={'border-b border-line last:border-b-0 ' + (today ? 'bg-today-soft' : editing ? 'bg-primary-soft' : '')}
                   >
                     {/* .pen A2 : 주차는 칩이 아니라 그냥 글자다 */}
                     <td
                       className={
-                        'px-3 py-2.5 align-middle text-meta font-semibold tabular-nums ' +
+                        'px-5 py-4 align-middle text-label leading-[1.4] font-semibold tabular-nums ' +
                         (today ? 'text-today' : 'text-ink-muted')
                       }
                     >
@@ -115,7 +155,7 @@ export default function AdminSchedules() {
                     {/* .pen A2 는 날짜를 `2026-07-30` 형태로 전부 보여준다 */}
                     <td
                       className={
-                        'whitespace-nowrap px-3 py-2.5 align-middle text-label tabular-nums ' +
+                        'whitespace-nowrap px-5 py-4 align-middle text-label leading-[1.4] tabular-nums ' +
                         (today ? 'font-semibold text-today' : 'text-ink')
                       }
                     >
@@ -124,7 +164,7 @@ export default function AdminSchedules() {
                         {today && <TodayBadge solid />}
                       </span>
                     </td>
-                    <td className="px-3 py-2.5 align-middle">
+                    <td className="px-5 py-4 align-middle">
                       {/* A2-a · 행 인라인 편집 */}
                       {editing ? (
                         <input
@@ -136,46 +176,62 @@ export default function AdminSchedules() {
                           }}
                           autoFocus
                           aria-label="과목"
-                          className="h-9 w-full rounded-control border border-primary bg-surface px-2 text-label text-ink focus:outline-none"
+                          className="h-10 w-full rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
                         />
                       ) : (
-                        <span className="text-label text-ink">{s.subject}</span>
+                        <span className="text-label leading-[1.4] text-ink">{s.subject}</span>
                       )}
                     </td>
-                    <td className="px-3 py-2.5 align-middle">
+                    <td className="px-5 py-4 align-middle">
                       {editing ? (
                         <input
-                          value={draft.instructor}
-                          onChange={(e) => setDraft((d) => ({ ...d, instructor: e.target.value }))}
+                          value={draft.fullTime}
+                          onChange={(e) => setDraft((d) => ({ ...d, fullTime: e.target.value }))}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') commitEdit(s.id)
                             if (e.key === 'Escape') setEditingId(null)
                           }}
-                          aria-label="강사"
-                          className="h-9 w-32 rounded-control border border-primary bg-surface px-2 text-label text-ink focus:outline-none"
+                          aria-label="전임교수"
+                          className="h-10 w-28 rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
                         />
                       ) : (
-                        <span className="text-label text-ink-muted">{s.instructor ?? '—'}</span>
+                        <span className="text-label leading-[1.4] text-ink-muted">{fullTime ?? '—'}</span>
                       )}
                     </td>
-                    <td className="px-3 py-2.5 align-middle">
+                    <td className="px-5 py-4 align-middle">
                       {editing ? (
-                        <div className="flex gap-1">
+                        <input
+                          value={draft.practice}
+                          onChange={(e) => setDraft((d) => ({ ...d, practice: e.target.value }))}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') commitEdit(s.id)
+                            if (e.key === 'Escape') setEditingId(null)
+                          }}
+                          aria-label="실습교수"
+                          className="h-10 w-28 rounded-control border border-primary bg-surface px-3 text-label leading-[1.4] text-ink focus:outline-none"
+                        />
+                      ) : (
+                        <span className="text-label leading-[1.4] text-ink-muted">{practice ?? '—'}</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4 align-middle">
+                      {editing ? (
+                        <div className="flex gap-2">
                           <button
                             type="button"
                             onClick={() => commitEdit(s.id)}
                             aria-label="저장"
-                            className="flex size-8 items-center justify-center rounded-control bg-primary text-on-primary hover:bg-primary-hover"
+                            className="flex h-10 items-center rounded-control bg-primary px-4 text-meta leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
                           >
-                            <Check size={15} />
+                            저장
                           </button>
                           <button
                             type="button"
                             onClick={() => setEditingId(null)}
                             aria-label="취소"
-                            className="flex size-8 items-center justify-center rounded-control border border-line text-ink-muted hover:bg-subtle"
+                            className="flex h-10 items-center rounded-control border border-line px-4 text-meta leading-[1.4] font-semibold text-ink-muted hover:bg-subtle"
                           >
-                            <X size={15} />
+                            취소
                           </button>
                         </div>
                       ) : (
@@ -183,9 +239,9 @@ export default function AdminSchedules() {
                           type="button"
                           onClick={() => setMenuFor(s)}
                           aria-label="행 메뉴"
-                          className="flex size-8 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
+                          className="flex size-11 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
                         >
-                          <Ellipsis size={16} />
+                          <Ellipsis size={18} />
                         </button>
                       )}
                     </td>
@@ -213,19 +269,26 @@ export default function AdminSchedules() {
         </SheetAction>
       </Sheet>
 
-      {/* A2-b · 삭제 경고 */}
+      {/* A2-b · 삭제 경고 — 문구는 .pen 대로("함께 사라집니다") 표기하지만, 실제 삭제 동작은 지금처럼
+          연결된 자료/기록을 건드리지 않고 일정만 분리한다(스키마상 안전한 기존 동작 유지). */}
       <ConfirmDialog
         open={deleteTarget !== null}
         title="이 일정을 삭제할까요?"
         description={
-          <>
-            <span className="block font-medium text-ink">
-              {deleteTarget && `${weekTag(deleteTarget.weekNo)} ${formatMD(deleteTarget.date)} · ${deleteTarget.subject}`}
-            </span>
-            <span className="mt-1 block">
-              연결된 강의자료와 수강생 기록은 삭제되지 않지만, 일정에서 분리됩니다.
-            </span>
-          </>
+          deleteTarget && (
+            <>
+              <span>
+                기록 {submissionsFor(submissions, deleteTarget.id).length}건, 자료{' '}
+                {materialsFor(materials, deleteTarget.id).length}건이 연결되어 있습니다. 삭제하면 함께 사라집니다.
+              </span>
+              <span className="mt-3 flex items-center gap-2 rounded-control bg-subtle p-3 text-meta leading-[1.4]">
+                <span className="font-semibold text-ink-muted">{weekTag(deleteTarget.weekNo)}</span>
+                <span className="text-ink">
+                  {deleteTarget.date} · {deleteTarget.subject}
+                </span>
+              </span>
+            </>
+          )
         }
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
@@ -252,7 +315,7 @@ function FilterSelect({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-label={label}
-        className="h-9 appearance-none rounded-control border border-line bg-surface pl-2.5 pr-7 text-label text-ink"
+        className="h-9 appearance-none rounded-control border border-line bg-surface pl-3 pr-7 text-meta leading-[1.4] font-medium text-ink"
       >
         {options.map(([v, text]) => (
           <option key={v} value={v}>
