@@ -11,7 +11,8 @@ import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader } from '../components/Shell'
 import { ErrorState, SkeletonCard, SkeletonLine } from '../components/States'
 import { dayLabel, formatMD, instructorNames, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
-import { CLASS_NAME, MOCK_MEALS, MOCK_NOTICES, QUICK_LINKS, TOTAL_WEEKS, USER_NAME } from '../lib/mock'
+import { useMe } from '../lib/auth'
+import { MOCK_MEALS, MOCK_NOTICES, QUICK_LINKS, TOTAL_WEEKS } from '../lib/mock'
 import {
   getCurrentWeekNo,
   getNextSchedule,
@@ -25,6 +26,7 @@ import { useStore } from '../lib/store'
 import type { ClassMode, Schedule } from '../lib/types'
 
 export default function Home() {
+  const me = useMe()
   const { schedules, submissions, materials } = useStore()
   const location = useLocation()
   const [params] = useSearchParams()
@@ -59,7 +61,7 @@ export default function Home() {
 
   return (
     <>
-      <AppHeader title="SKALog" brand right={`${CLASS_NAME} · ${USER_NAME}`} />
+      <AppHeader title="SKALog" brand right={`${me.campus} ${me.className} · ${me.name}`} />
 
       <div className="mx-auto w-full max-w-5xl space-y-3 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         {/*
@@ -73,7 +75,7 @@ export default function Home() {
           ) : (
             <>
               <div className="flex flex-col gap-3 lg:hidden">
-                <h1 className="text-title font-semibold text-ink">안녕하세요, {USER_NAME}님</h1>
+                <h1 className="text-title font-semibold text-ink">안녕하세요, {me.name}님</h1>
                 <div className="flex items-center gap-2">
                   <p className="text-heading font-semibold text-ink">{weekdayFullLabel(anchorDate)}</p>
                   <WeekBadge weekNo={currentWeekNo} tone="primary" />
@@ -92,7 +94,7 @@ export default function Home() {
 
               <div className="hidden items-center gap-3 lg:flex">
                 <div className="flex flex-col gap-1">
-                  <h1 className="text-display font-semibold text-ink">안녕하세요, {USER_NAME}님</h1>
+                  <h1 className="text-display font-semibold text-ink">안녕하세요, {me.name}님</h1>
                   <p className="text-label leading-[1.4] text-ink-muted">
                     오늘 일정 {todaySchedule ? 1 : 0}건과 새 자료 {newMaterialCount(materials)}건이 기다리고 있어요.
                   </p>

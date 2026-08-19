@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { del, get, patch, post } from './api'
+import { useMe } from './auth'
 import { weekdayOf } from './format'
 import { TODAY_ISO } from './mock'
 import type { Attachment, Instructor, Material, Schedule, Submission, SubmissionType } from './types'
@@ -33,10 +34,6 @@ type StoreValue = {
 }
 
 const StoreContext = createContext<StoreValue | null>(null)
-
-// ponytail: 로그인(6단계) 전까지 반/사용자를 고정. 로그인 붙으면 세션에서 꺼내도록 교체.
-const CLASS_ID = 1
-const USER_ID = 1
 
 export type ApiSchedule = { id: number; date: string; weekNo: number; subject: string; instructors?: Instructor[]; isLive?: boolean }
 type ApiMaterial = {
@@ -97,6 +94,10 @@ function nowLocalISO(): string {
 }
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+  const me = useMe()
+  const CLASS_ID = me.classId
+  const USER_ID = me.id
+
   const [schedules, setSchedules] = useState<Schedule[]>([])
   const [schedulesLoaded, setSchedulesLoaded] = useState(false)
   const [submissions, setSubmissions] = useState<Submission[]>([])

@@ -18,6 +18,7 @@ slack:
   bot-token: ${SLACK_BOT_TOKEN:}
   team-id: ${SLACK_TEAM_ID:}
   material-channel-ids: ${SLACK_MATERIAL_CHANNEL_IDS:}
+  redirect-base-uri: ${SLACK_REDIRECT_BASE_URI:http://localhost:5173}
 
 logging:
   level:

@@ -6,7 +6,8 @@ import { AttachmentCount, Badge, RecordDot } from '../components/Badge'
 import { MaterialRow } from '../components/MaterialRow'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { formatMD, isToday, monthGrid, monthLabel, weekRangeLabel, weekTag, WEEKDAY_NAMES } from '../lib/format'
-import { CLASS_NAME, TODAY_ISO } from '../lib/mock'
+import { useMe } from '../lib/auth'
+import { TODAY_ISO } from '../lib/mock'
 import { getCurrentWeekNo, materialsFor, submissionsFor, weekNumbers } from '../lib/selectors'
 import { useStore } from '../lib/store'
 import type { Schedule } from '../lib/types'
@@ -14,6 +15,7 @@ import type { Schedule } from '../lib/types'
 type ViewMode = 'week' | 'month'
 
 export default function Timeline() {
+  const me = useMe()
   const { schedules } = useStore()
   const [params, setParams] = useSearchParams()
   const view: ViewMode = params.get('view') === 'month' ? 'month' : 'week'
@@ -50,7 +52,7 @@ export default function Timeline() {
 
   return (
     <>
-      <AppHeader title="일정표" right={CLASS_NAME} />
+      <AppHeader title="일정표" right={`${me.campus} ${me.className}`} />
       <div className="mx-auto w-full max-w-5xl px-4 pb-24 lg:px-8 lg:pb-10">
         {/*
           목록이 마운트 직후 이번 주차로 스크롤되므로, 보기 전환과 주차 칩은

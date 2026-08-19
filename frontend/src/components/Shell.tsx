@@ -1,7 +1,8 @@
 import { CalendarCog, CalendarDays, ChevronLeft, House, Inbox, LogOut, NotebookText, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { CLASS_NAME, CURRENT_USER, USER_NAME } from '../lib/mock'
+import { post } from '../lib/api'
+import { useMe } from '../lib/auth'
 
 /**
  * AppHeader — .pen `Wz08H` : height 56, bg-surface, border-bottom.
@@ -104,8 +105,14 @@ const NAV_GROUPS = [
  * self-start 가 없으면 flex 의 stretch 때문에 높이가 본문만큼 늘어나 sticky 가 걸리지 않는다.
  */
 export function Sidebar() {
-  const navigate = useNavigate()
-  const roleLabel = CURRENT_USER.role === 'ADMIN' ? '관리자' : '훈련생'
+  const me = useMe()
+  const roleLabel = me.role === 'ADMIN' ? '관리자' : '훈련생'
+  const className = `${me.campus} ${me.className}`
+
+  async function logout() {
+    await post('/auth/logout', {}).catch(() => {})
+    window.location.href = '/login'
+  }
 
   return (
     <aside className="hidden w-sidebar shrink-0 flex-col gap-5 self-start overflow-y-auto border-r border-line bg-surface px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-dvh">
@@ -116,17 +123,17 @@ export function Sidebar() {
 
       <div className="flex items-center gap-2 border-y border-line py-3">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-label font-semibold leading-none text-primary">
-          {USER_NAME.slice(0, 1)}
+          {me.name.slice(0, 1)}
         </div>
         <div className="flex min-w-0 flex-col gap-px">
-          <p className="truncate text-meta font-semibold leading-[1.3] text-ink">{USER_NAME}</p>
+          <p className="truncate text-meta font-semibold leading-[1.3] text-ink">{me.name}</p>
           <p className="truncate text-badge leading-[1.3] text-ink-muted">
-            {roleLabel} · {CLASS_NAME}
+            {roleLabel} · {className}
           </p>
         </div>
       </div>
 
-      {NAV_GROUPS.filter((g) => !g.admin || CURRENT_USER.role === 'ADMIN').map((group) => (
+      {NAV_GROUPS.filter((g) => !g.admin || me.role === 'ADMIN').map((group) => (
         <div key={group.label} className="flex flex-col gap-1">
           <p className="px-3 py-1 text-badge font-semibold leading-[1.4] tracking-[1px] text-ink-muted">
             {group.label}
@@ -154,7 +161,7 @@ export function Sidebar() {
 
       <button
         type="button"
-        onClick={() => navigate('/login')}
+        onClick={logout}
         className="flex items-center justify-center gap-2 rounded-control border border-line p-2 text-meta font-medium leading-[1.4] text-danger hover:bg-danger-bg"
       >
         <LogOut size={16} />

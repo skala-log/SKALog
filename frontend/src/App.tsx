@@ -1,5 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Sidebar, TabBar } from './components/Shell'
+import { AuthProvider } from './lib/auth'
 import { StoreProvider } from './lib/store'
 import { ToastProvider } from './lib/toast'
 import AdminMaterials from './pages/AdminMaterials'
@@ -17,11 +18,9 @@ const STANDALONE = ['/login']
 
 export default function App() {
   return (
-    <StoreProvider>
-      <ToastProvider>
-        <Shell />
-      </ToastProvider>
-    </StoreProvider>
+    <ToastProvider>
+      <Shell />
+    </ToastProvider>
   )
 }
 
@@ -39,6 +38,16 @@ function Shell() {
     )
   }
 
+  return (
+    <AuthProvider>
+      <StoreProvider>
+        <AuthedShell />
+      </StoreProvider>
+    </AuthProvider>
+  )
+}
+
+function AuthedShell() {
   return (
     <div className="flex min-h-dvh bg-app text-ink">
       <Sidebar />

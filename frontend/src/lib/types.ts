@@ -65,6 +65,16 @@ export type User = {
   role: 'STUDENT' | 'ADMIN'
 }
 
+/** GET /api/me 응답 — 로그인한 사용자 */
+export type Me = {
+  id: number
+  name: string
+  role: 'STUDENT' | 'ADMIN'
+  classId: number
+  className: string
+  campus: string
+}
+
 /** 공지 노출 범위 — .pen `NoticeScope` (우리반 / 4층 / 판교 …) */
 export type NoticeScope = 'CLASS' | 'FLOOR' | 'CAMPUS'
 

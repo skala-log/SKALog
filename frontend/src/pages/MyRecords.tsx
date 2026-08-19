@@ -6,7 +6,8 @@ import { AttachmentCount, TypeBadge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { formatMD, weekTag } from '../lib/format'
-import { TOTAL_WEEKS, USER_NAME } from '../lib/mock'
+import { useMe } from '../lib/auth'
+import { TOTAL_WEEKS } from '../lib/mock'
 import { getCurrentWeekNo, getTodaySchedule, scheduleById } from '../lib/selectors'
 import { useStore } from '../lib/store'
 import type { Submission, SubmissionType } from '../lib/types'
@@ -17,6 +18,7 @@ type SortMode = 'RECENT' | 'WEEK'
 const PAGE_SIZE = 10
 
 export default function MyRecords() {
+  const me = useMe()
   const { schedules, submissions: allSubmissions } = useStore()
   const [params] = useSearchParams()
   // S6 · 내 기록 / 빈 상태 — ?state=empty 로 바로 확인
@@ -64,7 +66,7 @@ export default function MyRecords() {
 
   return (
     <>
-      <AppHeader title="내 기록" right={USER_NAME} />
+      <AppHeader title="내 기록" right={me.name} />
 
       <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
         <PageTitle>내 기록</PageTitle>

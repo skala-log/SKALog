@@ -7,7 +7,6 @@ import type {
   Schedule,
   ShowcaseItem,
   Submission,
-  User,
 } from './types'
 
 function todayLocalISO(): string {
@@ -18,16 +17,6 @@ function todayLocalISO(): string {
 
 export const TODAY_ISO = todayLocalISO()
 export const TOTAL_WEEKS = 23
-
-export const CURRENT_USER: User = {
-  name: '탁연우',
-  className: '1반',
-  campus: '판교',
-  role: 'ADMIN', // 관리자 화면(A1/A2)도 프로토타입에서 함께 확인하기 위해
-}
-
-export const CLASS_NAME = `${CURRENT_USER.campus} ${CURRENT_USER.className}`
-export const USER_NAME = CURRENT_USER.name
 
 export const MOCK_SCHEDULES: Schedule[] = REAL_SCHEDULES
 
