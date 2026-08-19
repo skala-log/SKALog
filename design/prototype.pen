@@ -1380,19 +1380,6 @@
           "alignItems": "center",
           "children": [
             {
-              "id": "WzSNt",
-              "type": "ref",
-              "ref": "zWNLL",
-              "name": "Badge/week",
-              "fill": "$bg-subtle",
-              "descendants": {
-                "lmFN1": {
-                  "content": "W03",
-                  "fill": "$text-muted"
-                }
-              }
-            },
-            {
               "id": "pknkk",
               "type": "ref",
               "ref": "zWNLL",
@@ -1401,19 +1388,6 @@
               "descendants": {
                 "lmFN1": {
                   "content": "W03",
-                  "fill": "$today"
-                }
-              }
-            },
-            {
-              "id": "dTi7v",
-              "type": "ref",
-              "ref": "zWNLL",
-              "name": "Badge/today",
-              "fill": "$today-soft",
-              "descendants": {
-                "lmFN1": {
-                  "content": "오늘",
                   "fill": "$today"
                 }
               }
@@ -1613,12 +1587,6 @@
           "alignItems": "center",
           "children": [
             {
-              "id": "Mx9ix",
-              "type": "ref",
-              "ref": "Ja22a",
-              "name": "Mode/현강"
-            },
-            {
               "id": "AIQfk",
               "type": "ref",
               "ref": "Ja22a",
@@ -1675,19 +1643,6 @@
           "gap": 10,
           "alignItems": "center",
           "children": [
-            {
-              "id": "usHXk",
-              "type": "ref",
-              "ref": "g6R1Gq",
-              "name": "Scope/전체",
-              "fill": "$today-soft",
-              "descendants": {
-                "T5PhRc": {
-                  "content": "전체",
-                  "fill": "$today"
-                }
-              }
-            },
             {
               "id": "EecNp",
               "type": "ref",
@@ -1893,17 +1848,6 @@
                       "fontFamily": "$font",
                       "fontSize": "$text-body",
                       "fontWeight": "$weight-medium"
-                    },
-                    {
-                      "id": "rfSnM",
-                      "type": "ref",
-                      "ref": "zWNLL",
-                      "name": "Badge",
-                      "descendants": {
-                        "lmFN1": {
-                          "content": "과제"
-                        }
-                      }
                     }
                   ]
                 },
@@ -1975,9 +1919,6 @@
                 "gNiU2": {
                   "content": "팀빌딩"
                 },
-                "rfSnM": {
-                  "enabled": false
-                },
                 "etdqs": {
                   "content": "오전 · 판교 1반"
                 },
@@ -2007,14 +1948,6 @@
                 "gNiU2": {
                   "content": "Git 이해·활용"
                 },
-                "rfSnM": {
-                  "enabled": true,
-                  "fill": "$assignment-bg"
-                },
-                "rfSnM/lmFN1": {
-                  "content": "과제",
-                  "fill": "$assignment"
-                },
                 "etdqs": {
                   "content": "권기창 · 2교시"
                 },
@@ -2043,14 +1976,6 @@
                 },
                 "gNiU2": {
                   "content": "Java/Spring 기초"
-                },
-                "rfSnM": {
-                  "enabled": true,
-                  "fill": "$note-bg"
-                },
-                "rfSnM/lmFN1": {
-                  "content": "노트",
-                  "fill": "$note"
                 },
                 "etdqs": {
                   "content": "이수민 · 3교시"
@@ -2939,9 +2864,6 @@
                     "gNiU2": {
                       "content": "Spring DI 개요.pdf"
                     },
-                    "rfSnM": {
-                      "enabled": false
-                    },
                     "etdqs": {
                       "content": "권기창 · 1.2MB"
                     },
@@ -2966,9 +2888,6 @@
                     "gNiU2": {
                       "content": "실습 코드 저장소"
                     },
-                    "rfSnM": {
-                      "enabled": false
-                    },
                     "etdqs": {
                       "content": "github.com/skala/w03"
                     },
@@ -2992,9 +2911,6 @@
                     },
                     "gNiU2": {
                       "content": "수업 필기 사진"
-                    },
-                    "rfSnM": {
-                      "enabled": false
                     },
                     "etdqs": {
                       "content": "김서연 · 2.4MB"
@@ -3243,7 +3159,7 @@
         },
         {
           "type": "frame",
-          "id": "ckNFx",
+          "id": "gvY9H",
           "name": "Sidebar",
           "reusable": true,
           "width": 240,
@@ -3256,26 +3172,119 @@
           "strokeAlignment": "inner",
           "strokeLinejoin": "round",
           "layout": "vertical",
-          "gap": "$space-6",
+          "gap": "$space-5",
           "padding": [
             "$space-5",
             "$space-4"
           ],
           "children": [
             {
-              "type": "text",
-              "id": "ZfyZu",
+              "type": "frame",
+              "id": "rs5uX",
               "name": "Brand",
-              "fill": "$primary",
-              "content": "SKALog",
-              "lineHeight": 1.4,
-              "fontFamily": "$font",
-              "fontSize": "$text-title",
-              "fontWeight": "$weight-semibold"
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kCsej",
+                  "name": "Logo",
+                  "fill": "$primary",
+                  "content": "SKALog",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font",
+                  "fontSize": "$text-title",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "EQFBV",
+                  "name": "Sub",
+                  "fill": "$text-faint",
+                  "content": "학습 기록 플랫폼",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font",
+                  "fontSize": "$text-badge",
+                  "fontWeight": "normal"
+                }
+              ]
             },
             {
               "type": "frame",
-              "id": "Vilzr",
+              "id": "aDweO",
+              "name": "UserCard",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": "$border",
+              "strokeWidth": {
+                "top": 1,
+                "bottom": 1
+              },
+              "gap": "$space-2",
+              "padding": "$space-3",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Vo8BG",
+                  "name": "Avatar",
+                  "width": 36,
+                  "height": 36,
+                  "fill": "$primary-soft",
+                  "cornerRadius": "$radius-pill",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "q1QZgo",
+                      "name": "Initial",
+                      "fill": "$primary",
+                      "content": "탁",
+                      "lineHeight": 1,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DnYPb",
+                  "name": "Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 1,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PZRI6",
+                      "name": "Name",
+                      "fill": "$text",
+                      "content": "탁연우",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lTKoU",
+                      "name": "Role",
+                      "fill": "$text-muted",
+                      "content": "훈련생 · 판교 1반",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-badge",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jn92a",
               "name": "Group/학습",
               "width": "fill_container",
               "layout": "vertical",
@@ -3283,7 +3292,7 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "yvCjW",
+                  "id": "M2bTh",
                   "name": "LabelWrap",
                   "width": "fill_container",
                   "padding": [
@@ -3293,7 +3302,7 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "P6gYAs",
+                      "id": "RG48Y",
                       "name": "Label",
                       "fill": "$text-muted",
                       "content": "학습",
@@ -3306,26 +3315,20 @@
                   ]
                 },
                 {
-                  "id": "LLAbT",
+                  "id": "YLuZ6",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "Nav/오늘",
                   "width": "fill_container",
                   "fill": "$primary-soft",
                   "descendants": {
-                    "B7pUzF": {
-                      "icon": "house",
-                      "fill": "$primary"
-                    },
                     "YsjqB": {
-                      "content": "홈",
-                      "fill": "$primary",
-                      "fontWeight": "$weight-semibold"
+                      "content": "홈"
                     }
                   }
                 },
                 {
-                  "id": "HASse",
+                  "id": "E2RqY",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "Nav/일정표",
@@ -3333,18 +3336,15 @@
                   "fill": "#00000000",
                   "descendants": {
                     "B7pUzF": {
-                      "icon": "calendar-days",
-                      "fill": "$text-muted"
+                      "icon": "calendar"
                     },
                     "YsjqB": {
-                      "content": "일정표",
-                      "fill": "$text-muted",
-                      "fontWeight": "$weight-medium"
+                      "content": "일정표"
                     }
                   }
                 },
                 {
-                  "id": "x7W0pr",
+                  "id": "AxhZW",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "Nav/내 기록",
@@ -3352,31 +3352,25 @@
                   "fill": "#00000000",
                   "descendants": {
                     "B7pUzF": {
-                      "icon": "notebook-text",
-                      "fill": "$text-muted"
+                      "icon": "notebook-pen"
                     },
                     "YsjqB": {
-                      "content": "내 기록",
-                      "fill": "$text-muted",
-                      "fontWeight": "$weight-medium"
+                      "content": "내 기록"
                     }
                   }
                 },
                 {
-                  "id": "x5B8yZ",
+                  "id": "Ut7uo",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "showcase",
                   "width": "fill_container",
                   "descendants": {
                     "B7pUzF": {
-                      "icon": "sparkles",
-                      "fill": "$text-muted"
+                      "icon": "sparkles"
                     },
                     "YsjqB": {
-                      "content": "쇼케이스",
-                      "fill": "$text-muted",
-                      "fontWeight": "$weight-medium"
+                      "content": "쇼케이스"
                     }
                   }
                 }
@@ -3384,7 +3378,7 @@
             },
             {
               "type": "frame",
-              "id": "TdMJo",
+              "id": "v0QuH5",
               "name": "Group/관리",
               "width": "fill_container",
               "layout": "vertical",
@@ -3392,7 +3386,7 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "y4V31",
+                  "id": "M2QLtw",
                   "name": "LabelWrap",
                   "width": "fill_container",
                   "padding": [
@@ -3402,7 +3396,7 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "H6CZvJ",
+                      "id": "td4XN",
                       "name": "Label",
                       "fill": "$text-muted",
                       "content": "관리",
@@ -3415,7 +3409,7 @@
                   ]
                 },
                 {
-                  "id": "HVhHj",
+                  "id": "OOqqe",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "Nav/자료 승인함",
@@ -3423,18 +3417,15 @@
                   "fill": "#00000000",
                   "descendants": {
                     "B7pUzF": {
-                      "icon": "inbox",
-                      "fill": "$text-muted"
+                      "icon": "clipboard-check"
                     },
                     "YsjqB": {
-                      "content": "자료 승인함",
-                      "fill": "$text-muted",
-                      "fontWeight": "$weight-medium"
+                      "content": "자료 승인함"
                     }
                   }
                 },
                 {
-                  "id": "vvkTh",
+                  "id": "bhWig",
                   "type": "ref",
                   "ref": "MfhSN",
                   "name": "Nav/일정 관리",
@@ -3442,13 +3433,10 @@
                   "fill": "#00000000",
                   "descendants": {
                     "B7pUzF": {
-                      "icon": "calendar-cog",
-                      "fill": "$text-muted"
+                      "icon": "calendar-cog"
                     },
                     "YsjqB": {
-                      "content": "일정 관리",
-                      "fill": "$text-muted",
-                      "fontWeight": "$weight-medium"
+                      "content": "일정 관리"
                     }
                   }
                 }
@@ -3456,44 +3444,54 @@
             },
             {
               "type": "frame",
-              "id": "fnd2o",
+              "id": "BQiBA",
               "name": "Spacer",
               "width": "fill_container",
               "height": "fill_container"
             },
             {
               "type": "frame",
-              "id": "EfFjb",
+              "id": "V930J",
               "name": "Footer",
               "width": "fill_container",
-              "fill": "$bg-subtle",
-              "cornerRadius": "$radius-control",
-              "gap": "$space-2",
-              "padding": "$space-3",
-              "alignItems": "center",
+              "layout": "vertical",
               "children": [
                 {
-                  "type": "icon",
-                  "id": "f9czrc",
-                  "name": "Avatar",
-                  "width": 20,
-                  "height": 20,
-                  "icon": "circle-user",
-                  "library": "lucide",
-                  "fill": "$text-muted"
-                },
-                {
-                  "type": "text",
-                  "id": "uTizl",
-                  "name": "Name",
-                  "fill": "$text",
-                  "textGrowth": "fixed-width",
+                  "type": "frame",
+                  "id": "e3NlXK",
+                  "name": "LogoutButton",
                   "width": "fill_container",
-                  "content": "탁연우 · 판교 1반",
-                  "lineHeight": 1.4,
-                  "fontFamily": "$font",
-                  "fontSize": "$text-meta",
-                  "fontWeight": "normal"
+                  "cornerRadius": "$radius-control",
+                  "stroke": "$border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "gap": "$space-2",
+                  "padding": "$space-2",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "phoyq",
+                      "name": "Icon",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "log-out",
+                      "library": "lucide",
+                      "fill": "$danger"
+                    },
+                    {
+                      "type": "text",
+                      "id": "A9GvXy",
+                      "name": "Label",
+                      "fill": "$danger",
+                      "content": "로그아웃",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
                 }
               ]
             }
@@ -5463,15 +5461,49 @@
                   "fontWeight": "$weight-semibold"
                 },
                 {
-                  "type": "text",
-                  "id": "uF0CE",
-                  "name": "Instructor",
-                  "fill": "$text-muted",
-                  "content": "권기창",
-                  "lineHeight": 1.4,
-                  "fontFamily": "$font",
-                  "fontSize": "$text-label",
-                  "fontWeight": "normal"
+                  "type": "frame",
+                  "id": "zvSoJ",
+                  "name": "Professors",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U4ASQm",
+                      "name": "RoleTag/전임",
+                      "fill": "$primary-soft",
+                      "cornerRadius": "$radius-pill",
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "x7TnQM",
+                          "name": "Label",
+                          "fill": "$primary",
+                          "content": "전임",
+                          "lineHeight": 1.33,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-badge",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "kyACV",
+                      "name": "Name",
+                      "fill": "$text",
+                      "content": "권기창",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
                 }
               ]
             },
@@ -5754,9 +5786,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "오늘 21:10"
                         },
@@ -5802,9 +5831,6 @@
                         },
                         "gNiU2": {
                           "content": "실습 과제 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "오늘 18:02"
@@ -6234,9 +6260,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Java/Spring 기초 · 7/30"
                         },
@@ -6282,9 +6305,6 @@
                         },
                         "gNiU2": {
                           "content": "실습 과제 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "Java/Spring 기초 · 7/30"
@@ -6372,9 +6392,6 @@
                         "gNiU2": {
                           "content": "Git rebase 정리"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Git 심화 · 7/22"
                         },
@@ -6411,9 +6428,6 @@
                         },
                         "gNiU2": {
                           "content": "1주차 회고 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "팀빌딩 · 7/18"
@@ -6606,121 +6620,6 @@
               "fontWeight": "normal"
             }
           ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "fey9g",
-      "x": 3045,
-      "y": 1660,
-      "name": "M8 · 반 선택 (최초 1회)",
-      "clip": true,
-      "width": 375,
-      "height": 812,
-      "fill": "$bg-app",
-      "layout": "vertical",
-      "gap": "$space-6",
-      "padding": [
-        0,
-        "$space-6"
-      ],
-      "justifyContent": "center",
-      "children": [
-        {
-          "type": "text",
-          "id": "UuNv5",
-          "name": "Q",
-          "fill": "$text",
-          "textGrowth": "fixed-width",
-          "width": "fill_container",
-          "content": "어느 반이신가요?",
-          "lineHeight": 1.35,
-          "textAlign": "center",
-          "fontFamily": "$font",
-          "fontSize": "$text-display",
-          "fontWeight": "$weight-semibold"
-        },
-        {
-          "type": "frame",
-          "id": "Mizbb",
-          "name": "Field/반",
-          "width": "fill_container",
-          "height": 56,
-          "fill": "$bg-surface",
-          "cornerRadius": "$radius-control",
-          "stroke": "$border",
-          "strokeWidth": 1,
-          "strokeAlignment": "inner",
-          "gap": "$space-2",
-          "padding": [
-            0,
-            "$space-4"
-          ],
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "XgVGy",
-              "name": "Value",
-              "fill": "$text",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "판교 1반",
-              "lineHeight": 1.4,
-              "fontFamily": "$font",
-              "fontSize": "$text-heading",
-              "fontWeight": "$weight-medium"
-            },
-            {
-              "type": "icon",
-              "id": "OishV",
-              "name": "Chevron",
-              "width": 20,
-              "height": 20,
-              "icon": "chevron-down",
-              "library": "lucide",
-              "fill": "$text-muted"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "e368s",
-          "name": "Btn/시작하기",
-          "width": "fill_container",
-          "height": 56,
-          "fill": "$primary",
-          "cornerRadius": "$radius-control",
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "yZhSF",
-              "name": "Label",
-              "fill": "$on-primary",
-              "content": "시작하기",
-              "lineHeight": 1.4,
-              "fontFamily": "$font",
-              "fontSize": "$text-heading",
-              "fontWeight": "$weight-semibold"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "id": "HNjj2",
-          "name": "Note",
-          "fill": "$text-muted",
-          "textGrowth": "fixed-width",
-          "width": "fill_container",
-          "content": "나중에 설정에서 바꿀 수 있습니다",
-          "lineHeight": 1.5,
-          "textAlign": "center",
-          "fontFamily": "$font",
-          "fontSize": "$text-meta",
-          "fontWeight": "normal"
         }
       ]
     },
@@ -7488,9 +7387,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Java/Spring 기초 · 어제"
                         },
@@ -7537,11 +7433,11 @@
                         "gNiU2": {
                           "content": "Git 실습 제출"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Git 심화 · 3일 전"
+                        },
+                        "pZLhh": {
+                          "enabled": false
                         },
                         "LtctJ": {
                           "enabled": false
@@ -7972,9 +7868,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "오늘 21:10"
                         },
@@ -8020,9 +7913,6 @@
                         },
                         "gNiU2": {
                           "content": "실습 과제 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "오늘 18:02"
@@ -8328,15 +8218,49 @@
                   "fontWeight": "$weight-semibold"
                 },
                 {
-                  "type": "text",
-                  "id": "U9rTvq",
-                  "name": "Instructor",
-                  "fill": "$text-muted",
-                  "content": "권기창",
-                  "lineHeight": 1.4,
-                  "fontFamily": "$font",
-                  "fontSize": "$text-label",
-                  "fontWeight": "normal"
+                  "type": "frame",
+                  "id": "YFcSE",
+                  "name": "Professors",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "srO4L",
+                      "name": "RoleTag/전임",
+                      "fill": "$primary-soft",
+                      "cornerRadius": "$radius-pill",
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bsSBw",
+                          "name": "Label",
+                          "fill": "$primary",
+                          "content": "전임",
+                          "lineHeight": 1.33,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-badge",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "npOfE",
+                      "name": "Name",
+                      "fill": "$text",
+                      "content": "권기창",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
                 }
               ]
             },
@@ -8619,9 +8543,6 @@
                         "gNiU2": {
                           "content": "DI 컨테이너 정리"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "방금 · 업로드 중 1/1"
                         },
@@ -8658,9 +8579,6 @@
                         },
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "오늘 21:10"
@@ -8707,9 +8625,6 @@
                         },
                         "gNiU2": {
                           "content": "실습 과제 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "오늘 18:02"
@@ -8878,6 +8793,7 @@
           "layout": "vertical",
           "gap": "$space-5",
           "padding": "$space-4",
+          "justifyContent": "space_between",
           "children": [
             {
               "type": "frame",
@@ -8955,15 +8871,49 @@
                   "fontWeight": "$weight-semibold"
                 },
                 {
-                  "type": "text",
-                  "id": "dx77Q",
-                  "name": "Instructor",
-                  "fill": "$text-muted",
-                  "content": "권기창",
-                  "lineHeight": 1.4,
-                  "fontFamily": "$font",
-                  "fontSize": "$text-label",
-                  "fontWeight": "normal"
+                  "type": "frame",
+                  "id": "QFVEx",
+                  "name": "Professors",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "thF6k",
+                      "name": "RoleTag/전임",
+                      "fill": "$primary-soft",
+                      "cornerRadius": "$radius-pill",
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "XHYhf",
+                          "name": "Label",
+                          "fill": "$primary",
+                          "content": "전임",
+                          "lineHeight": 1.33,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-badge",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "kH3G4",
+                      "name": "Name",
+                      "fill": "$text",
+                      "content": "권기창",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
                 }
               ]
             },
@@ -9126,9 +9076,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "오늘 21:10"
                         },
@@ -9174,9 +9121,6 @@
                         },
                         "gNiU2": {
                           "content": "실습 과제 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "오늘 18:02"
@@ -9630,9 +9574,6 @@
                         "gNiU2": {
                           "content": "Git rebase 정리"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Git 심화 · 7/22"
                         },
@@ -9669,9 +9610,6 @@
                         },
                         "gNiU2": {
                           "content": "1주차 회고 제출"
-                        },
-                        "rfSnM": {
-                          "enabled": false
                         },
                         "etdqs": {
                           "content": "팀빌딩 · 7/18"
@@ -11099,9 +11037,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Java/Spring 기초 · 어제"
                         },
@@ -11148,11 +11083,11 @@
                         "gNiU2": {
                           "content": "Git 실습 제출"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Git 심화 · 3일 전"
+                        },
+                        "pZLhh": {
+                          "enabled": false
                         },
                         "LtctJ": {
                           "enabled": false
@@ -11549,29 +11484,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "Q05MCr",
+          "id": "X0YKJ",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "HASse": {
+            "E2RqY": {
               "fill": "$primary-soft"
             },
-            "HASse/B7pUzF": {
+            "E2RqY/B7pUzF": {
               "fill": "$primary"
             },
-            "HASse/YsjqB": {
+            "E2RqY/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -11585,7 +11521,12 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": "$space-8",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
           "alignItems": "center",
           "children": [
             {
@@ -11630,7 +11571,7 @@
                 },
                 {
                   "type": "frame",
-                  "id": "ca2M1",
+                  "id": "Y4fqw",
                   "name": "Hero",
                   "width": "fill_container",
                   "layout": "vertical",
@@ -11638,14 +11579,14 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "oBCVI",
+                      "id": "nD2Cn",
                       "name": "Meta",
                       "width": "fill_container",
                       "gap": "$space-2",
                       "alignItems": "center",
                       "children": [
                         {
-                          "id": "pwd4A",
+                          "id": "LBbQ3",
                           "type": "ref",
                           "ref": "zWNLL",
                           "name": "Week",
@@ -11659,7 +11600,7 @@
                         },
                         {
                           "type": "text",
-                          "id": "ureMJ",
+                          "id": "Q9ghV3",
                           "name": "Date",
                           "fill": "$text-muted",
                           "content": "7월 30일 목요일",
@@ -11670,13 +11611,13 @@
                         },
                         {
                           "type": "frame",
-                          "id": "RAzbI",
+                          "id": "hARXI",
                           "name": "Spacer",
                           "width": "fill_container",
                           "height": 1
                         },
                         {
-                          "id": "F2Ll2",
+                          "id": "hIG2F",
                           "type": "ref",
                           "ref": "zWNLL",
                           "name": "Today",
@@ -11692,7 +11633,7 @@
                     },
                     {
                       "type": "text",
-                      "id": "tQrRM",
+                      "id": "hyk19",
                       "name": "Subject",
                       "fill": "$text",
                       "textGrowth": "fixed-width",
@@ -11705,14 +11646,14 @@
                     },
                     {
                       "type": "frame",
-                      "id": "bkw3B",
+                      "id": "C3o0MC",
                       "name": "Professors",
                       "gap": 8,
                       "alignItems": "center",
                       "children": [
                         {
                           "type": "frame",
-                          "id": "T0r9Gs",
+                          "id": "hlPrn",
                           "name": "RoleTag/전임",
                           "fill": "$primary-soft",
                           "cornerRadius": "$radius-pill",
@@ -11724,7 +11665,7 @@
                           "children": [
                             {
                               "type": "text",
-                              "id": "lzHTV",
+                              "id": "C7sV5q",
                               "name": "Label",
                               "fill": "$primary",
                               "content": "전임",
@@ -11737,7 +11678,7 @@
                         },
                         {
                           "type": "text",
-                          "id": "V5sKJf",
+                          "id": "ZcVqc",
                           "name": "Name",
                           "fill": "$text",
                           "content": "권기창",
@@ -12036,9 +11977,6 @@
                                 "gNiU2": {
                                   "content": "DI 3가지 주입 방식"
                                 },
-                                "rfSnM": {
-                                  "enabled": false
-                                },
                                 "etdqs": {
                                   "content": "오늘 21:10"
                                 },
@@ -12084,9 +12022,6 @@
                                 },
                                 "gNiU2": {
                                   "content": "실습 과제 제출"
-                                },
-                                "rfSnM": {
-                                  "enabled": false
                                 },
                                 "etdqs": {
                                   "content": "오늘 18:02"
@@ -12178,29 +12113,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "mLuru",
+          "id": "qiT5D",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "x7W0pr": {
+            "AxhZW": {
               "fill": "$primary-soft"
             },
-            "x7W0pr/B7pUzF": {
+            "AxhZW/B7pUzF": {
               "fill": "$primary"
             },
-            "x7W0pr/YsjqB": {
+            "AxhZW/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -12214,7 +12150,12 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "padding": "$space-8",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
           "alignItems": "center",
           "children": [
             {
@@ -12911,9 +12852,6 @@
                             "gNiU2": {
                               "content": "DI 3가지 주입 방식"
                             },
-                            "rfSnM": {
-                              "enabled": false
-                            },
                             "etdqs": {
                               "content": "Java/Spring 기초 · 7/30"
                             },
@@ -12959,9 +12897,6 @@
                             },
                             "gNiU2": {
                               "content": "실습 과제 제출"
-                            },
-                            "rfSnM": {
-                              "enabled": false
                             },
                             "etdqs": {
                               "content": "Java/Spring 기초 · 7/30"
@@ -13049,9 +12984,6 @@
                             "gNiU2": {
                               "content": "Git rebase 정리"
                             },
-                            "rfSnM": {
-                              "enabled": false
-                            },
                             "etdqs": {
                               "content": "Git 심화 · 7/22"
                             },
@@ -13088,9 +13020,6 @@
                             },
                             "gNiU2": {
                               "content": "1주차 회고 제출"
-                            },
-                            "rfSnM": {
-                              "enabled": false
                             },
                             "etdqs": {
                               "content": "팀빌딩 · 7/18"
@@ -13182,7 +13111,7 @@
       "type": "frame",
       "id": "XOFB4",
       "x": 0,
-      "y": 4660,
+      "y": 4739,
       "name": "A1 · 관리자 / 자료 승인함",
       "clip": true,
       "width": 1440,
@@ -13190,29 +13119,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "peIBN",
+          "id": "cggnu",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "HVhHj": {
+            "OOqqe": {
               "fill": "$primary-soft"
             },
-            "HVhHj/B7pUzF": {
+            "OOqqe/B7pUzF": {
               "fill": "$primary"
             },
-            "HVhHj/YsjqB": {
+            "OOqqe/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -14145,29 +14075,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "OaWgP",
+          "id": "yAo2W",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "vvkTh": {
+            "bhWig": {
               "fill": "$primary-soft"
             },
-            "vvkTh/B7pUzF": {
+            "bhWig/B7pUzF": {
               "fill": "$primary"
             },
-            "vvkTh/YsjqB": {
+            "bhWig/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -14762,29 +14693,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "JTQyF",
+          "id": "UOovz",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "vvkTh": {
+            "bhWig": {
               "fill": "$primary-soft"
             },
-            "vvkTh/B7pUzF": {
+            "bhWig/B7pUzF": {
               "fill": "$primary"
             },
-            "vvkTh/YsjqB": {
+            "bhWig/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -15460,29 +15392,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "fDDpe",
+          "id": "XxwEp",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "vvkTh": {
+            "bhWig": {
               "fill": "$primary-soft"
             },
-            "vvkTh/B7pUzF": {
+            "bhWig/B7pUzF": {
               "fill": "$primary"
             },
-            "vvkTh/YsjqB": {
+            "bhWig/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -16298,7 +16231,7 @@
               "fill": "$text"
             },
             "tBYW4": {
-              "content": "12개"
+              "content": "6개"
             }
           }
         },
@@ -16320,7 +16253,7 @@
               "fill": "$text-muted",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "다른 반 교육생들이 만든 서비스를 모아뒀습니다",
+              "content": "다른 반 교육생들이 만든 서비스를 모아뒀습니다 · 6개",
               "fontFamily": "$font",
               "fontSize": "$text-meta",
               "fontWeight": "normal"
@@ -16422,6 +16355,24 @@
                       "content": "판교 9반 · 한성훈"
                     }
                   }
+                },
+                {
+                  "id": "kiF3V",
+                  "type": "ref",
+                  "ref": "yVFVu",
+                  "name": "S/출결 리마인더",
+                  "width": "fill_container",
+                  "descendants": {
+                    "fFv1M": {
+                      "content": "출결 리마인더"
+                    },
+                    "QXKO1": {
+                      "content": "체크인 안 한 사람에게 DM"
+                    },
+                    "J1Zhp": {
+                      "content": "판교 3반 · 송영옥"
+                    }
+                  }
                 }
               ]
             }
@@ -16448,29 +16399,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "hqJfA",
+          "id": "P36ZD",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "x5B8yZ": {
+            "Ut7uo": {
               "fill": "$primary-soft"
             },
-            "x5B8yZ/B7pUzF": {
+            "Ut7uo/B7pUzF": {
               "fill": "$primary"
             },
-            "x5B8yZ/YsjqB": {
+            "Ut7uo/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -17518,29 +17470,30 @@
       "fill": "$bg-app",
       "children": [
         {
-          "id": "rutNZ",
+          "id": "TLiFy",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
+          "width": 240,
           "height": "fill_container",
           "descendants": {
-            "LLAbT": {
+            "YLuZ6": {
               "fill": "#00000000"
             },
-            "LLAbT/B7pUzF": {
+            "YLuZ6/B7pUzF": {
               "fill": "$text-muted"
             },
-            "LLAbT/YsjqB": {
+            "YLuZ6/YsjqB": {
               "fill": "$text-muted",
               "fontWeight": "$weight-medium"
             },
-            "HASse": {
+            "E2RqY": {
               "fill": "$primary-soft"
             },
-            "HASse/B7pUzF": {
+            "E2RqY/B7pUzF": {
               "fill": "$primary"
             },
-            "HASse/YsjqB": {
+            "E2RqY/YsjqB": {
               "fill": "$primary",
               "fontWeight": "$weight-semibold"
             }
@@ -18372,27 +18325,16 @@
       "name": "D1 · 데스크톱 홈",
       "clip": true,
       "width": 1440,
-      "height": 1054,
+      "height": 1056,
       "fill": "$bg-app",
       "children": [
         {
-          "id": "MlqpV",
+          "id": "HGwxg",
           "type": "ref",
-          "ref": "ckNFx",
+          "ref": "gvY9H",
           "name": "Sidebar",
-          "height": "fill_container",
-          "descendants": {
-            "LLAbT": {
-              "fill": "$primary-soft"
-            },
-            "LLAbT/B7pUzF": {
-              "fill": "$primary"
-            },
-            "LLAbT/YsjqB": {
-              "fill": "$primary",
-              "fontWeight": "$weight-semibold"
-            }
-          }
+          "width": 240,
+          "height": "fill_container"
         },
         {
           "type": "frame",
@@ -18408,6 +18350,7 @@
             "$space-8",
             "$space-8"
           ],
+          "alignItems": "center",
           "children": [
             {
               "type": "frame",
@@ -18582,7 +18525,7 @@
                           "padding": "$space-4",
                           "descendants": {
                             "WjBNO": {
-                              "content": "📑 오늘 강의",
+                              "content": "오늘 강의",
                               "fill": "$text-muted",
                               "fontWeight": "600",
                               "fontStyle": "normal"
@@ -18595,7 +18538,7 @@
                             },
                             "Za40Y": {
                               "type": "frame",
-                              "id": "PV0ls",
+                              "id": "W3NTq",
                               "name": "Body",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -18603,15 +18546,15 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "eXfQW",
+                                  "id": "WMat8",
                                   "name": "Subject",
                                   "width": "fill_container",
                                   "layout": "vertical",
-                                  "gap": 2,
+                                  "gap": 10,
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "hBDhq",
+                                      "id": "x4SUxZ",
                                       "name": "Name",
                                       "fill": "$text",
                                       "textGrowth": "fixed-width",
@@ -18624,14 +18567,14 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "H0clFS",
+                                      "id": "UyOpV",
                                       "name": "Professors",
                                       "gap": 6,
                                       "alignItems": "center",
                                       "children": [
                                         {
                                           "type": "frame",
-                                          "id": "dhawb",
+                                          "id": "sMjrM",
                                           "name": "RoleTag/전임",
                                           "fill": "$primary-soft",
                                           "cornerRadius": "$radius-pill",
@@ -18643,7 +18586,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "vbPd3",
+                                              "id": "SS6Ji",
                                               "name": "Label",
                                               "fill": "$primary",
                                               "content": "전임",
@@ -18656,7 +18599,7 @@
                                         },
                                         {
                                           "type": "text",
-                                          "id": "rrCDc",
+                                          "id": "crBEa",
                                           "name": "Name",
                                           "fill": "$text",
                                           "content": "박창렴",
@@ -18667,7 +18610,7 @@
                                         },
                                         {
                                           "type": "text",
-                                          "id": "t4lWz",
+                                          "id": "PXpDZ",
                                           "name": "Dot",
                                           "fill": "$text-faint",
                                           "content": "·",
@@ -18678,7 +18621,7 @@
                                         },
                                         {
                                           "type": "frame",
-                                          "id": "mTch6",
+                                          "id": "c6iHW",
                                           "name": "RoleTag/실습",
                                           "fill": "$note-bg",
                                           "cornerRadius": "$radius-pill",
@@ -18690,7 +18633,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "qJAH4",
+                                              "id": "ZkHFQ",
                                               "name": "Label",
                                               "fill": "$note",
                                               "content": "실습",
@@ -18703,7 +18646,7 @@
                                         },
                                         {
                                           "type": "text",
-                                          "id": "UiRFv",
+                                          "id": "nIAo3",
                                           "name": "Name",
                                           "fill": "$text",
                                           "content": "이서준",
@@ -18718,7 +18661,7 @@
                                 },
                                 {
                                   "type": "rectangle",
-                                  "id": "IiFMl",
+                                  "id": "OhMYh",
                                   "name": "Divider",
                                   "fill": "$border",
                                   "width": "fill_container",
@@ -18726,7 +18669,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "aHIgP",
+                                  "id": "HyhWb",
                                   "name": "MaterialsHead",
                                   "width": "fill_container",
                                   "gap": "$space-1",
@@ -18734,7 +18677,7 @@
                                   "children": [
                                     {
                                       "type": "icon",
-                                      "id": "HRxZY",
+                                      "id": "V2hac7",
                                       "name": "Icon",
                                       "width": 14,
                                       "height": 14,
@@ -18744,7 +18687,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "b6Qcs",
+                                      "id": "Vm3v8",
                                       "name": "Label",
                                       "fill": "$text-muted",
                                       "content": "강의자료 2",
@@ -18757,7 +18700,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "Z99Wc",
+                                  "id": "xF9ZC",
                                   "name": "Materials",
                                   "width": "fill_container",
                                   "layout": "vertical",
@@ -18765,7 +18708,7 @@
                                   "children": [
                                     {
                                       "type": "frame",
-                                      "id": "BrXsx",
+                                      "id": "pUrd7",
                                       "name": "Mat/Spring DI 개요.pdf",
                                       "width": "fill_container",
                                       "height": 56,
@@ -18780,7 +18723,7 @@
                                       "children": [
                                         {
                                           "type": "icon",
-                                          "id": "RKbl5",
+                                          "id": "NCI5M",
                                           "name": "Kind",
                                           "width": 16,
                                           "height": 16,
@@ -18790,7 +18733,7 @@
                                         },
                                         {
                                           "type": "frame",
-                                          "id": "mJer2",
+                                          "id": "fH0sE",
                                           "name": "Text",
                                           "width": "fill_container",
                                           "layout": "vertical",
@@ -18798,7 +18741,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "klveQ",
+                                              "id": "Ydd5M",
                                               "name": "Name",
                                               "fill": "$text",
                                               "textGrowth": "fixed-width",
@@ -18811,7 +18754,7 @@
                                             },
                                             {
                                               "type": "text",
-                                              "id": "fG9ch",
+                                              "id": "LeLNK",
                                               "name": "Meta",
                                               "fill": "$text-muted",
                                               "textGrowth": "fixed-width",
@@ -18826,7 +18769,7 @@
                                         },
                                         {
                                           "type": "icon",
-                                          "id": "gB5Uc",
+                                          "id": "MsYVP",
                                           "name": "Action",
                                           "width": 18,
                                           "height": 18,
@@ -18838,7 +18781,7 @@
                                     },
                                     {
                                       "type": "frame",
-                                      "id": "SifIp",
+                                      "id": "wLuJl",
                                       "name": "Mat/실습 코드 저장소",
                                       "width": "fill_container",
                                       "height": 56,
@@ -18853,7 +18796,7 @@
                                       "children": [
                                         {
                                           "type": "icon",
-                                          "id": "Hdjll",
+                                          "id": "o0wIx",
                                           "name": "Kind",
                                           "width": 16,
                                           "height": 16,
@@ -18863,7 +18806,7 @@
                                         },
                                         {
                                           "type": "frame",
-                                          "id": "rsM6c",
+                                          "id": "pw8xP",
                                           "name": "Text",
                                           "width": "fill_container",
                                           "layout": "vertical",
@@ -18871,7 +18814,7 @@
                                           "children": [
                                             {
                                               "type": "text",
-                                              "id": "EQy1B",
+                                              "id": "zAEoK",
                                               "name": "Name",
                                               "fill": "$text",
                                               "textGrowth": "fixed-width",
@@ -18884,7 +18827,7 @@
                                             },
                                             {
                                               "type": "text",
-                                              "id": "pAYuY",
+                                              "id": "lfZic",
                                               "name": "Meta",
                                               "fill": "$text-muted",
                                               "textGrowth": "fixed-width",
@@ -18899,7 +18842,7 @@
                                         },
                                         {
                                           "type": "icon",
-                                          "id": "RM6aD",
+                                          "id": "KSLjW",
                                           "name": "Action",
                                           "width": 18,
                                           "height": 18,
@@ -18912,7 +18855,7 @@
                                   ]
                                 },
                                 {
-                                  "id": "hGMIs",
+                                  "id": "U9sUR3",
                                   "type": "ref",
                                   "ref": "m3Wlc",
                                   "name": "Composer",
@@ -19098,9 +19041,6 @@
                                     "gNiU2": {
                                       "content": "pandas DataFrame 기본 연산 정리"
                                     },
-                                    "rfSnM": {
-                                      "enabled": false
-                                    },
                                     "etdqs": {
                                       "content": "데이터 분석을 위한 Python 이해 · 오늘"
                                     },
@@ -19147,11 +19087,11 @@
                                     "gNiU2": {
                                       "content": "W03 주차 회고 제출"
                                     },
-                                    "rfSnM": {
-                                      "enabled": false
-                                    },
                                     "etdqs": {
                                       "content": "Java, SpringBoot, Rest API 구현 · 3일 전"
+                                    },
+                                    "pZLhh": {
+                                      "enabled": false
                                     },
                                     "LtctJ": {
                                       "enabled": false
@@ -19187,11 +19127,11 @@
                                     "gNiU2": {
                                       "content": "Spring Bean 생명주기 & DI 정리"
                                     },
-                                    "rfSnM": {
-                                      "enabled": false
-                                    },
                                     "etdqs": {
                                       "content": "Java, SpringBoot, Rest API 구현 · 4일 전"
+                                    },
+                                    "pZLhh": {
+                                      "enabled": false
                                     },
                                     "LtctJ": {
                                       "enabled": false
@@ -20390,7 +20330,7 @@
           "name": "Body",
           "clip": true,
           "width": "fill_container",
-          "height": "fill_container",
+          "height": 1667,
           "layout": "vertical",
           "gap": "$space-3",
           "padding": "$space-4",
@@ -20406,16 +20346,39 @@
               "gap": "$space-3",
               "children": [
                 {
-                  "type": "text",
-                  "id": "Y7psS",
+                  "type": "frame",
+                  "id": "F9SPDd",
                   "name": "Greeting",
-                  "fill": "$text",
-                  "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "안녕하세요, 탁연우님",
-                  "fontFamily": "$font",
-                  "fontSize": "$text-title",
-                  "fontWeight": "$weight-semibold"
+                  "layout": "vertical",
+                  "gap": "$space-1",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "M7MPto",
+                      "name": "Hello",
+                      "fill": "$text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "안녕하세요, 탁연우님",
+                      "fontFamily": "$font",
+                      "fontSize": "$text-title",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dW7Xv",
+                      "name": "Sub",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "오늘 일정 1건과 새 자료 2건이 기다리고 있어요.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "normal"
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -20469,7 +20432,7 @@
                           "id": "j0ZgH9",
                           "name": "Progress",
                           "fill": "$text-muted",
-                          "content": "4 / 23주차",
+                          "content": "19일차",
                           "lineHeight": 1.4,
                           "fontFamily": "$font",
                           "fontSize": "$text-meta",
@@ -20544,17 +20507,10 @@
                   "content": "오늘 강의"
                 },
                 "QX5IP": {
-                  "id": "IxBtZ",
+                  "id": "xbnRL",
                   "type": "ref",
-                  "ref": "zWNLL",
-                  "name": "Today",
-                  "fill": "$today-soft",
-                  "descendants": {
-                    "lmFN1": {
-                      "content": "오늘",
-                      "fill": "$today"
-                    }
-                  }
+                  "ref": "Ja22a",
+                  "name": "Mode"
                 },
                 "Za40Y": {
                   "type": "frame",
@@ -20570,7 +20526,7 @@
                       "name": "Subject",
                       "width": "fill_container",
                       "layout": "vertical",
-                      "gap": 2,
+                      "gap": 8,
                       "children": [
                         {
                           "type": "text",
@@ -20586,15 +20542,96 @@
                           "fontWeight": "$weight-semibold"
                         },
                         {
-                          "type": "text",
-                          "id": "auLKB",
-                          "name": "Instructor",
-                          "fill": "$text-muted",
-                          "content": "박창렴",
-                          "lineHeight": 1.4,
-                          "fontFamily": "$font",
-                          "fontSize": "$text-meta",
-                          "fontWeight": "normal"
+                          "type": "frame",
+                          "id": "eGm4h",
+                          "name": "Professors",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "qtUQJ",
+                              "name": "RoleTag/전임",
+                              "fill": "$primary-soft",
+                              "cornerRadius": "$radius-pill",
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "jgUzP",
+                                  "name": "Label",
+                                  "fill": "$primary",
+                                  "content": "전임",
+                                  "lineHeight": 1.33,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-badge",
+                                  "fontWeight": "$weight-semibold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "rTLHM",
+                              "name": "Name",
+                              "fill": "$text",
+                              "content": "박창렴",
+                              "lineHeight": 1.4,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-medium"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Z9STg",
+                              "name": "Dot",
+                              "fill": "$text-faint",
+                              "content": "·",
+                              "lineHeight": 1.4,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "m4kLTi",
+                              "name": "RoleTag/실습",
+                              "fill": "$note-bg",
+                              "cornerRadius": "$radius-pill",
+                              "padding": [
+                                2,
+                                7
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "m7euFl",
+                                  "name": "Label",
+                                  "fill": "$note",
+                                  "content": "실습",
+                                  "lineHeight": 1.33,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-badge",
+                                  "fontWeight": "$weight-semibold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "doYJT",
+                              "name": "Name",
+                              "fill": "$text",
+                              "content": "이서준",
+                              "lineHeight": 1.4,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-medium"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -20904,8 +20941,14 @@
               "id": "WGiiy",
               "name": "Sec/공지",
               "width": "fill_container",
+              "fill": "$bg-surface",
+              "cornerRadius": "$radius-card",
+              "stroke": "$border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
               "layout": "vertical",
-              "gap": "$space-2",
+              "gap": "$space-3",
+              "padding": "$space-4",
               "children": [
                 {
                   "type": "frame",
@@ -20969,10 +21012,11 @@
                           "fill": "$primary"
                         },
                         "imy0X": {
-                          "content": "8/3(월) 특강 시간표 변경 안내"
+                          "content": "8/3(월) 특강 시간표 변경 안내",
+                          "fontSize": "$text-label"
                         },
                         "Q19o1": {
-                          "content": "10분 전"
+                          "content": "오늘"
                         }
                       }
                     },
@@ -20992,10 +21036,11 @@
                           "fill": "$note"
                         },
                         "imy0X": {
-                          "content": "사무실 에어컨 점검 — 15~16시 소음"
+                          "content": "사무실 에어컨 점검 — 15~16시 소음",
+                          "fontSize": "$text-label"
                         },
                         "Q19o1": {
-                          "content": "2시간 전"
+                          "content": "오늘"
                         }
                       }
                     },
@@ -21015,7 +21060,8 @@
                           "fill": "$text-muted"
                         },
                         "imy0X": {
-                          "content": "8월 회의실 예약 규칙 변경"
+                          "content": "8월 회의실 예약 규칙 변경",
+                          "fontSize": "$text-label"
                         },
                         "Q19o1": {
                           "content": "어제"
@@ -21028,7 +21074,7 @@
             },
             {
               "type": "frame",
-              "id": "jYA5p",
+              "id": "z3Aw8",
               "name": "Sec/식단",
               "width": "fill_container",
               "layout": "vertical",
@@ -21036,7 +21082,7 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "HuI4i",
+                  "id": "YV1j6",
                   "name": "Head",
                   "width": "fill_container",
                   "gap": "$space-2",
@@ -21044,17 +21090,18 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "orOxK",
+                      "id": "X79C4",
                       "name": "Label",
                       "fill": "$text",
-                      "content": "이번 주 식단",
+                      "content": "주간 식단",
+                      "lineHeight": 1.4,
                       "fontFamily": "$font",
-                      "fontSize": "$text-label",
+                      "fontSize": "$text-heading",
                       "fontWeight": "$weight-semibold"
                     },
                     {
                       "type": "frame",
-                      "id": "NIUK3",
+                      "id": "XDr5I",
                       "name": "Line",
                       "width": "fill_container",
                       "height": 1,
@@ -21064,18 +21111,26 @@
                 },
                 {
                   "type": "frame",
-                  "id": "h7iwL",
-                  "name": "Cols",
+                  "id": "zNWQi",
+                  "name": "Chips",
                   "width": "fill_container",
-                  "gap": "$space-1",
+                  "gap": 4,
                   "children": [
                     {
-                      "id": "N3SNv",
+                      "id": "N0EcW4",
                       "type": "ref",
                       "ref": "ldXjX",
-                      "name": "Meal/월",
+                      "name": "Day/8/3",
                       "width": "fill_container",
                       "fill": "$today-soft",
+                      "stroke": "$today",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 2,
+                      "padding": [
+                        "$space-2",
+                        0
+                      ],
                       "descendants": {
                         "DZljd": {
                           "content": "월",
@@ -21083,20 +21138,30 @@
                         },
                         "N2faNk": {
                           "content": "8/3",
-                          "fill": "$today"
+                          "fill": "$today",
+                          "fontWeight": "$weight-semibold",
+                          "enabled": false
                         },
                         "c0i6H": {
-                          "content": "제육볶음"
+                          "enabled": false
                         }
                       }
                     },
                     {
-                      "id": "c8o1qR",
+                      "id": "f5YEM",
                       "type": "ref",
                       "ref": "ldXjX",
-                      "name": "Meal/화",
+                      "name": "Day/8/4",
                       "width": "fill_container",
-                      "fill": "#00000000",
+                      "fill": "$bg-surface",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 2,
+                      "padding": [
+                        "$space-2",
+                        0
+                      ],
                       "descendants": {
                         "DZljd": {
                           "content": "화",
@@ -21104,20 +21169,30 @@
                         },
                         "N2faNk": {
                           "content": "8/4",
-                          "fill": "$text-faint"
+                          "fill": "$text-faint",
+                          "fontWeight": "$weight-regular",
+                          "enabled": false
                         },
                         "c0i6H": {
-                          "content": "순두부찌개"
+                          "enabled": false
                         }
                       }
                     },
                     {
-                      "id": "DaLJH",
+                      "id": "gpUNH",
                       "type": "ref",
                       "ref": "ldXjX",
-                      "name": "Meal/수",
+                      "name": "Day/8/5",
                       "width": "fill_container",
-                      "fill": "#00000000",
+                      "fill": "$bg-surface",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 2,
+                      "padding": [
+                        "$space-2",
+                        0
+                      ],
                       "descendants": {
                         "DZljd": {
                           "content": "수",
@@ -21125,20 +21200,30 @@
                         },
                         "N2faNk": {
                           "content": "8/5",
-                          "fill": "$text-faint"
+                          "fill": "$text-faint",
+                          "fontWeight": "$weight-regular",
+                          "enabled": false
                         },
                         "c0i6H": {
-                          "content": "비빔밥"
+                          "enabled": false
                         }
                       }
                     },
                     {
-                      "id": "Z1jnM",
+                      "id": "LOE4p",
                       "type": "ref",
                       "ref": "ldXjX",
-                      "name": "Meal/목",
+                      "name": "Day/8/6",
                       "width": "fill_container",
-                      "fill": "#00000000",
+                      "fill": "$bg-surface",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 2,
+                      "padding": [
+                        "$space-2",
+                        0
+                      ],
                       "descendants": {
                         "DZljd": {
                           "content": "목",
@@ -21146,20 +21231,30 @@
                         },
                         "N2faNk": {
                           "content": "8/6",
-                          "fill": "$text-faint"
+                          "fill": "$text-faint",
+                          "fontWeight": "$weight-regular",
+                          "enabled": false
                         },
                         "c0i6H": {
-                          "content": "돈까스"
+                          "enabled": false
                         }
                       }
                     },
                     {
-                      "id": "Ozis2",
+                      "id": "gmJjf",
                       "type": "ref",
                       "ref": "ldXjX",
-                      "name": "Meal/금",
+                      "name": "Day/8/7",
                       "width": "fill_container",
-                      "fill": "#00000000",
+                      "fill": "$bg-surface",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": 2,
+                      "padding": [
+                        "$space-2",
+                        0
+                      ],
                       "descendants": {
                         "DZljd": {
                           "content": "금",
@@ -21167,183 +21262,775 @@
                         },
                         "N2faNk": {
                           "content": "8/7",
-                          "fill": "$text-faint"
+                          "fill": "$text-faint",
+                          "fontWeight": "$weight-regular",
+                          "enabled": false
                         },
                         "c0i6H": {
-                          "content": "김치찌개"
+                          "enabled": false
                         }
                       }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b84QTV",
+                  "name": "MealTabs",
+                  "width": "fill_container",
+                  "fill": "$bg-subtle",
+                  "cornerRadius": "$radius-control",
+                  "gap": 2,
+                  "padding": 2,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u7uQ5w",
+                      "name": "Tab/점심",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": 6,
+                      "padding": [
+                        5,
+                        0
+                      ],
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M844d",
+                          "name": "Label",
+                          "fill": "$text",
+                          "content": "점심",
+                          "lineHeight": 1.4,
+                          "textAlign": "center",
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vqM79",
+                      "name": "Tab/저녁",
+                      "width": "fill_container",
+                      "fill": "#00000000",
+                      "cornerRadius": 6,
+                      "padding": [
+                        5,
+                        0
+                      ],
+                      "justifyContent": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "sP9Wq",
+                          "name": "Label",
+                          "fill": "$text-muted",
+                          "content": "저녁",
+                          "lineHeight": 1.4,
+                          "textAlign": "center",
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-medium"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n4fRU",
+                  "name": "Detail/8-3",
+                  "width": "fill_container",
+                  "fill": "$bg-surface",
+                  "cornerRadius": "$radius-card",
+                  "stroke": "$border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "gap": "$space-2",
+                  "padding": "$space-3",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "D7v97",
+                      "name": "Menu",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "R7Nf8",
+                          "name": "Item/제육볶음",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "bFLHw",
+                              "name": "Dot",
+                              "fill": "$today",
+                              "width": 4,
+                              "height": 4
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZMHQd",
+                              "name": "Name",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "제육볶음",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-label",
+                              "fontWeight": "$weight-semibold"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Lkigv",
+                          "name": "Item/미역국",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "k8kCzc",
+                              "name": "Dot",
+                              "fill": "$text-faint",
+                              "width": 4,
+                              "height": 4
+                            },
+                            {
+                              "type": "text",
+                              "id": "A2IDZ",
+                              "name": "Name",
+                              "fill": "$text-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "미역국",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-regular"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "drwPS",
+                          "name": "Item/계란찜",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "ENLmL",
+                              "name": "Dot",
+                              "fill": "$text-faint",
+                              "width": 4,
+                              "height": 4
+                            },
+                            {
+                              "type": "text",
+                              "id": "l6el3",
+                              "name": "Name",
+                              "fill": "$text-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "계란찜",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-regular"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x9KDK",
+                          "name": "Item/배추김치",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "pUOgT",
+                              "name": "Dot",
+                              "fill": "$text-faint",
+                              "width": 4,
+                              "height": 4
+                            },
+                            {
+                              "type": "text",
+                              "id": "VmziS",
+                              "name": "Name",
+                              "fill": "$text-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "배추김치",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-regular"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZYfpI",
+                          "name": "Item/요구르트",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "ZxtFg",
+                              "name": "Dot",
+                              "fill": "$text-faint",
+                              "width": 4,
+                              "height": 4
+                            },
+                            {
+                              "type": "text",
+                              "id": "A8bOve",
+                              "name": "Name",
+                              "fill": "$text-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "요구르트",
+                              "lineHeight": 1.5,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-regular"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
               ]
             },
             {
-              "id": "A3l1X",
-              "type": "ref",
-              "ref": "phV74",
-              "name": "Card/이번주",
+              "type": "frame",
+              "id": "qf1I0",
+              "name": "Sec/일정",
               "width": "fill_container",
-              "descendants": {
-                "WjBNO": {
-                  "content": "이번 주"
-                },
-                "QX5IP": {
-                  "id": "S1VDm",
-                  "type": "ref",
-                  "ref": "zWNLL",
-                  "name": "Week",
-                  "fill": "$primary-soft",
-                  "descendants": {
-                    "lmFN1": {
-                      "content": "W03",
-                      "fill": "$primary"
-                    }
-                  }
-                },
-                "Za40Y": {
+              "layout": "vertical",
+              "gap": "$space-2",
+              "children": [
+                {
                   "type": "frame",
-                  "id": "J0404",
-                  "name": "Body",
+                  "id": "SexcN",
+                  "name": "Head",
                   "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 2,
+                  "gap": "$space-2",
+                  "alignItems": "center",
                   "children": [
                     {
-                      "id": "axBCK",
-                      "type": "ref",
-                      "ref": "CRePe",
-                      "name": "WR/7/27",
-                      "width": "fill_container",
-                      "fill": "#00000000",
-                      "descendants": {
-                        "xAJiy": {
-                          "enabled": false
-                        },
-                        "b407BZ": {
-                          "content": "월",
-                          "fill": "$text-muted"
-                        },
-                        "F1upG": {
-                          "content": "7/27",
-                          "fill": "$text-muted"
-                        },
-                        "tKhG6": {
-                          "content": "Git 심화"
-                        },
-                        "U9OYk": {
-                          "enabled": true
-                        },
-                        "U9OYk/y49R1S": {
-                          "content": "1"
-                        },
-                        "fTyrS": {
-                          "enabled": true
-                        }
-                      }
+                      "type": "text",
+                      "id": "NCsS4",
+                      "name": "Label",
+                      "fill": "$text",
+                      "content": "일정",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-heading",
+                      "fontWeight": "$weight-semibold"
                     },
                     {
-                      "id": "Rb2Tz",
-                      "type": "ref",
-                      "ref": "CRePe",
-                      "name": "WR/7/28",
+                      "type": "frame",
+                      "id": "JrQ38",
+                      "name": "Line",
                       "width": "fill_container",
-                      "fill": "#00000000",
-                      "descendants": {
-                        "xAJiy": {
-                          "enabled": false
-                        },
-                        "b407BZ": {
-                          "content": "화",
-                          "fill": "$text-muted"
-                        },
-                        "F1upG": {
-                          "content": "7/28",
-                          "fill": "$text-muted"
-                        },
-                        "tKhG6": {
-                          "content": "Java/Spring 기초"
-                        },
-                        "U9OYk": {
-                          "enabled": true
-                        },
-                        "U9OYk/y49R1S": {
-                          "content": "2"
-                        },
-                        "fTyrS": {
-                          "enabled": true
-                        }
-                      }
+                      "height": 1,
+                      "fill": "$border"
                     },
                     {
-                      "id": "X3ITlz",
-                      "type": "ref",
-                      "ref": "CRePe",
-                      "name": "WR/7/30",
-                      "width": "fill_container",
-                      "fill": "$today-soft",
-                      "descendants": {
-                        "xAJiy": {
-                          "enabled": true
+                      "type": "text",
+                      "id": "RPNNm",
+                      "name": "More",
+                      "fill": "$primary",
+                      "content": "일정표 ›",
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-medium"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UkQo2",
+                  "name": "ScrollArea",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 232,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u9BAC",
+                      "x": 0,
+                      "y": -26,
+                      "name": "List",
+                      "width": 331,
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PoK2C",
+                          "name": "Row/7/31",
+                          "opacity": 0.45,
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "hPRwf",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "li0Ac",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "7/31",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Dujn5",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Java, SpringBoot, Rest API 구현",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            }
+                          ]
                         },
-                        "b407BZ": {
-                          "content": "목",
-                          "fill": "$today"
+                        {
+                          "type": "frame",
+                          "id": "JGqNP",
+                          "name": "Row/8/3",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-control",
+                          "stroke": "$primary",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "xEqvs",
+                              "name": "Accent",
+                              "fill": "$primary",
+                              "width": 3,
+                              "height": 32
+                            },
+                            {
+                              "type": "text",
+                              "id": "QkfAL",
+                              "name": "Date",
+                              "fill": "$primary",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/3",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-semibold"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Pl6Dc",
+                              "name": "Text",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 1,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "qsQYW",
+                                  "name": "TodayTag",
+                                  "fill": "$primary",
+                                  "content": "오늘",
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-badge",
+                                  "fontWeight": "$weight-semibold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "XYQ7N",
+                                  "name": "Subject",
+                                  "fill": "$text",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "데이터 분석을 위한 Python 이해",
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-meta",
+                                  "fontWeight": "$weight-semibold"
+                                }
+                              ]
+                            }
+                          ]
                         },
-                        "F1upG": {
-                          "content": "7/30",
-                          "fill": "$today"
+                        {
+                          "type": "frame",
+                          "id": "Rks1t",
+                          "name": "Row/8/4",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "N0NNh",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "CcZ5j",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/4",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "fDSb2",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "데이터 분석을 위한 Python 이해",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            }
+                          ]
                         },
-                        "tKhG6": {
-                          "content": "Java/Spring 기초"
+                        {
+                          "type": "frame",
+                          "id": "iDPsj",
+                          "name": "Row/8/5",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "EVrxn",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "v8hNZ",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/5",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "plgX9",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "실전 Feature Engineering",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            }
+                          ]
                         },
-                        "U9OYk": {
-                          "enabled": true
+                        {
+                          "type": "frame",
+                          "id": "eWmKh",
+                          "name": "Row/8/6",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "MmOLg",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZGD9l",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/6",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "x7Qsl",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "머신러닝 및 딥러닝 이해",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            }
+                          ]
                         },
-                        "U9OYk/y49R1S": {
-                          "content": "2"
+                        {
+                          "type": "frame",
+                          "id": "kdVsx",
+                          "name": "Row/8/7",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "FoKiO",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "E41cY",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/7",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "JlBZ4",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "머신러닝 및 딥러닝 이해",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "normal"
+                            }
+                          ]
                         },
-                        "fTyrS": {
-                          "enabled": false
+                        {
+                          "type": "frame",
+                          "id": "eeE9o",
+                          "name": "Row/8/10",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "LQWwk",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "Y516CH",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/10",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "JD2F9",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "머신러닝 및 딥러닝 이해",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-medium"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k5MPl",
+                          "name": "Row/8/11",
+                          "width": "fill_container",
+                          "fill": "#00000000",
+                          "cornerRadius": "$radius-control",
+                          "gap": 10,
+                          "padding": [
+                            8,
+                            10
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "C4o5b",
+                              "name": "Accent",
+                              "fill": "#00000000",
+                              "width": 3,
+                              "height": 20
+                            },
+                            {
+                              "type": "text",
+                              "id": "LWl0L",
+                              "name": "Date",
+                              "fill": "$text-faint",
+                              "textGrowth": "fixed-width",
+                              "width": 32,
+                              "content": "8/11",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-badge",
+                              "fontWeight": "$weight-regular"
+                            },
+                            {
+                              "type": "text",
+                              "id": "FN24F",
+                              "name": "Subject",
+                              "fill": "$text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "스마트 데이터 이해 및 활용",
+                              "fontFamily": "$font",
+                              "fontSize": "$text-meta",
+                              "fontWeight": "$weight-medium"
+                            }
+                          ]
                         }
-                      }
+                      ]
                     },
                     {
-                      "id": "L5xVeZ",
-                      "type": "ref",
-                      "ref": "CRePe",
-                      "name": "WR/7/31",
-                      "width": "fill_container",
-                      "fill": "#00000000",
-                      "descendants": {
-                        "xAJiy": {
-                          "enabled": false
-                        },
-                        "b407BZ": {
-                          "content": "금",
-                          "fill": "$text-muted"
-                        },
-                        "F1upG": {
-                          "content": "7/31",
-                          "fill": "$text-muted"
-                        },
-                        "tKhG6": {
-                          "content": "DB 설계"
-                        },
-                        "U9OYk": {
-                          "enabled": false
-                        },
-                        "U9OYk/y49R1S": {
-                          "content": "1"
-                        },
-                        "fTyrS": {
-                          "enabled": false
-                        }
-                      }
+                      "type": "rectangle",
+                      "cornerRadius": "$radius-pill",
+                      "id": "T1GcH",
+                      "x": 337,
+                      "y": 0,
+                      "name": "ScrollTrack",
+                      "fill": "$bg-subtle",
+                      "width": 3,
+                      "height": 232
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": "$radius-pill",
+                      "id": "BnMZQ",
+                      "x": 337,
+                      "y": 36,
+                      "name": "ScrollThumb",
+                      "fill": "$text-faint",
+                      "width": 3,
+                      "height": 96
                     }
                   ]
                 }
-              }
+              ]
             },
             {
               "id": "qqZml",
@@ -21394,9 +22081,6 @@
                         "gNiU2": {
                           "content": "DI 3가지 주입 방식"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Java/Spring 기초 · 어제"
                         },
@@ -21443,11 +22127,11 @@
                         "gNiU2": {
                           "content": "Git 실습 제출"
                         },
-                        "rfSnM": {
-                          "enabled": false
-                        },
                         "etdqs": {
                           "content": "Git 심화 · 3일 전"
+                        },
+                        "pZLhh": {
+                          "enabled": false
                         },
                         "LtctJ": {
                           "enabled": false
