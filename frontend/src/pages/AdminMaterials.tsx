@@ -11,6 +11,7 @@ import { useToast } from '../lib/toast'
 import type { Material } from '../lib/types'
 
 type Tab = 'PENDING' | 'APPROVED' | 'REJECTED'
+const PAGE_SIZE = 20
 
 /** A1 · 관리자 / 자료 승인함 */
 export default function AdminMaterials() {
@@ -18,6 +19,7 @@ export default function AdminMaterials() {
     useStore()
   const toast = useToast()
   const [tab, setTab] = useState<Tab>('PENDING')
+  const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [rejected, setRejected] = useState<Material[]>([])
   const [collecting, setCollecting] = useState(false)
@@ -37,6 +39,9 @@ export default function AdminMaterials() {
   }
 
   const list = tab === 'PENDING' ? pendingMaterials : tab === 'APPROVED' ? materials : rejected
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const pageItems = list.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
   const collectedToday = pendingMaterials.filter((m) => m.postedAt.slice(0, 10) === TODAY_ISO).length
   const scheduleOptions = useMemo(
     () => [...schedules].sort((a, b) => a.date.localeCompare(b.date)),
@@ -96,6 +101,7 @@ export default function AdminMaterials() {
               onClick={() => {
                 setTab(value)
                 setSelected(new Set())
+                setPage(1)
               }}
               aria-pressed={tab === value}
               className={
@@ -153,7 +159,7 @@ export default function AdminMaterials() {
           />
         ) : (
           <ul className="space-y-2">
-            {list.map((m) => {
+            {pageItems.map((m) => {
               const schedule = schedules.find((s) => s.id === m.scheduleId) ?? null
               const isPending = tab === 'PENDING'
               return (
@@ -275,6 +281,30 @@ export default function AdminMaterials() {
               )
             })}
           </ul>
+        )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex h-9 items-center rounded-control border border-line bg-surface px-3 text-meta font-medium text-ink hover:bg-primary-soft disabled:opacity-40"
+            >
+              이전
+            </button>
+            <span className="text-meta text-ink-muted tabular-nums">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex h-9 items-center rounded-control border border-line bg-surface px-3 text-meta font-medium text-ink hover:bg-primary-soft disabled:opacity-40"
+            >
+              다음
+            </button>
+          </div>
         )}
 
         {/* .pen A1 : 수동 등록은 목록 아래 왼쪽에 놓인 보조 버튼 */}
