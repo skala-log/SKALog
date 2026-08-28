@@ -1,5 +1,6 @@
 package com.skalog.slack;
 
+import com.skalog.auth.RequireAdmin;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ public class SlackAdminController {
         this.materialCollector = materialCollector;
     }
 
+    @RequireAdmin
     @PostMapping("/collect")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void collect() {

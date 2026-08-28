@@ -99,7 +99,6 @@ function nowLocalISO(): string {
 export function StoreProvider({ children }: { children: ReactNode }) {
   const me = useMe()
   const CLASS_ID = me.classId
-  const USER_ID = me.id
 
   const [schedules, setSchedules] = useState<Schedule[]>([])
   const [schedulesLoaded, setSchedulesLoaded] = useState(false)
@@ -123,7 +122,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setMaterials(perSchedule.flat().map(toMaterial))
       setSchedulesLoaded(true)
     })
-    get<ApiSubmission[]>(`/submissions?userId=${USER_ID}`).then((raw) => setSubmissions(raw.map(toSubmission)))
+    get<ApiSubmission[]>('/submissions').then((raw) => setSubmissions(raw.map(toSubmission)))
     refreshPendingMaterials()
   }, [refreshPendingMaterials])
 
@@ -146,7 +145,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
     setSubmissions((prev) => [optimistic, ...prev])
 
-    post<ApiSubmission>(`/submissions?userId=${USER_ID}`, {
+    post<ApiSubmission>('/submissions', {
       scheduleId: input.scheduleId,
       type: input.type,
       title: input.title,
@@ -168,14 +167,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setSubmissions((prev) => prev.filter((s) => s.id !== id))
     const realId = resolveRealId(id)
     if (realId < 0) return // 아직 서버 저장이 끝나지 않은 항목 — 저장 완료 후에도 정리는 안 되지만 드문 경합이라 무시
-    del(`/submissions/${realId}?userId=${USER_ID}`).catch((e) => console.error('submission 삭제 실패', e))
+    del(`/submissions/${realId}`).catch((e) => console.error('submission 삭제 실패', e))
   }, [])
 
   // ponytail: 백엔드에 복원 API가 없어(soft delete만 있음) 재생성으로 대체한다. id는 그대로 유지하고
   // 새로 생긴 서버 id만 realIdRef에 기록 — 진짜 복원이 필요하면 PATCH /submissions/{id}/restore 추가.
   const restoreSubmission = useCallback((submission: Submission) => {
     setSubmissions((prev) => [submission, ...prev])
-    post<ApiSubmission>(`/submissions?userId=${USER_ID}`, {
+    post<ApiSubmission>('/submissions', {
       scheduleId: submission.scheduleId,
       type: submission.type,
       title: submission.title,

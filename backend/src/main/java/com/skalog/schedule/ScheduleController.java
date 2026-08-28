@@ -1,5 +1,6 @@
 package com.skalog.schedule;
 
+import com.skalog.auth.RequireAdmin;
 import com.skalog.material.MaterialRepository;
 import com.skalog.submission.SubmissionRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,6 +48,7 @@ public class ScheduleController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @RequireAdmin
     @PatchMapping("/{id}")
     @Transactional
     public Schedule update(@PathVariable Long id, @Valid @RequestBody ScheduleUpdateRequest req) {
@@ -63,6 +65,7 @@ public class ScheduleController {
 
     // ponytail: 연결된 자료/기록이 있으면 삭제를 막는다. UI 문구는 "분리됩니다"지만
     // material/submission의 schedule_id가 not null이라 실제 분리(FK를 null로)는 별도 스키마 변경이 필요함.
+    @RequireAdmin
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

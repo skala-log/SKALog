@@ -1,5 +1,6 @@
 package com.skalog.material;
 
+import com.skalog.auth.RequireAdmin;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MaterialController {
         return materialRepository.findByScheduleIdAndStatus(scheduleId, MaterialStatus.APPROVED);
     }
 
+    @RequireAdmin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Material create(@Valid @RequestBody MaterialRequest req) {
@@ -38,11 +40,13 @@ public class MaterialController {
         return materialRepository.save(material);
     }
 
+    @RequireAdmin
     @GetMapping("/pending")
     public List<Material> pending() {
         return materialRepository.findByStatusOrderByCreatedAtDesc(MaterialStatus.PENDING);
     }
 
+    @RequireAdmin
     @PostMapping("/approve")
     public List<Material> approve(@Valid @RequestBody MaterialIdsRequest req) {
         List<Material> materials = materialRepository.findAllById(req.ids());
@@ -50,6 +54,7 @@ public class MaterialController {
         return materialRepository.saveAll(materials);
     }
 
+    @RequireAdmin
     @PostMapping("/reject")
     public List<Material> reject(@Valid @RequestBody MaterialIdsRequest req) {
         List<Material> materials = materialRepository.findAllById(req.ids());
@@ -57,6 +62,7 @@ public class MaterialController {
         return materialRepository.saveAll(materials);
     }
 
+    @RequireAdmin
     @PatchMapping("/{id}/relink")
     public Material relink(@PathVariable Long id, @RequestBody MaterialRelinkRequest req) {
         Material material = materialRepository.findById(id)
