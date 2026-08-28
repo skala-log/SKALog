@@ -26,7 +26,7 @@ export function MaterialRow({
 
   return (
     <a
-      href={material.url ?? undefined}
+      href={material.sourceUrl ?? material.url ?? undefined}
       target="_blank"
       rel="noreferrer"
       className={

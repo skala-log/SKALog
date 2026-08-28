@@ -44,6 +44,8 @@ type ApiMaterial = {
   url: string | null
   status: Material['status']
   sourceRef: string | null
+  sourceUrl: string | null
+  postedAt: string | null
 }
 type ApiSubmission = {
   id: number
@@ -66,7 +68,7 @@ export function toSchedule(s: ApiSchedule): Schedule {
   }
 }
 
-// ponytail: ext/fileSize/postedAt은 백엔드가 아직 안 내려줌(수동 입력 자료라 파일 메타·수집 시각이 없음). 승인함(4단계)에서 채워지면 여기도 채운다.
+// ponytail: ext/fileSize는 백엔드가 아직 안 내려줌(파일 메타 정보 자체를 안 만듦). 필요해지면 추가.
 function toMaterial(m: ApiMaterial): Material {
   return {
     id: m.id,
@@ -78,7 +80,8 @@ function toMaterial(m: ApiMaterial): Material {
     fileSize: null,
     status: m.status,
     sourceRef: m.sourceRef,
-    postedAt: '',
+    sourceUrl: m.sourceUrl,
+    postedAt: m.postedAt ?? '',
   }
 }
 

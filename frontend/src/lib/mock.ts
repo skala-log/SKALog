@@ -48,6 +48,7 @@ const mat = (
   fileSize,
   status: 'APPROVED',
   sourceRef: '슬랙 원본',
+  sourceUrl: null,
   postedAt,
   ...extra,
 })

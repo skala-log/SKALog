@@ -193,16 +193,19 @@ export default function AdminMaterials() {
                       <div className="flex flex-wrap items-center gap-2 text-meta leading-[1.4] text-ink-muted">
                         <span>
                           {schedule && schedule.instructors.length > 0 ? `${instructorNames(schedule.instructors)} · ` : ''}
-                          {/* ponytail: 슬랙 수집 자료는 postedAt이 아직 없다(백엔드 미구현) — 그 경우 시각 생략 */}
                           {m.postedAt ? dateTimeLabel(m.postedAt) : '수집 시각 미상'}
                         </span>
-                        <a
-                          href="#"
-                          className="flex h-7 items-center gap-1 rounded-control bg-subtle px-2 text-badge leading-[1.4] font-semibold text-primary hover:underline"
-                        >
-                          슬랙 원본
-                          <ArrowUpRight size={12} />
-                        </a>
+                        {m.sourceUrl && (
+                          <a
+                            href={m.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex h-7 items-center gap-1 rounded-control bg-subtle px-2 text-badge leading-[1.4] font-semibold text-primary hover:underline"
+                          >
+                            슬랙 원본
+                            <ArrowUpRight size={12} />
+                          </a>
+                        )}
                       </div>
 
                       {/* 매칭 드롭다운 */}

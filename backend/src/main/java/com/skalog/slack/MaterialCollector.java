@@ -7,7 +7,9 @@ import com.skalog.schedule.Schedule;
 import com.skalog.schedule.ScheduleRepository;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -62,8 +64,18 @@ public class MaterialCollector {
                         .findByClassIdAndDate(CLASS_ID, tsToKstDate(candidate.ts()))
                         .map(Schedule::getId)
                         .orElse(null);
+                // 파일은 슬랙이 permalink를 바로 주지만, 순수 링크 메시지는 안 줘서 chat.getPermalink로 따로 조회한다.
+                String sourceUrl = candidate.sourceUrl() != null
+                        ? candidate.sourceUrl()
+                        : fetchPermalink(channelId, candidate.ts());
                 materialRepository.save(new Material(
-                        scheduleId, candidate.title(), candidate.kind(), candidate.url(), candidate.sourceRef()));
+                        scheduleId,
+                        candidate.title(),
+                        candidate.kind(),
+                        candidate.url(),
+                        candidate.sourceRef(),
+                        OffsetDateTime.ofInstant(tsToInstant(candidate.ts()), ZoneOffset.UTC),
+                        sourceUrl));
             }
         }
     }
@@ -74,7 +86,7 @@ public class MaterialCollector {
         if (!message.files().isEmpty()) {
             for (SlackMessage.SlackFile file : message.files()) {
                 candidates.add(new MaterialCandidate(
-                        file.name(), MaterialKind.FILE, file.urlPrivate(), file.id(), message.ts()));
+                        file.name(), MaterialKind.FILE, file.urlPrivate(), file.id(), message.ts(), file.permalink()));
             }
             return candidates;
         }
@@ -83,13 +95,14 @@ public class MaterialCollector {
             String url = slackLink.group(1);
             String label = slackLink.group(2);
             String title = (label != null && !label.isBlank()) ? label : url;
-            candidates.add(new MaterialCandidate(truncate(title), MaterialKind.LINK, url, message.ts(), message.ts()));
+            candidates.add(
+                    new MaterialCandidate(truncate(title), MaterialKind.LINK, url, message.ts(), message.ts(), null));
             return candidates;
         }
         Matcher bareUrl = BARE_URL_PATTERN.matcher(message.text());
         if (bareUrl.find()) {
             candidates.add(new MaterialCandidate(
-                    truncate(message.text()), MaterialKind.LINK, bareUrl.group(), message.ts(), message.ts()));
+                    truncate(message.text()), MaterialKind.LINK, bareUrl.group(), message.ts(), message.ts(), null));
         }
         return candidates;
     }
@@ -100,9 +113,24 @@ public class MaterialCollector {
 
     /** 슬랙 ts(초 단위, 소수점 포함 문자열)를 KST 날짜로 변환한다. */
     static LocalDate tsToKstDate(String ts) {
-        double epochSeconds = Double.parseDouble(ts);
-        return Instant.ofEpochMilli((long) (epochSeconds * 1000)).atZone(KST).toLocalDate();
+        return tsToInstant(ts).atZone(KST).toLocalDate();
     }
 
-    record MaterialCandidate(String title, MaterialKind kind, String url, String sourceRef, String ts) {}
+    /** 슬랙 ts를 실제 시각으로 변환한다. */
+    static Instant tsToInstant(String ts) {
+        double epochSeconds = Double.parseDouble(ts);
+        return Instant.ofEpochMilli((long) (epochSeconds * 1000));
+    }
+
+    /** chat.getPermalink 호출이 실패해도 자료 수집 자체는 계속되도록 sourceUrl만 null로 남긴다. */
+    private String fetchPermalink(String channelId, String ts) {
+        try {
+            return slackClient.getPermalink(channelId, ts);
+        } catch (Exception e) {
+            log.warn("permalink 조회 실패 channel={} ts={}", channelId, ts, e);
+            return null;
+        }
+    }
+
+    record MaterialCandidate(String title, MaterialKind kind, String url, String sourceRef, String ts, String sourceUrl) {}
 }

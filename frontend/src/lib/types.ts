@@ -34,7 +34,8 @@ export type Material = {
   url: string | null
   fileSize: string | null // "2.1MB"
   status: MaterialStatus
-  sourceRef: string | null // slack permalink label
+  sourceRef: string | null // 슬랙 파일 id/메시지 ts — 재수집 중복 방지용 식별자, 링크 아님
+  sourceUrl: string | null // 클릭하면 슬랙 메시지로 이동하는 permalink
   postedAt: string // ISO — when it hit the slack channel
   matchConfidence?: 'EXACT' | 'GUESS'
 }

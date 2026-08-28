@@ -25,8 +25,9 @@ class MaterialCollectorTest {
                 "1690848000.000100",
                 "오늘 자료 올립니다",
                 List.of(
-                        new SlackMessage.SlackFile("F1", "슬라이드.pdf", "https://files.slack.com/f1", "pdf"),
-                        new SlackMessage.SlackFile("F2", "예제.zip", "https://files.slack.com/f2", "zip")));
+                        new SlackMessage.SlackFile(
+                                "F1", "슬라이드.pdf", "https://files.slack.com/f1", "pdf", "https://skala.slack.com/files/F1"),
+                        new SlackMessage.SlackFile("F2", "예제.zip", "https://files.slack.com/f2", "zip", null)));
 
         List<MaterialCollector.MaterialCandidate> candidates = MaterialCollector.extractCandidates(message);
 
@@ -35,6 +36,7 @@ class MaterialCollectorTest {
         assertEquals(MaterialKind.FILE, candidates.get(0).kind());
         assertEquals("F1", candidates.get(0).sourceRef());
         assertEquals("https://files.slack.com/f1", candidates.get(0).url());
+        assertEquals("https://skala.slack.com/files/F1", candidates.get(0).sourceUrl());
     }
 
     @Test
@@ -73,6 +75,14 @@ class MaterialCollectorTest {
         assertEquals(1, candidates.size());
         assertEquals("https://example.com/handout.pdf", candidates.get(0).url());
         assertEquals("https://example.com/handout.pdf", candidates.get(0).title());
+    }
+
+    @Test
+    void tsToInstant_소수점포함ts를_실제시각으로() {
+        Instant instant = Instant.parse("2026-01-15T20:00:00Z");
+        String ts = instant.getEpochSecond() + ".000000";
+
+        assertEquals(instant, MaterialCollector.tsToInstant(ts));
     }
 
     @Test

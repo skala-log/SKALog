@@ -46,10 +46,27 @@ public class SlackClient {
                         f.path("id").asText(null),
                         f.path("name").asText(null),
                         f.path("url_private").asText(null),
-                        f.path("filetype").asText(null)));
+                        f.path("filetype").asText(null),
+                        f.path("permalink").asText(null)));
             }
             messages.add(new SlackMessage(m.path("ts").asText(null), m.path("text").asText(""), files));
         }
         return messages;
+    }
+
+    /** 순수 텍스트 메시지는 슬랙이 permalink를 내려주지 않아서 chat.getPermalink로 따로 조회한다. */
+    public String getPermalink(String channelId, String ts) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_BASE + "/chat.getPermalink?channel=" + channelId + "&message_ts=" + ts))
+                .header("Authorization", "Bearer " + properties.botToken())
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        JsonNode root = objectMapper.readTree(response.body());
+        if (!root.path("ok").asBoolean(false)) {
+            throw new IOException("슬랙 API 오류: " + root.path("error").asText("unknown"));
+        }
+        return root.path("permalink").asText(null);
     }
 }
