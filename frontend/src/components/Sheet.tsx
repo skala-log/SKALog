@@ -6,6 +6,8 @@ type SheetProps = {
   open: boolean
   onClose: () => void
   title?: string
+  /** 데스크톱 폭. 액션 목록은 기본(320px), 폼은 wide(440px) — .pen `A1-b` Dialog 기준 */
+  wide?: boolean
   children: ReactNode
 }
 
@@ -21,7 +23,7 @@ function useEscape(open: boolean, onClose: () => void) {
 }
 
 /** Sheet — .pen `BiAQO` : 모바일은 바텀시트, 데스크톱은 가운데 패널 */
-export function Sheet({ open, onClose, title, children }: SheetProps) {
+export function Sheet({ open, onClose, title, wide, children }: SheetProps) {
   useEscape(open, onClose)
   if (!open) return null
   return (
@@ -30,7 +32,10 @@ export function Sheet({ open, onClose, title, children }: SheetProps) {
       <div
         role="dialog"
         aria-modal="true"
-        className="relative w-full rounded-t-sheet border border-line bg-surface p-4 shadow-lg lg:w-80 lg:rounded-card"
+        className={
+          'relative max-h-[85dvh] w-full overflow-y-auto rounded-t-sheet border border-line bg-surface p-4 shadow-lg lg:rounded-card ' +
+          (wide ? 'lg:w-[440px] lg:p-6' : 'lg:w-80')
+        }
       >
         <div className="mx-auto mb-2 h-1 w-9 rounded-full bg-line lg:hidden" aria-hidden />
         {title && (

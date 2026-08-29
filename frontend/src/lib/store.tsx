@@ -3,7 +3,7 @@ import { del, get, patch, post } from './api'
 import { useMe } from './auth'
 import { weekdayOf } from './format'
 import { TODAY_ISO } from './mock'
-import type { Attachment, Instructor, Material, Schedule, Submission, SubmissionType } from './types'
+import type { Attachment, Instructor, Material, MaterialKind, Schedule, Submission, SubmissionType } from './types'
 
 type NewSubmissionInput = {
   scheduleId: number
@@ -15,6 +15,13 @@ type NewSubmissionInput = {
 
 export type ScheduleDraft = Pick<Schedule, 'date' | 'weekNo' | 'subject' | 'instructors'>
 
+export type NewMaterialInput = {
+  scheduleId: number
+  title: string
+  kind: MaterialKind
+  url: string
+}
+
 type StoreValue = {
   schedules: Schedule[]
   schedulesLoaded: boolean
@@ -24,6 +31,7 @@ type StoreValue = {
   addSubmission: (input: NewSubmissionInput) => Submission
   removeSubmission: (id: number) => void
   restoreSubmission: (submission: Submission) => void
+  addMaterial: (input: NewMaterialInput) => Promise<Material>
   approveMaterials: (ids: number[]) => void
   rejectMaterials: (ids: number[]) => void
   relinkMaterial: (id: number, scheduleId: number | null) => void
@@ -186,6 +194,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       .catch((e) => console.error('submission 복원 실패', e))
   }, [])
 
+  // 관리자 수동 등록 — 게시 여부는 서버 응답의 status가 결정한다(현재 정책은 승인 큐 없이 바로 APPROVED).
+  const addMaterial = useCallback(async (input: NewMaterialInput) => {
+    const saved = await post<ApiMaterial>('/materials', input)
+    const material = toMaterial(saved)
+    if (material.status === 'APPROVED') setMaterials((prev) => [material, ...prev])
+    else setPendingMaterials((prev) => [material, ...prev])
+    return material
+  }, [])
+
   const approveMaterials = useCallback((ids: number[]) => {
     const set = new Set(ids)
     setPendingMaterials((prev) => {
@@ -237,6 +254,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addSubmission,
       removeSubmission,
       restoreSubmission,
+      addMaterial,
       approveMaterials,
       rejectMaterials,
       relinkMaterial,
@@ -254,6 +272,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addSubmission,
       removeSubmission,
       restoreSubmission,
+      addMaterial,
       approveMaterials,
       rejectMaterials,
       relinkMaterial,

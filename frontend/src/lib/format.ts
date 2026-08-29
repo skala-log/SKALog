@@ -54,6 +54,11 @@ export function weekTag(weekNo: number): string {
   return `W${String(weekNo).padStart(2, '0')}`
 }
 
+/** "W03 7/28 · Java/Spring 기초" — 일정 select의 option 라벨. 매칭/수동 등록 드롭다운이 같이 쓴다 */
+export function scheduleOptionLabel(s: { weekNo: number; date: string; subject: string }): string {
+  return `${weekTag(s.weekNo)} ${formatMD(s.date)} · ${s.subject}`
+}
+
 export function weekRangeLabel(dates: string[]): string {
   const sorted = [...dates].sort()
   return `${formatMD(sorted[0])} – ${formatMD(sorted[sorted.length - 1])}`

@@ -1,14 +1,15 @@
-import { ArrowUpRight, Check, FileText, Link as LinkIcon, Plus, RefreshCw, TriangleAlert, X } from 'lucide-react'
+import { ArrowUpRight, Check, FileText, Info, Link as LinkIcon, Plus, RefreshCw, TriangleAlert, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
+import { Sheet } from '../components/Sheet'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { post } from '../lib/api'
-import { dateTimeLabel, formatMD, instructorNames, weekTag } from '../lib/format'
+import { dateTimeLabel, instructorNames, scheduleOptionLabel } from '../lib/format'
 import { TODAY_ISO } from '../lib/mock'
 import { useStore } from '../lib/store'
 import { useToast } from '../lib/toast'
-import type { Material } from '../lib/types'
+import type { Material, MaterialKind, Schedule } from '../lib/types'
 
 type Tab = 'PENDING' | 'APPROVED' | 'REJECTED'
 const PAGE_SIZE = 20
@@ -23,6 +24,7 @@ export default function AdminMaterials() {
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [rejected, setRejected] = useState<Material[]>([])
   const [collecting, setCollecting] = useState(false)
+  const [manualOpen, setManualOpen] = useState(false)
 
   async function collectNow() {
     setCollecting(true)
@@ -232,7 +234,7 @@ export default function AdminMaterials() {
                           <option value="">일정 미지정</option>
                           {scheduleOptions.map((s) => (
                             <option key={s.id} value={s.id}>
-                              {weekTag(s.weekNo)} {formatMD(s.date)} · {s.subject}
+                              {scheduleOptionLabel(s)}
                             </option>
                           ))}
                         </select>
@@ -311,7 +313,7 @@ export default function AdminMaterials() {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => toast.show('준비 중입니다')}
+            onClick={() => setManualOpen(true)}
             className="flex h-touch items-center gap-1.5 rounded-control border border-line bg-surface px-4 text-label font-medium text-primary hover:bg-primary-soft"
           >
             <Plus size={16} />
@@ -328,6 +330,151 @@ export default function AdminMaterials() {
           </button>
         </div>
       </div>
+
+      {/* 닫을 때마다 언마운트 — 다시 열면 항상 빈 폼에서 시작한다(이전 선택이 남아 엉뚱한 일정에 게시되는 것 방지) */}
+      {manualOpen && (
+        <ManualRegisterSheet onClose={() => setManualOpen(false)} scheduleOptions={scheduleOptions} />
+      )}
     </>
+  )
+}
+
+const KIND_OPTIONS: Array<[MaterialKind, string]> = [
+  ['FILE', '문서'],
+  ['LINK', '링크'],
+]
+
+const fieldLabel = 'text-meta leading-[1.4] font-semibold text-ink-muted'
+const fieldInput =
+  'h-11 w-full rounded-control border border-line bg-surface px-3 text-label leading-[1.4] text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none'
+
+/** A1-b · 승인함 / 자료 수동 등록 — 승인 큐 없이 등록 즉시 일정 상세에 게시된다 */
+function ManualRegisterSheet({
+  onClose,
+  scheduleOptions,
+}: {
+  onClose: () => void
+  scheduleOptions: Schedule[]
+}) {
+  const { addMaterial } = useStore()
+  const toast = useToast()
+  const [scheduleId, setScheduleId] = useState('')
+  const [title, setTitle] = useState('')
+  const [kind, setKind] = useState<MaterialKind>('FILE')
+  const [url, setUrl] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const valid = scheduleId !== '' && title.trim() !== '' && url.trim() !== ''
+
+  // 저장 요청이 나간 뒤에는 닫지 못하게 — 결과를 모른 채 닫으면 중복 등록으로 이어진다.
+  function close() {
+    if (!saving) onClose()
+  }
+
+  async function submit() {
+    if (!valid || saving) return
+    setSaving(true)
+    try {
+      await addMaterial({ scheduleId: Number(scheduleId), title: title.trim(), kind, url: url.trim() })
+      toast.show('등록했습니다 — 일정 상세에 바로 게시됩니다')
+      onClose()
+    } catch (e) {
+      console.error('자료 수동 등록 실패', e)
+      toast.show('등록에 실패했습니다')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <Sheet open onClose={close} title="자료 수동 등록" wide>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          submit()
+        }}
+        className="flex flex-col gap-4 pt-2"
+      >
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>일정</span>
+          <select value={scheduleId} onChange={(e) => setScheduleId(e.target.value)} required className={fieldInput}>
+            <option value="">일정을 선택하세요</option>
+            {scheduleOptions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {scheduleOptionLabel(s)}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>제목</span>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            placeholder="Spring DI 보충자료"
+            className={fieldInput}
+          />
+        </label>
+
+        <div className="flex flex-col gap-2">
+          <span className={fieldLabel}>종류</span>
+          <div className="flex gap-2">
+            {KIND_OPTIONS.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={kind === value}
+                onClick={() => setKind(value)}
+                className={
+                  'flex h-11 flex-1 items-center justify-center rounded-control border text-label leading-[1.4] ' +
+                  (kind === value
+                    ? 'border-primary bg-primary-soft font-semibold text-primary'
+                    : 'border-line bg-surface font-medium text-ink-muted hover:bg-subtle')
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>URL</span>
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+            placeholder="https://drive.google.com/…"
+            className={fieldInput}
+          />
+        </label>
+
+        <div className="flex items-center gap-2 rounded-control bg-subtle p-3">
+          <Info size={16} className="shrink-0 text-ink-muted" />
+          <p className="text-meta leading-[1.6] text-ink-muted">승인 절차 없이 등록 즉시 일정 상세에 게시됩니다.</p>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={close}
+            className="flex h-touch items-center rounded-control border border-line bg-surface px-5 text-label leading-[1.4] font-semibold text-ink-muted hover:bg-subtle"
+          >
+            취소
+          </button>
+          <button
+            type="submit"
+            disabled={!valid || saving}
+            className="flex h-touch items-center rounded-control bg-primary px-5 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover disabled:opacity-50"
+          >
+            {saving ? '등록 중…' : '등록'}
+          </button>
+        </div>
+      </form>
+    </Sheet>
   )
 }

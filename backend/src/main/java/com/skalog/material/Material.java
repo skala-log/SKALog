@@ -48,13 +48,14 @@ public class Material {
 
     protected Material() {}
 
-    /** 관리자 수동 입력 — 승인 큐 없이 바로 APPROVED로 붙는다. */
+    /** 관리자 수동 입력 — 승인 큐 없이 바로 APPROVED로 붙는다. postedAt은 등록 시각. */
     public Material(Long scheduleId, String title, MaterialKind kind, String url) {
         this.scheduleId = scheduleId;
         this.title = title;
         this.kind = kind;
         this.url = url;
         this.status = MaterialStatus.APPROVED;
+        this.postedAt = OffsetDateTime.now();
     }
 
     /** 슬랙 수집기 — 사람이 확인 전이라 PENDING(기본값)으로 시작해 승인함에 뜬다. */
