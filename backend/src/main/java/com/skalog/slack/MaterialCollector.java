@@ -116,8 +116,8 @@ public class MaterialCollector {
         return tsToInstant(ts).atZone(KST).toLocalDate();
     }
 
-    /** 슬랙 ts를 실제 시각으로 변환한다. */
-    static Instant tsToInstant(String ts) {
+    /** 슬랙 ts를 실제 시각으로 변환한다. NoticeCollector도 쓴다. */
+    public static Instant tsToInstant(String ts) {
         double epochSeconds = Double.parseDouble(ts);
         return Instant.ofEpochMilli((long) (epochSeconds * 1000));
     }

@@ -19,6 +19,23 @@ slack:
   team-id: ${SLACK_TEAM_ID:}
   material-channel-ids: ${SLACK_MATERIAL_CHANNEL_IDS:}
   redirect-base-uri: ${SLACK_REDIRECT_BASE_URI:http://localhost:5173}
+  # 공용 공지 채널(층·캠퍼스) → 노출 범위 매핑. 채널 ID는 비밀이 아니라 yml에 직접 둔다.
+  # 반별 채널은 여기 두지 않고 class_group.slack_channel_id 로 관리한다 — 그 반에게만 "우리반"으로 보인다.
+  notice-channels:
+    - channel-id: C0BLU6KDEBA # 4기_판교캠퍼스_공지_4층
+      scope: FLOOR
+      label: 4층
+      campus: 판교 4층 # class_group.campus 와 같은 문자열 — 이 층의 반들에게만
+    - channel-id: C0BE3L96198 # 4기_판교캠퍼스_공지
+      scope: CAMPUS
+      label: 판교
+    - channel-id: C0BE4P7Q61Z # 4기_교육생_전체공지
+      scope: CAMPUS
+      label: 전체
+
+gemini:
+  api-key: ${GEMINI_API_KEY:}
+  model: gemini-3.5-flash-lite
 
 logging:
   level:

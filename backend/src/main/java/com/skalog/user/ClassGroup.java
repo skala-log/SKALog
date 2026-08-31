@@ -18,6 +18,10 @@ public class ClassGroup {
     @Column(length = 50)
     private String campus;
 
+    /** 반별 슬랙 교육 채널. 비공개 채널이라 봇을 초대받은 반만 채워진다. null이면 공지 수집 안 함. */
+    @Column(name = "slack_channel_id", length = 20, unique = true)
+    private String slackChannelId;
+
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
@@ -31,5 +35,6 @@ public class ClassGroup {
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getCampus() { return campus; }
+    public String getSlackChannelId() { return slackChannelId; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
 }

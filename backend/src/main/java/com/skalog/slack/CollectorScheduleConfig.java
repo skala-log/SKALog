@@ -1,5 +1,6 @@
 package com.skalog.slack;
 
+import com.skalog.notice.NoticeCollector;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -11,9 +12,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class CollectorScheduleConfig {
 
     private final MaterialCollector materialCollector;
+    private final NoticeCollector noticeCollector;
 
-    public CollectorScheduleConfig(MaterialCollector materialCollector) {
+    public CollectorScheduleConfig(MaterialCollector materialCollector, NoticeCollector noticeCollector) {
         this.materialCollector = materialCollector;
+        this.noticeCollector = noticeCollector;
     }
 
     // ponytail: initialDelay를 안 둬서 서버가 (재)기동되는 즉시 첫 수집이 돈다.
@@ -21,5 +24,6 @@ public class CollectorScheduleConfig {
     @Scheduled(fixedDelay = 10 * 60 * 1000)
     public void collect() {
         materialCollector.collect();
+        noticeCollector.collect();
     }
 }

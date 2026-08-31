@@ -49,7 +49,15 @@ public class SlackClient {
                         f.path("filetype").asText(null),
                         f.path("permalink").asText(null)));
             }
-            messages.add(new SlackMessage(m.path("ts").asText(null), m.path("text").asText(""), files));
+            // 슬랙 "공유"로 넘어온 원문은 text가 아니라 attachments(is_share)에 들어온다. 링크 미리보기(unfurl)는 제외.
+            StringBuilder text = new StringBuilder(m.path("text").asText(""));
+            for (JsonNode a : m.path("attachments")) {
+                String shared = a.path("text").asText("");
+                if (a.path("is_share").asBoolean(false) && !shared.isBlank()) {
+                    text.append('\n').append(shared);
+                }
+            }
+            messages.add(new SlackMessage(m.path("ts").asText(null), text.toString().strip(), files));
         }
         return messages;
     }
