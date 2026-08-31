@@ -1,6 +1,6 @@
 import * as Icons from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { ArrowUp, ArrowUpRight, ChevronRight, MapPin, Monitor } from 'lucide-react'
+import { ArrowUp, ArrowUpRight, ChevronRight, MapPin, Megaphone, Monitor } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { dayLabel, formatMD, isToday, weekdayOf } from '../lib/format'
@@ -9,6 +9,7 @@ import { materialsFor, schedulesInWeek, submissionsFor } from '../lib/selectors'
 import type { ClassMode, MealPlan, Material, Notice, QuickLink, Schedule, Submission } from '../lib/types'
 import { WeekBadge } from './Badge'
 import { Card } from './Card'
+import { EmptyState } from './EmptyState'
 import { ScheduleRow } from './ListItem'
 
 /** mock 의 lucide 아이콘 이름 문자열을 컴포넌트로 해석한다. 못 찾으면 링크 아이콘. */
@@ -32,7 +33,7 @@ export function BlockHead({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <p className="shrink-0 text-label font-semibold text-ink">{title}</p>
+      <p className="shrink-0 text-heading font-semibold text-ink">{title}</p>
       <span className={'h-px flex-1 ' + (hairline ? 'bg-line' : 'bg-transparent')} />
       {action}
     </div>
@@ -126,13 +127,24 @@ export function LinkRail({ links, showHeader = false }: { links: QuickLink[]; sh
   )
 }
 
-/** 공지 — .pen 에서 카드(흰 배경 + 1px 테두리)로 바뀌었다. 범위 배지가 앞에 붙는다. */
-export function NoticeList({ notices, max = 3 }: { notices: Notice[]; max?: number }) {
+/**
+ * 공지 — .pen 에서 카드(흰 배경 + 1px 테두리)로 바뀌었다. 범위 배지가 앞에 붙는다.
+ * 세 줄 높이(max-h-44)까지만 보이고 그 아래는 스크롤 — 오래된 공지도 잘리지 않고 남는다.
+ */
+export function NoticeList({ notices }: { notices: Notice[] }) {
   return (
     <section className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4">
       <BlockHead title="공지" hairline={false} />
-      <ul className="flex flex-col gap-1">
-        {notices.slice(0, max).map((n) => (
+      {notices.length === 0 && (
+        <EmptyState
+          icon={Megaphone}
+          message="아직 수집된 공지가 없습니다"
+          alternative="슬랙 공지 채널을 10분마다 확인해 한 줄로 요약해 드려요."
+          className="border-0 py-6"
+        />
+      )}
+      <ul className="flex max-h-44 flex-col gap-1 overflow-y-auto">
+        {notices.map((n) => (
           <li key={n.id}>
             <a
               href={n.url}
@@ -142,7 +154,13 @@ export function NoticeList({ notices, max = 3 }: { notices: Notice[]; max?: numb
             >
               <NoticeScopeBadge notice={n} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-body leading-[1.4] font-medium text-ink transition-colors group-hover:text-primary">
+                {/*
+                  요약이 카드 폭을 넘으면 잘리므로, 마우스를 올리면 전문이 보이게 한다.
+                  ponytail: 떠 있는 툴팁 대신 그 자리에서 펼친다 — 이 목록은 overflow-y-auto 라
+                  absolute 툴팁이 컨테이너에 잘린다. 대신 행이 커지며 아래가 밀린다.
+                  레이아웃이 흔들리는 게 거슬리면 그때 포탈 툴팁으로.
+                */}
+                <span className="block truncate text-body leading-[1.4] font-medium text-ink transition-colors group-hover:overflow-visible group-hover:whitespace-normal group-hover:text-primary">
                   {n.title}
                 </span>
                 <span className="block text-badge text-ink-muted">{dayLabel(n.postedAt)}</span>
@@ -286,13 +304,43 @@ export function ScheduleScroll({ schedules }: { schedules: Schedule[] }) {
   )
 }
 
+const MEAL_API = 'https://skala-lunch.ewkimhyunsu11.workers.dev/api/menus/current'
+
+type MenuDay = { date: string; lunch?: { dishes: { name: string }[] }; dinner?: { dishes: { name: string }[] } }
+
+/**
+ * 외부 식단 워커의 이번 주 식단. CORS가 열려 있어 백엔드를 거치지 않고 직접 부른다.
+ * ponytail: 워커가 죽으면 섹션이 빈 채로 남는다 — 캐시·폴백이 필요해지면 백엔드 프록시로 옮길 것.
+ */
+/** 홈에서 한 번만 호출해 모바일·데스크톱 두 MealSection에 내려준다 — 둘 다 마운트돼 있어서 각자 부르면 요청이 두 번 나간다. */
+export function useMeals(): MealPlan[] {
+  const [meals, setMeals] = useState<MealPlan[]>([])
+  useEffect(() => {
+    fetch(MEAL_API)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((d: { days: MenuDay[] }) =>
+        setMeals(
+          d.days.map((day) => ({
+            date: day.date,
+            lunch: day.lunch?.dishes.map((x) => x.name) ?? [],
+            dinner: day.dinner?.dishes.map((x) => x.name) ?? [],
+          })),
+        ),
+      )
+      .catch(() => setMeals([]))
+  }, [])
+  return meals
+}
+
 /**
  * 주간 식단 — .pen `Sec/식단`.
  * 요일 칩(날짜 없이 요일만) + 점심/저녁 탭 + 선택한 끼니의 메뉴 상세.
  */
 export function MealSection({ meals }: { meals: MealPlan[] }) {
-  const [date, setDate] = useState(() => meals.find((m) => isToday(m.date))?.date ?? meals[0]?.date)
+  const [picked, setPicked] = useState<string>()
   const [slot, setSlot] = useState<'lunch' | 'dinner'>('lunch')
+  // 식단은 비동기로 도착하므로 기본 선택은 state 초기값이 아니라 렌더에서 폴백한다
+  const date = picked ?? meals.find((m) => isToday(m.date))?.date ?? meals[0]?.date
   const selected = meals.find((m) => m.date === date)
 
   return (
@@ -307,14 +355,15 @@ export function MealSection({ meals }: { meals: MealPlan[] }) {
             <button
               key={m.date}
               type="button"
-              onClick={() => setDate(m.date)}
+              onClick={() => setPicked(m.date)}
               aria-pressed={active}
               className={
                 'flex-1 rounded-control border py-1.5 text-badge font-semibold transition-colors ' +
-                (today
-                  ? 'border-today bg-today-soft text-today'
-                  : active
-                    ? 'border-primary bg-primary-soft text-primary'
+                // 선택이 오늘 표시보다 우선. 아니면 오늘(월) 칩이 다른 요일을 눌러도 계속 강조된 채 남는다
+                (active
+                  ? 'border-primary bg-primary-soft text-primary'
+                  : today
+                    ? 'border-today bg-surface text-today hover:bg-today-soft'
                     : 'border-line bg-surface text-ink-muted hover:border-primary-tint hover:text-primary')
               }
             >

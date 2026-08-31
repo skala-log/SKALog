@@ -4,15 +4,17 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { Badge, InstructorList, WeekBadge } from '../components/Badge'
 import { Card, SectionHeader } from '../components/Card'
 import { EmptyState } from '../components/EmptyState'
-import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll, ThisWeekCard } from '../components/HomeBlocks'
+import { ClassModeBadge, LinkRail, MealSection, NoticeList, ScheduleScroll, ThisWeekCard, useMeals } from '../components/HomeBlocks'
 import { InlineComposer } from '../components/InlineComposer'
 import { RecordRow } from '../components/ListItem'
 import { MaterialEmpty, MaterialRow } from '../components/MaterialRow'
 import { AppHeader } from '../components/Shell'
 import { ErrorState, SkeletonCard, SkeletonLine } from '../components/States'
+import { Tooltip } from '../components/Tooltip'
 import { dayLabel, formatMD, instructorNames, weekdayFullLabel, weekdayOf, weekTag } from '../lib/format'
+import { get } from '../lib/api'
 import { useMe } from '../lib/auth'
-import { MOCK_MEALS, MOCK_NOTICES, QUICK_LINKS, TOTAL_WEEKS } from '../lib/mock'
+import { QUICK_LINKS, TOTAL_WEEKS } from '../lib/mock'
 import {
   getCurrentWeekNo,
   getNextSchedule,
@@ -23,7 +25,14 @@ import {
   scheduleById,
 } from '../lib/selectors'
 import { useStore } from '../lib/store'
-import type { ClassMode, Schedule } from '../lib/types'
+import type { ClassMode, Notice, Schedule } from '../lib/types'
+
+/** 백엔드 공지 응답. url은 permalink 조회 실패 시 null이라 슬랙 홈으로 폴백한다. */
+type ApiNotice = Omit<Notice, 'url'> & { url: string | null }
+
+function toNotice(n: ApiNotice): Notice {
+  return { ...n, url: n.url ?? 'https://theskala.slack.com/' }
+}
 
 export default function Home() {
   const me = useMe()
@@ -35,6 +44,16 @@ export default function Home() {
   const state = params.get('state')
   const [loading, setLoading] = useState(state === 'loading')
   const [cardError, setCardError] = useState(state === 'error')
+  const [notices, setNotices] = useState<Notice[]>([])
+  const [noticesLoaded, setNoticesLoaded] = useState(false)
+  const meals = useMeals()
+
+  useEffect(() => {
+    get<ApiNotice[]>('/notices')
+      .then((raw) => setNotices(raw.map(toNotice)))
+      .catch(() => {}) // 공지 로드 실패는 홈을 막지 않는다 — 빈 상태로 보여준다
+      .finally(() => setNoticesLoaded(true))
+  }, [])
 
   useEffect(() => {
     setLoading(state === 'loading')
@@ -83,12 +102,12 @@ export default function Home() {
                   <p className="shrink-0 text-meta leading-[1.4] text-ink-muted tabular-nums">
                     {currentWeekNo} / {TOTAL_WEEKS}주차
                   </p>
-                  <span
-                    title={`교육 ${elapsedDays}일째 · 총 ${totalDays}일 과정 (주말 제외)`}
+                  <Tooltip
+                    label={`교육 ${elapsedDays}일째 · 총 ${totalDays}일 과정 (주말 제외)`}
                     className="shrink-0 text-ink-faint"
                   >
                     <Info size={14} />
-                  </span>
+                  </Tooltip>
                 </div>
               </div>
 
@@ -103,28 +122,30 @@ export default function Home() {
                 <p className="text-label font-medium text-ink">{weekdayFullLabel(anchorDate)}</p>
                 <WeekBadge weekNo={currentWeekNo} tone="primary" />
                 <p className="shrink-0 text-meta text-ink-muted tabular-nums">{elapsedDays}일차</p>
-                <span
-                  title={`총 ${totalDays}일 과정 · ${currentWeekNo} / ${TOTAL_WEEKS}주차 (주말 제외)`}
+                <Tooltip
+                  label={`총 ${totalDays}일 과정 · ${currentWeekNo} / ${TOTAL_WEEKS}주차 (주말 제외)`}
                   className="shrink-0 text-ink-faint"
                 >
                   <Info size={14} />
-                </span>
+                </Tooltip>
               </div>
             </>
           )}
 
-          {/* 로딩 중에는 진행바도 스켈레톤이다 (.pen S1 — 그라데이션이 미리 보이면 안 된다) */}
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-line-accent">
-            {!loading && (
-              <div
-                className="h-full rounded-full transition-[width]"
-                style={{
-                  width: `${Math.round((currentWeekNo / TOTAL_WEEKS) * 100)}%`,
-                  backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-mint))',
-                }}
-              />
-            )}
-          </div>
+          {/* 진행률은 주차가 아니라 실제 교육일 기준(주말 제외). 로딩 중엔 그라데이션을 숨긴다 (.pen S1) */}
+          <Tooltip label={`${elapsedDays}일차 / ${totalDays}일차`} className="w-full">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-line-accent">
+              {!loading && (
+                <div
+                  className="h-full rounded-full transition-[width]"
+                  style={{
+                    width: `${totalDays ? Math.round((elapsedDays / totalDays) * 100) : 0}%`,
+                    backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-mint))',
+                  }}
+                />
+              )}
+            </div>
+          </Tooltip>
         </section>
 
         {/*
@@ -150,11 +171,11 @@ export default function Home() {
               <LinkRail links={QUICK_LINKS} />
             </div>
 
-            {loading ? <SkeletonCard lines={4} /> : <NoticeList notices={MOCK_NOTICES} />}
+            {loading || !noticesLoaded ? <SkeletonCard lines={4} /> : <NoticeList notices={notices} />}
 
             {/* 모바일: 공지 다음 식단 → 이번 주 일정 카드(.pen M1 `Card/이번주`, 스크롤형 아님) */}
             <div className="flex flex-col gap-3 lg:hidden">
-              <MealSection meals={MOCK_MEALS} />
+              <MealSection meals={meals} />
               {cardError ? (
                 <Card title="이번 주">
                   <ErrorState onRetry={() => setCardError(false)} />
@@ -186,7 +207,7 @@ export default function Home() {
             ) : (
               <ScheduleScroll schedules={schedules} />
             )}
-            <MealSection meals={MOCK_MEALS} />
+            <MealSection meals={meals} />
           </aside>
         </div>
       </div>
@@ -214,7 +235,7 @@ function TodayCard({ scheduleId, bare = false }: { scheduleId: number; bare?: bo
     >
       <Link to={`/timeline/${schedule.id}`} className="group block">
         <p className="text-title font-semibold text-ink group-hover:text-primary">{schedule.subject}</p>
-        <div className="mt-2"><InstructorList instructors={schedule.instructors} /></div>
+        <div className="mt-2.5"><InstructorList instructors={schedule.instructors} /></div>
       </Link>
 
       <SectionHeader icon={Paperclip} muted title="강의자료" count={scheduleMaterials.length} className="mt-4" />

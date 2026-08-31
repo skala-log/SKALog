@@ -15,9 +15,17 @@ function diffDaysFromToday(dateOnlyISO: string): number {
   return Math.round((today.getTime() - target.getTime()) / 86400000)
 }
 
+/** 타임존이 붙은 ISO(백엔드 UTC)든 naive ISO든 로컬 기준 날짜만 남긴다. */
+function localDateOnly(iso: string): string {
+  if (iso.length <= 10) return iso
+  const d = new Date(iso)
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+
 /** "오늘" / "어제" / "N일 전" / "M/D" (future or far past) */
 export function dayLabel(iso: string): string {
-  const dateOnly = iso.slice(0, 10)
+  const dateOnly = localDateOnly(iso)
   const diff = diffDaysFromToday(dateOnly)
   if (diff === 0) return '오늘'
   if (diff === 1) return '어제'

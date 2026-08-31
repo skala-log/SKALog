@@ -1,8 +1,6 @@
 import { REAL_SCHEDULES } from './schedules'
 import type {
-  MealPlan,
   Material,
-  Notice,
   QuickLink,
   Schedule,
   ShowcaseItem,
@@ -173,32 +171,7 @@ export const QUICK_LINKS: QuickLink[] = [
   { id: 6, label: '쇼케이스', url: '/showcase', external: false, icon: 'sparkles' },
 ]
 
-// ── 홈 3층 · 슬랙 공지 ───────────────────────────────────────────────
-const SLACK_NOTICE_URL = 'https://theskala.slack.com/'
-export const MOCK_NOTICES: Notice[] = [
-  { id: 1, title: '8/3(월) 특강 시간표 변경 안내', scope: 'CLASS', scopeLabel: '우리반', postedAt: '2026-08-03T08:50:00', url: SLACK_NOTICE_URL },
-  { id: 2, title: '사무실 에어컨 점검 — 15~16시 소음 있을 수 있음', scope: 'FLOOR', scopeLabel: '4층', postedAt: '2026-08-03T07:10:00', url: SLACK_NOTICE_URL },
-  { id: 3, title: '8월 회의실 예약 규칙 변경', scope: 'CAMPUS', scopeLabel: '판교', postedAt: '2026-08-02T17:30:00', url: SLACK_NOTICE_URL },
-  { id: 4, title: '수료 포트폴리오 제출 일정 공지', scope: 'CLASS', scopeLabel: '우리반', postedAt: '2026-08-01T11:00:00', url: SLACK_NOTICE_URL },
-]
-
 // ── 홈 3층 · 주간 식단 ───────────────────────────────────────────────
-export const MOCK_MEALS: MealPlan[] = [
-  {
-    date: '2026-08-03',
-    lunch: ['제육볶음', '미역국', '계란찜', '배추김치', '요구르트'],
-    dinner: ['순두부찌개', '잡채', '깍두기', '단호박샐러드'],
-  },
-  {
-    date: '2026-08-04',
-    lunch: ['고등어구이', '된장국', '콩나물무침', '배추김치'],
-    dinner: ['치킨마요덮밥', '미소된장국', '단무지'],
-  },
-  { date: '2026-08-05', lunch: ['비빔밥', '유부장국', '무생채'], dinner: ['제육덮밥', '계란국', '배추김치'] },
-  { date: '2026-08-06', lunch: ['돈까스', '우동', '단무지', '양배추샐러드'], dinner: ['김치볶음밥', '어묵탕'] },
-  { date: '2026-08-07', lunch: ['김치찌개', '두부조림', '시금치나물'], dinner: ['카레라이스', '샐러드', '요구르트'] },
-]
-
 // ── /showcase · 타 교육생 서비스 ─────────────────────────────────────
 export const MOCK_SHOWCASE: ShowcaseItem[] = [
   { id: 1, name: 'SKALog', summary: '설정 없이 바로 쓰는 학습 기록장', team: '판교 1반 · 탁연우', url: '#', createdAt: '2026-08-01' },

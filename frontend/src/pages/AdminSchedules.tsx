@@ -1,4 +1,4 @@
-import { ChevronDown, Ellipsis, Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, Ellipsis, Pencil, Trash2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { TodayBadge } from '../components/Badge'
 import { AppHeader } from '../components/Shell'
@@ -95,7 +95,7 @@ export default function AdminSchedules() {
       <AppHeader title="일정 관리" />
 
       <div className="mx-auto w-full max-w-5xl space-y-4 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-8">
-        {/* .pen A2 : 제목 오른쪽에 반·주차 셀렉트가 바로 붙고, 추가 버튼은 우측 끝 */}
+        {/* .pen A2 : 제목 오른쪽에 반·주차 셀렉트가 바로 붙는다. 신규 일정은 SQL로 넣는다(추가 버튼 없음) */}
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="hidden text-display font-semibold text-ink lg:block">일정 관리</h1>
           <FilterSelect
@@ -110,26 +110,18 @@ export default function AdminSchedules() {
             label="주차 선택"
             options={[['ALL', '주차 전체'], ...weekNumbers(schedules).map((w) => [String(w), weekTag(w)] as [string, string])]}
           />
-          <button
-            type="button"
-            onClick={() => toast.show('준비 중입니다')}
-            className="ml-auto flex h-11 items-center gap-1 rounded-control bg-primary px-4 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover"
-          >
-            <Plus size={16} />
-            추가
-          </button>
         </div>
 
         <div className="overflow-x-auto rounded-card border border-line bg-surface">
           <table className="w-full min-w-180 border-collapse text-left">
             <thead>
-              <tr className="border-b border-line bg-subtle text-meta text-ink-muted">
-                <th className="px-5 py-2.5 font-semibold">주차</th>
-                <th className="px-5 py-2.5 font-semibold">날짜</th>
-                <th className="px-5 py-2.5 font-semibold">과목</th>
-                <th className="px-5 py-2.5 font-semibold">전임교수</th>
-                <th className="px-5 py-2.5 font-semibold">실습교수</th>
-                <th className="w-16 px-5 py-2.5" />
+              <tr className="whitespace-nowrap border-b border-line bg-subtle text-meta text-ink-muted">
+                <th className="px-5 py-2 font-semibold">주차</th>
+                <th className="px-5 py-2 font-semibold">날짜</th>
+                <th className="px-5 py-2 font-semibold">과목</th>
+                <th className="px-5 py-2 font-semibold">전임교수</th>
+                <th className="px-5 py-2 font-semibold">실습교수</th>
+                <th className="w-16 px-5 py-2" />
               </tr>
             </thead>
             <tbody>
@@ -146,7 +138,7 @@ export default function AdminSchedules() {
                     {/* .pen A2 : 주차는 칩이 아니라 그냥 글자다 */}
                     <td
                       className={
-                        'px-5 py-4 align-middle text-label leading-[1.4] font-semibold tabular-nums ' +
+                        'px-5 py-2 align-middle text-label leading-[1.4] font-semibold tabular-nums ' +
                         (today ? 'text-today' : 'text-ink-muted')
                       }
                     >
@@ -155,7 +147,7 @@ export default function AdminSchedules() {
                     {/* .pen A2 는 날짜를 `2026-07-30` 형태로 전부 보여준다 */}
                     <td
                       className={
-                        'whitespace-nowrap px-5 py-4 align-middle text-label leading-[1.4] tabular-nums ' +
+                        'whitespace-nowrap px-5 py-2 align-middle text-label leading-[1.4] tabular-nums ' +
                         (today ? 'font-semibold text-today' : 'text-ink')
                       }
                     >
@@ -164,7 +156,7 @@ export default function AdminSchedules() {
                         {today && <TodayBadge solid />}
                       </span>
                     </td>
-                    <td className="px-5 py-4 align-middle">
+                    <td className="px-5 py-2 align-middle">
                       {/* A2-a · 행 인라인 편집 */}
                       {editing ? (
                         <input
@@ -182,7 +174,7 @@ export default function AdminSchedules() {
                         <span className="text-label leading-[1.4] text-ink">{s.subject}</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 align-middle">
+                    <td className="px-5 py-2 align-middle">
                       {editing ? (
                         <input
                           value={draft.fullTime}
@@ -198,7 +190,7 @@ export default function AdminSchedules() {
                         <span className="text-label leading-[1.4] text-ink-muted">{fullTime ?? '—'}</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 align-middle">
+                    <td className="px-5 py-2 align-middle">
                       {editing ? (
                         <input
                           value={draft.practice}
@@ -214,7 +206,7 @@ export default function AdminSchedules() {
                         <span className="text-label leading-[1.4] text-ink-muted">{practice ?? '—'}</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 align-middle">
+                    <td className="px-5 py-2 align-middle">
                       {editing ? (
                         <div className="flex gap-2">
                           <button
@@ -239,7 +231,7 @@ export default function AdminSchedules() {
                           type="button"
                           onClick={() => setMenuFor(s)}
                           aria-label="행 메뉴"
-                          className="flex size-11 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
+                          className="flex size-9 items-center justify-center rounded-control text-ink-muted hover:bg-subtle"
                         >
                           <Ellipsis size={18} />
                         </button>
