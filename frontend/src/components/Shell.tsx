@@ -6,7 +6,7 @@ import { useMe } from '../lib/auth'
 
 /**
  * AppHeader — .pen `Wz08H` : height 56, bg-surface, border-bottom.
- * 제목은 ink 이고, 브랜드(M1 "SKALog")일 때만 violet 이다(`brand`).
+ * 제목은 ink 이고, 브랜드(M1)일 때는 텍스트 대신 SKALog 로고를 띄운다(`brand`).
  */
 export function AppHeader({
   title,
@@ -34,12 +34,8 @@ export function AppHeader({
           <ChevronLeft size={22} />
         </button>
       )}
-      <h1
-        className={
-          'min-w-0 flex-1 truncate text-title font-semibold leading-[1.4] ' + (brand ? 'text-primary' : 'text-ink')
-        }
-      >
-        {title}
+      <h1 className="min-w-0 flex-1 truncate text-title font-semibold leading-[1.4] text-ink">
+        {brand ? <img src="/logo.svg" alt={title} className="h-[22px] w-auto" /> : title}
       </h1>
       {right && <div className="shrink-0 text-meta leading-[1.4] text-ink-muted">{right}</div>}
     </header>
@@ -117,7 +113,7 @@ export function Sidebar() {
   return (
     <aside className="hidden w-sidebar shrink-0 flex-col gap-5 self-start overflow-y-auto border-r border-line bg-surface px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-dvh">
       <NavLink to="/" className="flex flex-col gap-0.5">
-        <span className="text-title font-semibold leading-[1.4] text-primary">SKALog</span>
+        <img src="/logo.svg" alt="SKALog" className="h-[26px] w-auto self-start" />
         <span className="text-badge leading-[1.4] text-ink-faint">학습 기록 플랫폼</span>
       </NavLink>
 

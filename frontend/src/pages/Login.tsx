@@ -15,8 +15,8 @@ export default function Login() {
   return (
     <div className="flex min-h-dvh flex-col justify-center px-6">
       <div className="mx-auto w-full max-w-sm text-center">
-        <p className="text-[34px] font-semibold leading-[1.2] text-primary">SKALog</p>
-        <p className="mt-2 text-body text-ink-muted">설정 없이 바로 쓰는 학습 기록장</p>
+        <img src="/logo.svg" alt="SKALog" className="mx-auto h-11 w-auto" />
+        <p className="mt-3 text-body text-ink-muted">설정 없이 바로 쓰는 학습 기록장</p>
 
         {errorMessage && (
           <p className="mt-4 flex items-start gap-1.5 rounded-control bg-danger-bg px-3 py-2.5 text-left text-meta leading-[1.4] text-danger">
