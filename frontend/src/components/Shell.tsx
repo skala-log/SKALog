@@ -122,8 +122,8 @@ export function Sidebar() {
           {me.name.slice(0, 1)}
         </div>
         <div className="flex min-w-0 flex-col gap-px">
-          <p className="truncate text-meta font-semibold leading-[1.3] text-ink">{me.name}</p>
-          <p className="truncate text-badge leading-[1.3] text-ink-muted">
+          <p className="truncate text-label font-semibold leading-[1.3] text-ink">{me.name}</p>
+          <p className="truncate text-meta leading-[1.3] text-ink-muted">
             {roleLabel} · {className}
           </p>
         </div>

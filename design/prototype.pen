@@ -6190,6 +6190,18 @@
               ]
             },
             {
+              "id": "AK4AU",
+              "type": "ref",
+              "ref": "m3Wlc",
+              "name": "Composer/기록 남기기",
+              "width": "fill_container",
+              "descendants": {
+                "aWvxv": {
+                  "content": "기록 남기기"
+                }
+              }
+            },
+            {
               "type": "frame",
               "id": "noPbd",
               "name": "Grp/W03",
@@ -12780,6 +12792,18 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "id": "m1mcOK",
+                  "type": "ref",
+                  "ref": "m3Wlc",
+                  "name": "Composer/기록 남기기",
+                  "width": "fill_container",
+                  "descendants": {
+                    "aWvxv": {
+                      "content": "기록 남기기"
+                    }
+                  }
                 },
                 {
                   "type": "frame",
@@ -23653,6 +23677,2095 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ag3AW",
+      "x": 3045,
+      "y": 1660,
+      "name": "M5-a · 내 기록 / 기록 작성",
+      "clip": true,
+      "width": 375,
+      "height": 812,
+      "fill": "$bg-app",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "c2934K",
+          "type": "ref",
+          "ref": "Wz08H",
+          "name": "Header",
+          "width": "fill_container",
+          "descendants": {
+            "b0yrbA": {
+              "content": "내 기록",
+              "fill": "$text"
+            },
+            "tBYW4": {
+              "content": "탁연우"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "pesVx",
+          "name": "Body",
+          "clip": true,
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": "$space-4",
+          "padding": "$space-4",
+          "children": [
+            {
+              "type": "frame",
+              "id": "BTHSD",
+              "name": "Summary",
+              "width": "fill_container",
+              "fill": "$bg-surface",
+              "cornerRadius": "$radius-card",
+              "stroke": "$border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "padding": "$space-4",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "j8hmxy",
+                  "name": "Row",
+                  "width": "fill_container",
+                  "gap": "$space-2",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "kWiuK",
+                      "name": "Big",
+                      "fill": "$text",
+                      "content": "총 12건",
+                      "lineHeight": 1.35,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-title",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "OqPGd",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "text",
+                      "id": "hV9FC",
+                      "name": "Week",
+                      "fill": "$text-muted",
+                      "content": "3 / 23주차 진행 중",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "l6RzQ2",
+                  "name": "Break",
+                  "fill": "$text-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "과제 5 · 노트 7 · 첨부 4",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font",
+                  "fontSize": "$text-meta",
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "pApzn",
+                  "name": "ProgressTrack",
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 6,
+                  "fill": "$border-accent",
+                  "cornerRadius": "$radius-pill",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": "$radius-pill",
+                      "id": "B14OdW",
+                      "name": "Fill",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 270,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "$primary",
+                            "position": 0
+                          },
+                          {
+                            "color": "$mint",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 40,
+                      "height": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "H7It6",
+              "name": "Filters",
+              "width": "fill_container",
+              "gap": "$space-2",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ij73H",
+                  "name": "Chip/전체",
+                  "height": 32,
+                  "fill": "$primary",
+                  "cornerRadius": "$radius-pill",
+                  "stroke": "$primary",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nYzfa",
+                      "name": "Label",
+                      "fill": "$on-primary",
+                      "content": "전체",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sVlhR",
+                  "name": "Chip/과제",
+                  "height": 32,
+                  "fill": "$bg-surface",
+                  "cornerRadius": "$radius-pill",
+                  "stroke": "$border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hr4S1",
+                      "name": "Label",
+                      "fill": "$text-muted",
+                      "content": "과제",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Dbws0",
+                  "name": "Chip/노트",
+                  "height": 32,
+                  "fill": "$bg-surface",
+                  "cornerRadius": "$radius-pill",
+                  "stroke": "$border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZmqMD",
+                      "name": "Label",
+                      "fill": "$text-muted",
+                      "content": "노트",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dbaVc",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "uu0yP",
+                  "name": "Sort",
+                  "height": 32,
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-1",
+                  "padding": [
+                    0,
+                    "$space-2"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vdUU0",
+                      "name": "Label",
+                      "fill": "$text-muted",
+                      "content": "최신순",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-medium"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "Z1JZI",
+                      "name": "Icon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "arrow-up-down",
+                      "library": "lucide",
+                      "fill": "$text-muted"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "AWFiG",
+              "type": "ref",
+              "ref": "CrFdG",
+              "name": "Composer/기록 작성",
+              "width": "fill_container",
+              "descendants": {
+                "x5vJbq": {
+                  "type": "frame",
+                  "id": "YZcLx",
+                  "name": "DateBlock",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$space-1",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "yzH9m",
+                      "name": "Row",
+                      "width": "fill_container",
+                      "gap": "$space-2",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "vUcAG",
+                          "name": "Field/날짜",
+                          "width": "fill_container",
+                          "height": 44,
+                          "fill": "$bg-subtle",
+                          "cornerRadius": "$radius-control",
+                          "stroke": "$primary",
+                          "strokeWidth": 1.5,
+                          "strokeAlignment": "inner",
+                          "gap": "$space-2",
+                          "padding": [
+                            0,
+                            "$space-3"
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "e3cU3",
+                              "name": "Cal",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "calendar",
+                              "library": "lucide",
+                              "fill": "$text-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "WLhJK",
+                              "name": "Value",
+                              "fill": "$text",
+                              "content": "2026-09-02 (수)",
+                              "lineHeight": 1.4,
+                              "fontFamily": "$font",
+                              "fontSize": "$text-body",
+                              "fontWeight": "$weight-medium"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "MnmvB",
+                              "name": "Spacer",
+                              "width": "fill_container",
+                              "height": 1
+                            },
+                            {
+                              "type": "icon",
+                              "id": "pzuA3",
+                              "name": "Chevron",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "chevron-up",
+                              "library": "lucide",
+                              "fill": "$text-muted"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "mJHNl",
+                          "type": "ref",
+                          "ref": "zWNLL",
+                          "name": "Week",
+                          "fill": "$primary-soft",
+                          "descendants": {
+                            "lmFN1": {
+                              "content": "W03",
+                              "fill": "$primary"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "RAIEC": {
+                  "enabled": false
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "PHCbU",
+              "name": "Grp/W03",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "EujNQ",
+                  "name": "Head",
+                  "width": "fill_container",
+                  "gap": "$space-3",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v7oL52",
+                      "name": "Week",
+                      "fill": "$text-muted",
+                      "content": "W03",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GSwyt",
+                      "name": "Line",
+                      "width": "fill_container",
+                      "height": 1,
+                      "fill": "$border"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZuzGY",
+                  "name": "Rows",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$space-2",
+                  "children": [
+                    {
+                      "id": "WcJfr",
+                      "type": "ref",
+                      "ref": "CxxDW",
+                      "name": "Rec/DI 3가지 주입 방식",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-card",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "descendants": {
+                        "TshJZ": {
+                          "enabled": false
+                        },
+                        "gLpye": {
+                          "enabled": true,
+                          "fill": "$note-bg"
+                        },
+                        "gLpye/lmFN1": {
+                          "content": "노트",
+                          "fill": "$note"
+                        },
+                        "gNiU2": {
+                          "content": "DI 3가지 주입 방식"
+                        },
+                        "etdqs": {
+                          "content": "Java/Spring 기초 · 7/30"
+                        },
+                        "LtctJ": {
+                          "id": "CAQFi",
+                          "type": "ref",
+                          "ref": "t2ns28",
+                          "name": "Clip",
+                          "fill": "#00000000",
+                          "descendants": {
+                            "y49R1S": {
+                              "content": "1"
+                            }
+                          }
+                        },
+                        "d76kNV": {
+                          "icon": "chevron-right"
+                        }
+                      }
+                    },
+                    {
+                      "id": "obWn6",
+                      "type": "ref",
+                      "ref": "CxxDW",
+                      "name": "Rec/실습 과제 제출",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-card",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "descendants": {
+                        "TshJZ": {
+                          "enabled": false
+                        },
+                        "gLpye": {
+                          "enabled": true,
+                          "fill": "$assignment-bg"
+                        },
+                        "gLpye/lmFN1": {
+                          "content": "과제",
+                          "fill": "$assignment"
+                        },
+                        "gNiU2": {
+                          "content": "실습 과제 제출"
+                        },
+                        "etdqs": {
+                          "content": "Java/Spring 기초 · 7/30"
+                        },
+                        "LtctJ": {
+                          "enabled": false
+                        },
+                        "d76kNV": {
+                          "icon": "chevron-right"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Gkf4V",
+              "name": "Grp/W02",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": "$space-2",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Rii2m",
+                  "name": "Head",
+                  "width": "fill_container",
+                  "gap": "$space-3",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "W8U1Zw",
+                      "name": "Week",
+                      "fill": "$text-muted",
+                      "content": "W02",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Ykh0Y",
+                      "name": "Line",
+                      "width": "fill_container",
+                      "height": 1,
+                      "fill": "$border"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "lUgAi",
+                  "name": "Rows",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$space-2",
+                  "children": [
+                    {
+                      "id": "M7n8X",
+                      "type": "ref",
+                      "ref": "CxxDW",
+                      "name": "Rec/Git rebase 정리",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-card",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "descendants": {
+                        "TshJZ": {
+                          "enabled": false
+                        },
+                        "gLpye": {
+                          "enabled": true,
+                          "fill": "$note-bg"
+                        },
+                        "gLpye/lmFN1": {
+                          "content": "노트",
+                          "fill": "$note"
+                        },
+                        "gNiU2": {
+                          "content": "Git rebase 정리"
+                        },
+                        "etdqs": {
+                          "content": "Git 심화 · 7/22"
+                        },
+                        "LtctJ": {
+                          "enabled": false
+                        },
+                        "d76kNV": {
+                          "icon": "chevron-right"
+                        }
+                      }
+                    },
+                    {
+                      "id": "fVYCx",
+                      "type": "ref",
+                      "ref": "CxxDW",
+                      "name": "Rec/1주차 회고 제출",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-card",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "descendants": {
+                        "TshJZ": {
+                          "enabled": false
+                        },
+                        "gLpye": {
+                          "enabled": true,
+                          "fill": "$assignment-bg"
+                        },
+                        "gLpye/lmFN1": {
+                          "content": "과제",
+                          "fill": "$assignment"
+                        },
+                        "gNiU2": {
+                          "content": "1주차 회고 제출"
+                        },
+                        "etdqs": {
+                          "content": "팀빌딩 · 7/18"
+                        },
+                        "LtctJ": {
+                          "id": "bhvP6",
+                          "type": "ref",
+                          "ref": "t2ns28",
+                          "name": "Clip",
+                          "fill": "#00000000",
+                          "descendants": {
+                            "y49R1S": {
+                              "content": "2"
+                            }
+                          }
+                        },
+                        "d76kNV": {
+                          "icon": "chevron-right"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "c6f6be",
+              "name": "Btn/더보기",
+              "width": "fill_container",
+              "height": 44,
+              "fill": "$bg-surface",
+              "cornerRadius": "$radius-control",
+              "stroke": "$border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Mk0cr",
+                  "name": "Label",
+                  "fill": "$primary",
+                  "content": "더 보기",
+                  "lineHeight": 1.4,
+                  "fontFamily": "$font",
+                  "fontSize": "$text-label",
+                  "fontWeight": "$weight-semibold"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NyC9d",
+              "layoutPosition": "absolute",
+              "x": 32,
+              "y": 243,
+              "name": "Dropdown",
+              "width": 311,
+              "fill": "$bg-surface",
+              "cornerRadius": "$radius-card",
+              "stroke": "$border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#1118271F",
+                "offset": {
+                  "x": 0,
+                  "y": 8
+                },
+                "blur": 24
+              },
+              "layout": "vertical",
+              "padding": "$space-1",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "cFYhc",
+                  "name": "Opt/9/2 (수)",
+                  "width": "fill_container",
+                  "height": 40,
+                  "fill": "$primary-soft",
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-2",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Z2v1I",
+                      "name": "Date",
+                      "fill": "$primary",
+                      "textGrowth": "fixed-width",
+                      "width": 64,
+                      "content": "9/2 (수)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "WSVye",
+                      "name": "Lecture",
+                      "fill": "$primary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Java/Spring 기초",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "dFtFM",
+                      "name": "Check",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "check",
+                      "library": "lucide",
+                      "fill": "$primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "yoDpP",
+                  "name": "Opt/9/1 (화)",
+                  "width": "fill_container",
+                  "height": 40,
+                  "fill": "#00000000",
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-2",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Mn47S",
+                      "name": "Date",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 64,
+                      "content": "9/1 (화)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vNbKY",
+                      "name": "Lecture",
+                      "fill": "$text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Docker 컨테이너 실습",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "trveJ",
+                  "name": "Opt/8/31 (월)",
+                  "width": "fill_container",
+                  "height": 40,
+                  "fill": "#00000000",
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-2",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MKzN3",
+                      "name": "Date",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 64,
+                      "content": "8/31 (월)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "cDjKD",
+                      "name": "Lecture",
+                      "fill": "$text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Spring MVC 실습",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Rkwp9",
+                  "name": "Opt/8/28 (금)",
+                  "width": "fill_container",
+                  "height": 40,
+                  "fill": "#00000000",
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-2",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "O8pknI",
+                      "name": "Date",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 64,
+                      "content": "8/28 (금)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lZKnw",
+                      "name": "Lecture",
+                      "fill": "$text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "SQL 기초",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CPOIC",
+                  "name": "Opt/8/27 (목)",
+                  "width": "fill_container",
+                  "height": 40,
+                  "fill": "#00000000",
+                  "cornerRadius": "$radius-control",
+                  "gap": "$space-2",
+                  "padding": [
+                    0,
+                    "$space-3"
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "e9LVC",
+                      "name": "Date",
+                      "fill": "$text-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 64,
+                      "content": "8/27 (목)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-meta",
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ICV3o",
+                      "name": "Lecture",
+                      "fill": "$text-faint",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "수업 없음",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "PoIMV",
+          "type": "ref",
+          "ref": "tnWL6",
+          "name": "TabBar",
+          "width": "fill_container",
+          "descendants": {
+            "xzv4L": {
+              "fill": "$text-muted"
+            },
+            "nhDHA": {
+              "fill": "$text-muted",
+              "fontWeight": "$weight-medium"
+            },
+            "q3EQ9n": {
+              "fill": "$primary"
+            },
+            "TKbJq": {
+              "fill": "$primary",
+              "fontWeight": "$weight-semibold"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "iTBFq",
+      "x": 7600,
+      "y": 3600,
+      "name": "D4-a · 데스크톱 내 기록 / 기록 작성",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg-app",
+      "children": [
+        {
+          "id": "cXQAY",
+          "type": "ref",
+          "ref": "gvY9H",
+          "name": "Sidebar",
+          "width": 240,
+          "height": "fill_container",
+          "descendants": {
+            "YLuZ6": {
+              "fill": "#00000000"
+            },
+            "YLuZ6/B7pUzF": {
+              "fill": "$text-muted"
+            },
+            "YLuZ6/YsjqB": {
+              "fill": "$text-muted",
+              "fontWeight": "$weight-medium"
+            },
+            "AxhZW": {
+              "fill": "$primary-soft"
+            },
+            "AxhZW/B7pUzF": {
+              "fill": "$primary"
+            },
+            "AxhZW/YsjqB": {
+              "fill": "$primary",
+              "fontWeight": "$weight-semibold"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "S84Zt",
+          "name": "Main",
+          "clip": true,
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            56,
+            "$space-8",
+            "$space-8",
+            "$space-8"
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DsHsf",
+              "name": "Column",
+              "width": 880,
+              "layout": "vertical",
+              "gap": "$space-6",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "fCDkF",
+                  "name": "Title",
+                  "fill": "$text",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "내 기록",
+                  "lineHeight": 1.3,
+                  "fontFamily": "$font",
+                  "fontSize": "$text-display",
+                  "fontWeight": "$weight-semibold"
+                },
+                {
+                  "type": "frame",
+                  "id": "CJgDa",
+                  "name": "Summary",
+                  "width": "fill_container",
+                  "fill": "#00000000",
+                  "stroke": "#00000000",
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "gap": "$space-3",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tulm9",
+                      "name": "Cards",
+                      "width": "fill_container",
+                      "gap": "$space-3",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Exuw8",
+                          "name": "Stat/총 기록",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "#00000000",
+                          "effect": [
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A0F",
+                              "offset": {
+                                "x": 0,
+                                "y": 1
+                              },
+                              "blur": 2
+                            },
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A14",
+                              "offset": {
+                                "x": 0,
+                                "y": 6
+                              },
+                              "blur": 16,
+                              "spread": -4
+                            }
+                          ],
+                          "layout": "vertical",
+                          "gap": "$space-4",
+                          "padding": "$space-5",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "hl2Py",
+                              "name": "IconWrap",
+                              "width": 34,
+                              "height": 34,
+                              "fill": "$primary-soft",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "H10GSw",
+                                  "name": "Icon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "icon": "file-text",
+                                  "library": "lucide",
+                                  "fill": "$primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "gfZg7",
+                              "name": "Text",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ynJJO",
+                                  "name": "Value",
+                                  "fill": "$text",
+                                  "content": "12",
+                                  "lineHeight": 1.2,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-display",
+                                  "fontWeight": "$weight-semibold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "mcg6c",
+                                  "name": "Label",
+                                  "fill": "$text-muted",
+                                  "content": "총 기록",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-meta",
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LzMi4",
+                          "name": "Stat/과제",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "#00000000",
+                          "effect": [
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A0F",
+                              "offset": {
+                                "x": 0,
+                                "y": 1
+                              },
+                              "blur": 2
+                            },
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A14",
+                              "offset": {
+                                "x": 0,
+                                "y": 6
+                              },
+                              "blur": 16,
+                              "spread": -4
+                            }
+                          ],
+                          "layout": "vertical",
+                          "gap": "$space-4",
+                          "padding": "$space-5",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "vmjCz",
+                              "name": "IconWrap",
+                              "width": 34,
+                              "height": 34,
+                              "fill": "$assignment-bg",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "j8y9Y",
+                                  "name": "Icon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "icon": "clipboard-list",
+                                  "library": "lucide",
+                                  "fill": "$assignment"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "UCP7R",
+                              "name": "Text",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "vk5nj",
+                                  "name": "Value",
+                                  "fill": "$text",
+                                  "content": "5",
+                                  "lineHeight": 1.2,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-display",
+                                  "fontWeight": "$weight-semibold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "oomNi",
+                                  "name": "Label",
+                                  "fill": "$text-muted",
+                                  "content": "과제",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-meta",
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "S5NTO6",
+                          "name": "Stat/노트",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "#00000000",
+                          "effect": [
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A0F",
+                              "offset": {
+                                "x": 0,
+                                "y": 1
+                              },
+                              "blur": 2
+                            },
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A14",
+                              "offset": {
+                                "x": 0,
+                                "y": 6
+                              },
+                              "blur": 16,
+                              "spread": -4
+                            }
+                          ],
+                          "layout": "vertical",
+                          "gap": "$space-4",
+                          "padding": "$space-5",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "JL8zh",
+                              "name": "IconWrap",
+                              "width": 34,
+                              "height": 34,
+                              "fill": "$note-bg",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "KrWDu",
+                                  "name": "Icon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "icon": "sticky-note",
+                                  "library": "lucide",
+                                  "fill": "$note"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "zFHA8",
+                              "name": "Text",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "RmcOe",
+                                  "name": "Value",
+                                  "fill": "$text",
+                                  "content": "7",
+                                  "lineHeight": 1.2,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-display",
+                                  "fontWeight": "$weight-semibold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "lha75",
+                                  "name": "Label",
+                                  "fill": "$text-muted",
+                                  "content": "노트",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-meta",
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x1lPX",
+                          "name": "Stat/첨부",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "#00000000",
+                          "effect": [
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A0F",
+                              "offset": {
+                                "x": 0,
+                                "y": 1
+                              },
+                              "blur": 2
+                            },
+                            {
+                              "type": "shadow",
+                              "shadowType": "outer",
+                              "color": "#0F172A14",
+                              "offset": {
+                                "x": 0,
+                                "y": 6
+                              },
+                              "blur": 16,
+                              "spread": -4
+                            }
+                          ],
+                          "layout": "vertical",
+                          "gap": "$space-4",
+                          "padding": "$space-5",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "T4q2N",
+                              "name": "IconWrap",
+                              "width": 34,
+                              "height": 34,
+                              "fill": "$bg-subtle",
+                              "cornerRadius": 10,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "PYrow",
+                                  "name": "Icon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "icon": "paperclip",
+                                  "library": "lucide",
+                                  "fill": "$text-muted"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Quk7J",
+                              "name": "Text",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "lCVUn",
+                                  "name": "Value",
+                                  "fill": "$text",
+                                  "content": "4",
+                                  "lineHeight": 1.2,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-display",
+                                  "fontWeight": "$weight-semibold"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "o1lPQA",
+                                  "name": "Label",
+                                  "fill": "$text-muted",
+                                  "content": "첨부",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-meta",
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "r2FHZ",
+                      "name": "ProgressWrap",
+                      "width": "fill_container",
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-card",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "gap": "$space-3",
+                      "padding": [
+                        10,
+                        "$space-4"
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "SMq79",
+                          "name": "Label",
+                          "fill": "$text",
+                          "content": "3 / 23주차 진행 중",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ew7mF",
+                          "name": "ProgressTrack",
+                          "clip": true,
+                          "width": "fill_container",
+                          "height": 6,
+                          "fill": "$border-accent",
+                          "cornerRadius": "$radius-pill",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": "$radius-pill",
+                              "id": "YH1mD",
+                              "name": "Fill",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 270,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "$primary",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "$mint",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 96,
+                              "height": 6
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GW46A",
+                  "name": "Filters",
+                  "width": "fill_container",
+                  "gap": "$space-2",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "kmRaX",
+                      "name": "Chip/전체",
+                      "height": 36,
+                      "fill": "$primary",
+                      "cornerRadius": "$radius-pill",
+                      "stroke": "$primary",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        0,
+                        "$space-4"
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M0ts7z",
+                          "name": "Label",
+                          "fill": "$on-primary",
+                          "content": "전체",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zpofq",
+                      "name": "Chip/과제",
+                      "height": 36,
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-pill",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        0,
+                        "$space-4"
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "T0SFM6",
+                          "name": "Label",
+                          "fill": "$text-muted",
+                          "content": "과제",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jGg6v",
+                      "name": "Chip/노트",
+                      "height": 36,
+                      "fill": "$bg-surface",
+                      "cornerRadius": "$radius-pill",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        0,
+                        "$space-4"
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "alsZw",
+                          "name": "Label",
+                          "fill": "$text-muted",
+                          "content": "노트",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "y23pxn",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BYsPf",
+                      "name": "Sort",
+                      "height": 36,
+                      "cornerRadius": "$radius-control",
+                      "gap": "$space-1",
+                      "padding": [
+                        0,
+                        "$space-3"
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "l5xkRC",
+                          "name": "Label",
+                          "fill": "$text-muted",
+                          "content": "최신순",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-medium"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "tQ1nO",
+                          "name": "Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "arrow-up-down",
+                          "library": "lucide",
+                          "fill": "$text-muted"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "OVk4t",
+                  "type": "ref",
+                  "ref": "CrFdG",
+                  "name": "Composer/기록 작성",
+                  "width": "fill_container",
+                  "descendants": {
+                    "x5vJbq": {
+                      "type": "frame",
+                      "id": "RgSHW",
+                      "name": "DateBlock",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$space-1",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "HlPV4",
+                          "name": "Row",
+                          "width": "fill_container",
+                          "gap": "$space-2",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "pV5ib",
+                              "name": "Field/날짜",
+                              "width": 280,
+                              "height": 44,
+                              "fill": "$bg-subtle",
+                              "cornerRadius": "$radius-control",
+                              "gap": "$space-2",
+                              "padding": [
+                                0,
+                                "$space-3"
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "lIy4x",
+                                  "name": "Cal",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "calendar",
+                                  "library": "lucide",
+                                  "fill": "$text-muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "pB56z",
+                                  "name": "Value",
+                                  "fill": "$text",
+                                  "content": "2026-09-02 (수)",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-body",
+                                  "fontWeight": "$weight-medium"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "d32JV",
+                                  "name": "Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "RCprn",
+                                  "name": "Chevron",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "chevron-down",
+                                  "library": "lucide",
+                                  "fill": "$text-muted"
+                                }
+                              ]
+                            },
+                            {
+                              "id": "r1XWdN",
+                              "type": "ref",
+                              "ref": "zWNLL",
+                              "name": "Week",
+                              "fill": "$primary-soft",
+                              "descendants": {
+                                "lmFN1": {
+                                  "content": "W03",
+                                  "fill": "$primary"
+                                }
+                              }
+                            },
+                            {
+                              "type": "frame",
+                              "id": "vlDr9",
+                              "name": "LectureHint",
+                              "gap": "$space-2",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "kukh2",
+                                  "name": "Lecture",
+                                  "fill": "$text",
+                                  "content": "Java/Spring 기초",
+                                  "lineHeight": 1.4,
+                                  "fontFamily": "$font",
+                                  "fontSize": "$text-label",
+                                  "fontWeight": "$weight-semibold"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "RAIEC": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "n6PwV",
+                  "name": "Grp/W03",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$space-2",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "O9y853",
+                      "name": "Head",
+                      "width": "fill_container",
+                      "gap": "$space-3",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dtIrP",
+                          "name": "Week",
+                          "fill": "$text-muted",
+                          "content": "W03",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LfRi8",
+                          "name": "Line",
+                          "width": "fill_container",
+                          "height": 1,
+                          "fill": "$border"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "U6Qpn",
+                      "name": "Rows",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$space-2",
+                      "children": [
+                        {
+                          "id": "pllrD",
+                          "type": "ref",
+                          "ref": "CxxDW",
+                          "name": "Rec/DI 3가지 주입 방식",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "$border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "TshJZ": {
+                              "enabled": false
+                            },
+                            "gLpye": {
+                              "enabled": true,
+                              "fill": "$note-bg"
+                            },
+                            "gLpye/lmFN1": {
+                              "content": "노트",
+                              "fill": "$note"
+                            },
+                            "gNiU2": {
+                              "content": "DI 3가지 주입 방식"
+                            },
+                            "etdqs": {
+                              "content": "Java/Spring 기초 · 7/30"
+                            },
+                            "LtctJ": {
+                              "id": "gz0aX",
+                              "type": "ref",
+                              "ref": "t2ns28",
+                              "name": "Clip",
+                              "fill": "#00000000",
+                              "descendants": {
+                                "y49R1S": {
+                                  "content": "1"
+                                }
+                              }
+                            },
+                            "d76kNV": {
+                              "icon": "chevron-right"
+                            }
+                          }
+                        },
+                        {
+                          "id": "y6OrW",
+                          "type": "ref",
+                          "ref": "CxxDW",
+                          "name": "Rec/실습 과제 제출",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "$border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "TshJZ": {
+                              "enabled": false
+                            },
+                            "gLpye": {
+                              "enabled": true,
+                              "fill": "$assignment-bg"
+                            },
+                            "gLpye/lmFN1": {
+                              "content": "과제",
+                              "fill": "$assignment"
+                            },
+                            "gNiU2": {
+                              "content": "실습 과제 제출"
+                            },
+                            "etdqs": {
+                              "content": "Java/Spring 기초 · 7/30"
+                            },
+                            "LtctJ": {
+                              "enabled": false
+                            },
+                            "d76kNV": {
+                              "icon": "chevron-right"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IZXh5",
+                  "name": "Grp/W02",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": "$space-2",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "X791nV",
+                      "name": "Head",
+                      "width": "fill_container",
+                      "gap": "$space-3",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "x6X9F",
+                          "name": "Week",
+                          "fill": "$text-muted",
+                          "content": "W02",
+                          "lineHeight": 1.4,
+                          "fontFamily": "$font",
+                          "fontSize": "$text-meta",
+                          "fontWeight": "$weight-semibold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fNzE6",
+                          "name": "Line",
+                          "width": "fill_container",
+                          "height": 1,
+                          "fill": "$border"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UBtUk",
+                      "name": "Rows",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": "$space-2",
+                      "children": [
+                        {
+                          "id": "iPlOX",
+                          "type": "ref",
+                          "ref": "CxxDW",
+                          "name": "Rec/Git rebase 정리",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "$border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "TshJZ": {
+                              "enabled": false
+                            },
+                            "gLpye": {
+                              "enabled": true,
+                              "fill": "$note-bg"
+                            },
+                            "gLpye/lmFN1": {
+                              "content": "노트",
+                              "fill": "$note"
+                            },
+                            "gNiU2": {
+                              "content": "Git rebase 정리"
+                            },
+                            "etdqs": {
+                              "content": "Git 심화 · 7/22"
+                            },
+                            "LtctJ": {
+                              "enabled": false
+                            },
+                            "d76kNV": {
+                              "icon": "chevron-right"
+                            }
+                          }
+                        },
+                        {
+                          "id": "TFfzA",
+                          "type": "ref",
+                          "ref": "CxxDW",
+                          "name": "Rec/1주차 회고 제출",
+                          "width": "fill_container",
+                          "fill": "$bg-surface",
+                          "cornerRadius": "$radius-card",
+                          "stroke": "$border",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
+                          "descendants": {
+                            "TshJZ": {
+                              "enabled": false
+                            },
+                            "gLpye": {
+                              "enabled": true,
+                              "fill": "$assignment-bg"
+                            },
+                            "gLpye/lmFN1": {
+                              "content": "과제",
+                              "fill": "$assignment"
+                            },
+                            "gNiU2": {
+                              "content": "1주차 회고 제출"
+                            },
+                            "etdqs": {
+                              "content": "팀빌딩 · 7/18"
+                            },
+                            "LtctJ": {
+                              "id": "wPhHm",
+                              "type": "ref",
+                              "ref": "t2ns28",
+                              "name": "Clip",
+                              "fill": "#00000000",
+                              "descendants": {
+                                "y49R1S": {
+                                  "content": "2"
+                                }
+                              }
+                            },
+                            "d76kNV": {
+                              "icon": "chevron-right"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Cg9jz",
+                  "name": "Btn/더보기",
+                  "width": "fill_container",
+                  "height": 44,
+                  "fill": "$bg-surface",
+                  "cornerRadius": "$radius-control",
+                  "stroke": "$border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vrubu",
+                      "name": "Label",
+                      "fill": "$primary",
+                      "content": "더 보기",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$font",
+                      "fontSize": "$text-label",
+                      "fontWeight": "$weight-semibold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ts7IZ",
+          "layoutPosition": "absolute",
+          "x": 1320,
+          "y": 780,
+          "name": "전역 슬롯 (96×96, 비워 둠)",
+          "width": 96,
+          "height": 96,
+          "cornerRadius": "$radius-card",
+          "stroke": "$border-accent",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "P7Td0Q",
+              "name": "Label",
+              "fill": "$text-faint",
+              "content": "전역 슬롯",
+              "lineHeight": 1.4,
+              "fontFamily": "$font",
+              "fontSize": "$text-badge",
+              "fontWeight": "normal"
             }
           ]
         }

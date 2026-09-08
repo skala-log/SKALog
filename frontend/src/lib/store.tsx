@@ -29,6 +29,8 @@ type StoreValue = {
   pendingMaterials: Material[]
   submissions: Submission[]
   addSubmission: (input: NewSubmissionInput) => Submission
+  updateSubmission: (id: number, draft: { title: string; body: string }) => void
+  addAttachments: (id: number, attachments: Attachment[]) => void
   removeSubmission: (id: number) => void
   restoreSubmission: (submission: Submission) => void
   addMaterial: (input: NewMaterialInput) => Promise<Material>
@@ -171,6 +173,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return optimistic
   }, [])
 
+  const updateSubmission = useCallback((id: number, draft: { title: string; body: string }) => {
+    setSubmissions((prev) => prev.map((s) => (s.id === id ? { ...s, ...draft } : s)))
+    const realId = resolveRealId(id)
+    if (realId < 0) return // 아직 서버 저장 전 — 생성 응답이 오면 서버엔 원본이 남지만 드문 경합이라 무시
+    patch(`/submissions/${realId}`, draft).catch((e) => console.error('submission 수정 실패', e))
+  }, [])
+
+  // ponytail: 첨부는 백엔드 업로드 API가 아직 없어 화면 상태에만 붙는다(새로고침 시 사라짐).
+  // POST /submissions/{id}/attachments 가 생기면 여기서 업로드하고 응답으로 교체.
+  const addAttachments = useCallback((id: number, attachments: Attachment[]) => {
+    setSubmissions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, attachments: [...s.attachments, ...attachments] } : s)),
+    )
+  }, [])
+
   const removeSubmission = useCallback((id: number) => {
     setSubmissions((prev) => prev.filter((s) => s.id !== id))
     const realId = resolveRealId(id)
@@ -252,6 +269,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       pendingMaterials,
       submissions,
       addSubmission,
+      updateSubmission,
+      addAttachments,
       removeSubmission,
       restoreSubmission,
       addMaterial,
@@ -270,6 +289,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       pendingMaterials,
       submissions,
       addSubmission,
+      updateSubmission,
+      addAttachments,
       removeSubmission,
       restoreSubmission,
       addMaterial,

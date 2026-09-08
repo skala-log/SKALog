@@ -79,6 +79,25 @@
 }
 
 /*
+ * 데스크톱 톤 정리 — .pen 토큰(위 @theme)은 모바일 기준이라 넓은 화면에선 글씨·컨트롤이 과하게 크다.
+ * Tailwind v4 유틸리티는 var() 참조로 컴파일되므로, lg(64rem)부터 변수만 덮어쓰면
+ * 모든 페이지의 text-*, h-touch, h-listitem 이 한 번에 조여진다. 모바일은 터치 크기(44px) 그대로.
+ */
+@media (min-width: 64rem) {
+  :root {
+    --text-display: 22px;
+    --text-title: 18px;
+    --text-heading: 16px;
+    --text-body: 14.5px;
+    --text-label: 13.5px;
+    --text-meta: 12.5px;
+    --text-badge: 11px;
+    --spacing-touch: 40px;
+    --spacing-listitem: 48px;
+  }
+}
+
+/*
  * 이 리셋은 반드시 @layer base 안에 있어야 한다.
  * 레이어 밖 CSS는 @layer utilities 보다 우선하므로, 밖에 두면
  * `a { color: inherit }` 가 text-primary 같은 유틸리티를 전부 덮어쓴다.
