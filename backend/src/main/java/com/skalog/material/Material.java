@@ -88,6 +88,13 @@ public class Material {
         this.scheduleId = scheduleId;
     }
 
+    public void update(Long scheduleId, String title, MaterialKind kind, String url) {
+        this.scheduleId = scheduleId;
+        this.title = title;
+        this.kind = kind;
+        this.url = url;
+    }
+
     public Long getId() { return id; }
     public Long getScheduleId() { return scheduleId; }
     public String getTitle() { return title; }

@@ -2,7 +2,7 @@ import { ArrowUpRight, Check, FileText, Info, Link as LinkIcon, Plus, RefreshCw,
 import { useMemo, useState } from 'react'
 import { Badge } from '../components/Badge'
 import { EmptyState } from '../components/EmptyState'
-import { Sheet } from '../components/Sheet'
+import { ConfirmDialog, Sheet } from '../components/Sheet'
 import { AppHeader, PageTitle } from '../components/Shell'
 import { post } from '../lib/api'
 import { dateTimeLabel, instructorNames, scheduleOptionLabel } from '../lib/format'
@@ -16,15 +16,25 @@ const PAGE_SIZE = 20
 
 /** A1 · 관리자 / 자료 승인함 */
 export default function AdminMaterials() {
-  const { schedules, materials, pendingMaterials, approveMaterials, rejectMaterials, relinkMaterial, refreshPendingMaterials } =
-    useStore()
+  const {
+    schedules,
+    materials,
+    pendingMaterials,
+    rejectedMaterials,
+    approveMaterials,
+    rejectMaterials,
+    relinkMaterial,
+    deleteMaterial,
+    refreshPendingMaterials,
+  } = useStore()
   const toast = useToast()
   const [tab, setTab] = useState<Tab>('PENDING')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Set<number>>(new Set())
-  const [rejected, setRejected] = useState<Material[]>([])
   const [collecting, setCollecting] = useState(false)
   const [manualOpen, setManualOpen] = useState(false)
+  const [editing, setEditing] = useState<Material | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<Material | null>(null)
 
   async function collectNow() {
     setCollecting(true)
@@ -40,7 +50,7 @@ export default function AdminMaterials() {
     }
   }
 
-  const list = tab === 'PENDING' ? pendingMaterials : tab === 'APPROVED' ? materials : rejected
+  const list = tab === 'PENDING' ? pendingMaterials : tab === 'APPROVED' ? materials : rejectedMaterials
   const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
   const pageItems = list.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
@@ -68,7 +78,6 @@ export default function AdminMaterials() {
 
   function bulkReject() {
     const ids = [...selected]
-    setRejected((prev) => [...pendingMaterials.filter((m) => selected.has(m.id)), ...prev])
     rejectMaterials(ids)
     setSelected(new Set())
     toast.show(`${ids.length}건 반려했습니다`)
@@ -253,8 +262,8 @@ export default function AdminMaterials() {
                       </div>
                     </div>
 
-                    {isPending && (
-                      <div className="flex shrink-0 gap-2">
+                    <div className="flex shrink-0 gap-2">
+                      {(isPending || tab === 'REJECTED') && (
                         <button
                           type="button"
                           onClick={() => {
@@ -265,10 +274,18 @@ export default function AdminMaterials() {
                         >
                           승인
                         </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setEditing(m)}
+                        className="flex h-9 items-center rounded-control border border-line px-4 text-meta leading-[1.4] font-semibold text-ink hover:bg-subtle"
+                      >
+                        수정
+                      </button>
+                      {isPending && (
                         <button
                           type="button"
                           onClick={() => {
-                            setRejected((prev) => [m, ...prev])
                             rejectMaterials([m.id])
                             toast.show('반려했습니다')
                           }}
@@ -276,8 +293,17 @@ export default function AdminMaterials() {
                         >
                           반려
                         </button>
-                      </div>
-                    )}
+                      )}
+                      {!isPending && (
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(m)}
+                          className="flex h-9 items-center rounded-control border border-line px-4 text-meta leading-[1.4] font-semibold text-danger hover:bg-danger-bg"
+                        >
+                          삭제
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </li>
               )
@@ -335,6 +361,23 @@ export default function AdminMaterials() {
       {manualOpen && (
         <ManualRegisterSheet onClose={() => setManualOpen(false)} scheduleOptions={scheduleOptions} />
       )}
+
+      {editing && (
+        <EditMaterialSheet material={editing} onClose={() => setEditing(null)} scheduleOptions={scheduleOptions} />
+      )}
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="이 자료를 삭제할까요?"
+        description={deleteTarget && <span>{deleteTarget.title} — 삭제하면 되돌릴 수 없습니다.</span>}
+        onConfirm={() => {
+          if (!deleteTarget) return
+          deleteMaterial(deleteTarget.id)
+          toast.show('자료를 삭제했습니다')
+          setDeleteTarget(null)
+        }}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </>
   )
 }
@@ -472,6 +515,123 @@ function ManualRegisterSheet({
             className="flex h-touch items-center rounded-control bg-primary px-5 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover disabled:opacity-50"
           >
             {saving ? '등록 중…' : '등록'}
+          </button>
+        </div>
+      </form>
+    </Sheet>
+  )
+}
+
+/** 승인함/반려함 · 자료 수정 — 자동 수집이든 수동 등록이든 상태와 무관하게 제목/종류/URL/매칭 일정을 고칠 수 있다 */
+function EditMaterialSheet({
+  material,
+  onClose,
+  scheduleOptions,
+}: {
+  material: Material
+  onClose: () => void
+  scheduleOptions: Schedule[]
+}) {
+  const { updateMaterial } = useStore()
+  const toast = useToast()
+  const [scheduleId, setScheduleId] = useState(material.scheduleId != null ? String(material.scheduleId) : '')
+  const [title, setTitle] = useState(material.title)
+  const [kind, setKind] = useState<MaterialKind>(material.kind)
+  const [url, setUrl] = useState(material.url ?? '')
+
+  const valid = title.trim() !== '' && url.trim() !== ''
+
+  function submit() {
+    if (!valid) return
+    updateMaterial(material.id, {
+      scheduleId: scheduleId === '' ? null : Number(scheduleId),
+      title: title.trim(),
+      kind,
+      url: url.trim(),
+    })
+    toast.show('자료를 수정했습니다')
+    onClose()
+  }
+
+  return (
+    <Sheet open onClose={onClose} title="자료 수정" wide>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          submit()
+        }}
+        className="flex flex-col gap-4 pt-2"
+      >
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>일정</span>
+          <select value={scheduleId} onChange={(e) => setScheduleId(e.target.value)} className={fieldInput}>
+            <option value="">일정 미지정</option>
+            {scheduleOptions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {scheduleOptionLabel(s)}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>제목</span>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className={fieldInput}
+          />
+        </label>
+
+        <div className="flex flex-col gap-2">
+          <span className={fieldLabel}>종류</span>
+          <div className="flex gap-2">
+            {KIND_OPTIONS.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={kind === value}
+                onClick={() => setKind(value)}
+                className={
+                  'flex h-11 flex-1 items-center justify-center rounded-control border text-label leading-[1.4] ' +
+                  (kind === value
+                    ? 'border-primary bg-primary-soft font-semibold text-primary'
+                    : 'border-line bg-surface font-medium text-ink-muted hover:bg-subtle')
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <label className="flex flex-col gap-2">
+          <span className={fieldLabel}>URL</span>
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+            className={fieldInput}
+          />
+        </label>
+
+        <div className="flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-touch items-center rounded-control border border-line bg-surface px-5 text-label leading-[1.4] font-semibold text-ink-muted hover:bg-subtle"
+          >
+            취소
+          </button>
+          <button
+            type="submit"
+            disabled={!valid}
+            className="flex h-touch items-center rounded-control bg-primary px-5 text-label leading-[1.4] font-semibold text-on-primary hover:bg-primary-hover disabled:opacity-50"
+          >
+            저장
           </button>
         </div>
       </form>

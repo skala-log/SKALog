@@ -22,11 +22,19 @@ export type NewMaterialInput = {
   url: string
 }
 
+export type MaterialDraft = {
+  scheduleId: number | null
+  title: string
+  kind: MaterialKind
+  url: string
+}
+
 type StoreValue = {
   schedules: Schedule[]
   schedulesLoaded: boolean
   materials: Material[]
   pendingMaterials: Material[]
+  rejectedMaterials: Material[]
   submissions: Submission[]
   addSubmission: (input: NewSubmissionInput) => Submission
   updateSubmission: (id: number, draft: { title: string; body: string }) => void
@@ -34,10 +42,13 @@ type StoreValue = {
   removeSubmission: (id: number) => void
   restoreSubmission: (submission: Submission) => void
   addMaterial: (input: NewMaterialInput) => Promise<Material>
+  updateMaterial: (id: number, draft: MaterialDraft) => void
+  deleteMaterial: (id: number) => void
   approveMaterials: (ids: number[]) => void
   rejectMaterials: (ids: number[]) => void
   relinkMaterial: (id: number, scheduleId: number | null) => void
   refreshPendingMaterials: () => Promise<void>
+  refreshRejectedMaterials: () => Promise<void>
   updateSchedule: (id: number, patch: Partial<ScheduleDraft>) => void
   removeSchedule: (id: number) => void
   restoreSchedule: (schedule: Schedule) => void
@@ -115,10 +126,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [materials, setMaterials] = useState<Material[]>([])
   const [pendingMaterials, setPendingMaterials] = useState<Material[]>([])
+  const [rejectedMaterials, setRejectedMaterials] = useState<Material[]>([])
 
   const refreshPendingMaterials = useCallback(async () => {
     const raw = await get<ApiMaterial[]>('/materials/pending')
     setPendingMaterials(raw.map(toMaterial))
+  }, [])
+
+  const refreshRejectedMaterials = useCallback(async () => {
+    const raw = await get<ApiMaterial[]>('/materials/rejected')
+    setRejectedMaterials(raw.map(toMaterial))
   }, [])
 
   useEffect(() => {
@@ -134,7 +151,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     })
     get<ApiSubmission[]>('/submissions').then((raw) => setSubmissions(raw.map(toSubmission)))
     refreshPendingMaterials()
-  }, [refreshPendingMaterials])
+    refreshRejectedMaterials()
+  }, [refreshPendingMaterials, refreshRejectedMaterials])
 
   // ponytail: 화면에 보이는 id는 생성 시점에 고정하고, 실제 서버 id는 realIdRef에서 별도로 추적한다.
   // (toast의 "실행 취소"가 submission.id를 클로저로 들고 있는데, 저장 응답이 오면서 id를 바꿔치기하면
@@ -220,27 +238,55 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return material
   }, [])
 
-  const approveMaterials = useCallback((ids: number[]) => {
-    const set = new Set(ids)
-    setPendingMaterials((prev) => {
-      const approved = prev.filter((m) => set.has(m.id)).map((m) => ({ ...m, status: 'APPROVED' as const }))
-      setMaterials((cur) => [...approved, ...cur])
-      return prev.filter((m) => !set.has(m.id))
-    })
-    post('/materials/approve', { ids }).catch((e) => console.error('자료 승인 실패', e))
-  }, [])
+  // 대기 탭에서도, 반려 탭에서 되돌릴 때도 같은 승인 API를 쓴다 — 백엔드는 이전 상태를 안 가린다.
+  const approveMaterials = useCallback(
+    (ids: number[]) => {
+      const set = new Set(ids)
+      const approved = [...pendingMaterials, ...rejectedMaterials]
+        .filter((m) => set.has(m.id))
+        .map((m) => ({ ...m, status: 'APPROVED' as const }))
+      setPendingMaterials((prev) => prev.filter((m) => !set.has(m.id)))
+      setRejectedMaterials((prev) => prev.filter((m) => !set.has(m.id)))
+      setMaterials((prev) => [...approved, ...prev])
+      post('/materials/approve', { ids }).catch((e) => console.error('자료 승인 실패', e))
+    },
+    [pendingMaterials, rejectedMaterials],
+  )
 
-  const rejectMaterials = useCallback((ids: number[]) => {
-    const set = new Set(ids)
-    setPendingMaterials((prev) => prev.filter((m) => !set.has(m.id)))
-    post('/materials/reject', { ids }).catch((e) => console.error('자료 반려 실패', e))
-  }, [])
+  const rejectMaterials = useCallback(
+    (ids: number[]) => {
+      const set = new Set(ids)
+      const rejected = pendingMaterials
+        .filter((m) => set.has(m.id))
+        .map((m) => ({ ...m, status: 'REJECTED' as const }))
+      setPendingMaterials((prev) => prev.filter((m) => !set.has(m.id)))
+      setRejectedMaterials((prev) => [...rejected, ...prev])
+      post('/materials/reject', { ids }).catch((e) => console.error('자료 반려 실패', e))
+    },
+    [pendingMaterials],
+  )
 
   const relinkMaterial = useCallback((id: number, scheduleId: number | null) => {
     setPendingMaterials((prev) =>
       prev.map((m) => (m.id === id ? { ...m, scheduleId, matchConfidence: 'EXACT' as const } : m)),
     )
     patch(`/materials/${id}/relink`, { scheduleId }).catch((e) => console.error('자료 매칭 실패', e))
+  }, [])
+
+  // 승인함 세 탭(대기/승인됨/반려됨) 중 어디에 있든 — 자동 수집이든 수동 등록이든 — 같은 방식으로 고친다.
+  const updateMaterial = useCallback((id: number, draft: MaterialDraft) => {
+    const apply = (m: Material) => (m.id === id ? { ...m, ...draft } : m)
+    setMaterials((prev) => prev.map(apply))
+    setPendingMaterials((prev) => prev.map(apply))
+    setRejectedMaterials((prev) => prev.map(apply))
+    patch(`/materials/${id}`, draft).catch((e) => console.error('자료 수정 실패', e))
+  }, [])
+
+  const deleteMaterial = useCallback((id: number) => {
+    setMaterials((prev) => prev.filter((m) => m.id !== id))
+    setPendingMaterials((prev) => prev.filter((m) => m.id !== id))
+    setRejectedMaterials((prev) => prev.filter((m) => m.id !== id))
+    del(`/materials/${id}`).catch((e) => console.error('자료 삭제 실패', e))
   }, [])
 
   const updateSchedule = useCallback((id: number, draft: Partial<ScheduleDraft>) => {
@@ -267,6 +313,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       schedulesLoaded,
       materials,
       pendingMaterials,
+      rejectedMaterials,
       submissions,
       addSubmission,
       updateSubmission,
@@ -274,10 +321,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeSubmission,
       restoreSubmission,
       addMaterial,
+      updateMaterial,
+      deleteMaterial,
       approveMaterials,
       rejectMaterials,
       relinkMaterial,
       refreshPendingMaterials,
+      refreshRejectedMaterials,
       updateSchedule,
       removeSchedule,
       restoreSchedule,
@@ -287,6 +337,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       schedulesLoaded,
       materials,
       pendingMaterials,
+      rejectedMaterials,
       submissions,
       addSubmission,
       updateSubmission,
@@ -294,10 +345,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeSubmission,
       restoreSubmission,
       addMaterial,
+      updateMaterial,
+      deleteMaterial,
       approveMaterials,
       rejectMaterials,
       relinkMaterial,
       refreshPendingMaterials,
+      refreshRejectedMaterials,
       updateSchedule,
       removeSchedule,
       restoreSchedule,

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,5 +70,27 @@ public class MaterialController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         material.relink(req.scheduleId());
         return materialRepository.save(material);
+    }
+
+    @RequireAdmin
+    @GetMapping("/rejected")
+    public List<Material> rejected() {
+        return materialRepository.findByStatusOrderByCreatedAtDesc(MaterialStatus.REJECTED);
+    }
+
+    @RequireAdmin
+    @PatchMapping("/{id}")
+    public Material update(@PathVariable Long id, @Valid @RequestBody MaterialUpdateRequest req) {
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        material.update(req.scheduleId(), req.title(), req.kind(), req.url());
+        return materialRepository.save(material);
+    }
+
+    @RequireAdmin
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        materialRepository.deleteById(id);
     }
 }

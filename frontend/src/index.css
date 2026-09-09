@@ -22,10 +22,10 @@
   --color-primary-tint: #ece6ff;
   --color-on-primary: #ffffff;
 
-  /* Today — SKALA pink, reserved for "today" only */
-  --color-today: #c81e4e;
-  --color-today-vivid: #ff4378;
-  --color-today-soft: #fff1f5;
+  /* Today — SKALA violet, matches --color-primary */
+  --color-today: #6c4dff;
+  --color-today-vivid: #6c4dff;
+  --color-today-soft: #f3f0ff;
 
   /* Mint — progress fill only, never text/icon/border */
   --color-mint: #2ee6c9;
@@ -109,6 +109,7 @@
 
   body {
     margin: 0;
+    overflow-x: hidden;
     background-color: var(--color-app);
     color: var(--color-ink);
     font-family: var(--font-sans);
