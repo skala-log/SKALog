@@ -6,6 +6,16 @@ import { MOCK_SHOWCASE } from '../lib/mock'
 export default function Showcase() {
   const items = [...MOCK_SHOWCASE].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
+  // ponytail: 임시 점검 안내, 준비되면 이 return 블록만 지우면 됨
+  return (
+    <>
+      <AppHeader title="쇼케이스" />
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-center px-4 py-24 text-center">
+        <p className="text-meta text-ink-muted lg:text-label">준비 중입니다.</p>
+      </div>
+    </>
+  )
+
   return (
     <>
       <AppHeader title="쇼케이스" right={`${items.length}개`} />
